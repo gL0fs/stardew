@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
 #include "Player.h"  // 添加Player头文件引用
+using namespace cocos2d;
 
 class BaseMapLayer : public cocos2d::Layer
 {
@@ -20,6 +21,8 @@ public:
     void handlePlayerMovement(const cocos2d::Vec2& direction);  // 处理玩家的移动
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // 按键按下
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // 按键松开
+    
+  
 
     void update(float delta);  // 每帧更新
 protected:
