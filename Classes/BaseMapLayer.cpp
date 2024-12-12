@@ -1,7 +1,7 @@
 #include "BaseMapLayer.h"
-#include "BaseMapLayer.h"
-USING_NS_CC;
 
+USING_NS_CC;
+#define COCOS2D_DEBUG 1
 BaseMapLayer::BaseMapLayer() : _map(nullptr), _playerInstance(nullptr) {
 }
 
@@ -15,7 +15,7 @@ BaseMapLayer* BaseMapLayer::create(const std::string& tmxFile)
     }
     CC_SAFE_DELETE(layer);
     return nullptr;
-}
+} 
 
 bool BaseMapLayer::init() {
     if (!Layer::init()) {
@@ -54,9 +54,9 @@ void BaseMapLayer::loadMap(const std::string& tmxFile)
 
     // 将地图放大四倍
     _map->setScale(2.5f);
-
+    _map->setAnchorPoint(Vec2(0, 0));
     // 直接将地图的左下角放置在层的左下角
-    _map->setPosition(origin);
+    _map->setPosition(0,0);
 
     // 添加地图到层
     this->addChild(_map, -1);
@@ -109,16 +109,22 @@ void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const s
     auto spawnPoint = objectGroup->getObject(spawnPointName);
     if (spawnPoint.empty()) return;
 
-    // 设置玩家位置
+    // 获取地图的尺寸和缩放比例
     float mapScale = _map->getScale();
+    cocos2d::Size mapSize = _map->getMapSize();
+    cocos2d::Size tileSize = _map->getTileSize();
 
     // 根据地图缩放比例调整spawn point坐标
     float x = spawnPoint["x"].asFloat() * mapScale;
+    // 转换y坐标：从左上角原点转换为左下角原点
     float y = spawnPoint["y"].asFloat() * mapScale;
+    
+    
 
     // 设置玩家位置
     _playerInstance->setPosition(cocos2d::Vec2(x, y));
     setViewPointCenter(_playerInstance->getPosition());
+   
 }
 
 bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) {
@@ -133,12 +139,13 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
     auto tileSize = this->_map->getTileSize();
     auto mapSize = this->_map->getMapSize();
     auto mapScale = this->_map->getScale(); // 获取地图的缩放比例
-
+    
     // 将下一个位置转换为瓦片坐标，考虑地图缩放
-    int x = static_cast<int>(nextPosition.x / (tileSize.width * mapScale));
-    int y = static_cast<int>((mapSize.height * tileSize.height * mapScale - nextPosition.y) / (tileSize.height * mapScale));
+    int x = static_cast<int>(round(nextPosition.x / tileSize.width)) - 1;
+    int y = static_cast<int>(round(mapSize.height * tileSize.height - nextPosition.y) / (tileSize.height)) +2;
     auto tileCoord = cocos2d::Vec2(x, y);
-
+    CCLOG("%d %d",x,y);
+   
     // 获取该瓦片坐标的GID
     int GID = obstacles->getTileGIDAt(tileCoord);
 
@@ -146,6 +153,7 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
     if (GID == 0) {
         return false;
     }
+    
 
     // 获取瓦片的属性
     cocos2d::Value properties = _map->getPropertiesForGID(GID);
@@ -153,6 +161,7 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
         cocos2d::ValueMap propMap = properties.asValueMap();
         // 检查是否有"collidable"属性并且值为true
         bool collidable = propMap.find("collidable") != propMap.end() && propMap.at("collidable").asBool();
+        CCLOG("collision%d %d", x, y);
         return collidable;
     }
     

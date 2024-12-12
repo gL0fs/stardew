@@ -15,7 +15,7 @@ bool Player::initPlayer(const std::string& spriteFile) {
     if (!this->initWithFile(spriteFile)) {
         return false;
     }
-    this->setAnchorPoint(Vec2(0.5,-0.5));
+    this->setAnchorPoint(Vec2(0.5,0));
     return true;
 }
 
