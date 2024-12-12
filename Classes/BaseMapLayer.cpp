@@ -51,24 +51,32 @@ void BaseMapLayer::loadMap(const std::string& tmxFile)
     Size mapSize = _map->getContentSize();
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    float scaleX = visibleSize.width / mapSize.width;
-    float scaleY = visibleSize.height / mapSize.height;
-    float scale = MAX(scaleX, scaleY);
-    _map->setScale(scale);
-    _map->setPosition(origin.x + (visibleSize.width - mapSize.width * scale) / 2,
-        origin.y + (visibleSize.height - mapSize.height * scale) / 2);
+
+    // 将地图放大四倍
+    _map->setScale(2.5f);
+
+    // 直接将地图的左下角放置在层的左下角
+    _map->setPosition(origin);
+
+    // 添加地图到层
     this->addChild(_map, -1);
+
+    // 初始化视角中心为玩家位置
+    if (_playerInstance) {
+        setViewPointCenter(_playerInstance->getPosition());
+    }
 }
 
 
 void BaseMapLayer::initializePlayer() {
-    // 获取玩家单例
+    
+   // 获取玩家单例
     _playerInstance = Player::getInstance();
-	// 初始化玩家精灵
-	if (!_playerInstance->initPlayer("Player.png")) {
-		return;
-	}
-	// 设置玩家位置
+    // 初始化玩家精灵
+    if (!_playerInstance->initPlayer("Player.png")) {
+        return;
+    }
+
     // 获取瓦片地图的瓦片尺寸
     auto tileSize = _map->getTileSize();
 
@@ -76,16 +84,19 @@ void BaseMapLayer::initializePlayer() {
     auto playerContentSize = _playerInstance->getContentSize();
 
     // 计算缩放比例
+    // 玩家宽度缩放为地图格子宽度
     float scaleWidth = tileSize.width / playerContentSize.width;
-    float scaleHeight = tileSize.height / playerContentSize.height;
-    // 可以选择根据宽度或高度缩放，或者两者都考虑（取最小值）
-    float scale = MIN(scaleWidth, scaleHeight);
+    // 玩家高度缩放为两个地图格子高度
+    float scaleHeight = (2 * tileSize.height) / playerContentSize.height;
 
     // 设置玩家精灵的缩放比例
-    _playerInstance->setScale(scale);
-	setPlayerPosition("Objects", "SpawnPoint");
-	// 添加玩家精灵到地图层
-	this->addChild(_playerInstance);
+    _playerInstance->setScale(scaleWidth, scaleHeight);
+
+    // 设置玩家位置
+    setPlayerPosition("Objects", "SpawnPoint");
+
+    // 添加玩家精灵到地图层
+    this->addChild(_playerInstance);
 }
 
 void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName) {
@@ -99,9 +110,15 @@ void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const s
     if (spawnPoint.empty()) return;
 
     // 设置玩家位置
-    float x = spawnPoint["x"].asFloat();
-    float y = spawnPoint["y"].asFloat();
+    float mapScale = _map->getScale();
+
+    // 根据地图缩放比例调整spawn point坐标
+    float x = spawnPoint["x"].asFloat() * mapScale;
+    float y = spawnPoint["y"].asFloat() * mapScale;
+
+    // 设置玩家位置
     _playerInstance->setPosition(cocos2d::Vec2(x, y));
+    setViewPointCenter(_playerInstance->getPosition());
 }
 
 bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) {
@@ -112,13 +129,14 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
         return false;
     }
 
-    // 获取瓦片大小和地图大小
+    // 获取瓦片大小、地图大小和地图缩放比例
     auto tileSize = this->_map->getTileSize();
     auto mapSize = this->_map->getMapSize();
+    auto mapScale = this->_map->getScale(); // 获取地图的缩放比例
 
-    // 将下一个位置转换为瓦片坐标
-    int x = nextPosition.x / tileSize.width;
-    int y = (mapSize.height * tileSize.height - nextPosition.y) / tileSize.height;
+    // 将下一个位置转换为瓦片坐标，考虑地图缩放
+    int x = static_cast<int>(nextPosition.x / (tileSize.width * mapScale));
+    int y = static_cast<int>((mapSize.height * tileSize.height * mapScale - nextPosition.y) / (tileSize.height * mapScale));
     auto tileCoord = cocos2d::Vec2(x, y);
 
     // 获取该瓦片坐标的GID
@@ -137,7 +155,7 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
         bool collidable = propMap.find("collidable") != propMap.end() && propMap.at("collidable").asBool();
         return collidable;
     }
-
+    
     // 默认不发生碰撞
     return false;
 }
@@ -151,6 +169,7 @@ void BaseMapLayer::handlePlayerMovement(const cocos2d::Vec2& direction) {
     // 检查是否发生碰撞
     if (!isCollisionAtNextPosition(nextPosition)) {
         _playerInstance->setPosition(nextPosition);
+        this->setViewPointCenter(nextPosition);
     }
 }
 
@@ -210,4 +229,37 @@ void BaseMapLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
     }
 	//归一化移动方向
 	_moveDirection.normalize();
+}
+void BaseMapLayer::setViewPointCenter(Point position) {
+    /*auto winSize = Director::getInstance()->getWinSize();
+    int x=MAX(position.x,winSize.width/2);
+    int y = MAX(position.y, winSize.height / 2);
+
+    x = MIN(x, (_map->getMapSize().width * this->_map->getTileSize().width) - winSize.height / 2);
+    y = MIN(y, (_map->getMapSize().height * this->_map->getTileSize().width) - winSize.height / 2);
+    auto actualPosition = Point(x, y);
+
+    auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
+    auto viewPoint = centerOfView - actualPosition;
+    this->setPosition(viewPoint);*/
+    auto winSize = Director::getInstance()->getWinSize();
+    auto mapScale = _map->getScale(); // 获取地图的缩放比例
+
+    // 计算地图的像素尺寸
+    float mapPixelWidth = _map->getMapSize().width * _map->getTileSize().width * mapScale;
+    float mapPixelHeight = _map->getMapSize().height * _map->getTileSize().height * mapScale;
+
+    // 计算限制位置，确保视图不会超出地图边界
+    int x = MAX(position.x, winSize.width / 2);
+    int y = MAX(position.y, winSize.height / 2);
+    x = MIN(x, mapPixelWidth - winSize.width / 2);
+    y = MIN(y, mapPixelHeight - winSize.height / 2);
+
+    // 计算实际位置，考虑缩放
+    auto actualPosition = Point(x, y);
+
+    // 计算视图点，考虑缩放
+    auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
+    auto viewPoint = centerOfView - actualPosition ;
+    this->setPosition(viewPoint);
 }

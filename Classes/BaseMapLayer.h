@@ -22,7 +22,7 @@ public:
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // 按键按下
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // 按键松开
     
-  
+    void setViewPointCenter(Point position);//视角随着player移动而移动
 
     void update(float delta);  // 每帧更新
 protected:
