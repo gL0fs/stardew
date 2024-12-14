@@ -118,7 +118,10 @@ void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const s
     float x = spawnPoint["x"].asFloat() * mapScale;
     // 转换y坐标：从左上角原点转换为左下角原点
     float y = spawnPoint["y"].asFloat() * mapScale;
+    CCLOG("MAPSIZE%f %f", mapSize.width, mapSize.height);
+    CCLOG("SPAWN %f %f", spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
     
+    CCLOG("SPAWN %f %f", x, y);
     
 
     // 设置玩家位置
@@ -141,14 +144,17 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
     auto mapScale = this->_map->getScale(); // 获取地图的缩放比例
     
     // 将下一个位置转换为瓦片坐标，考虑地图缩放
-    int x = static_cast<int>(round(nextPosition.x / tileSize.width)) - 1;
-    int y = static_cast<int>(round(mapSize.height * tileSize.height - nextPosition.y) / (tileSize.height)) +2;
+    int x = static_cast<int>(nextPosition.x / 17.83) ;
+    int y = static_cast<int>(mapSize.height * 17.83 - nextPosition.y) / (17.83);
     auto tileCoord = cocos2d::Vec2(x, y);
+    CCLOG("nextPosition:%f %f", nextPosition.x, nextPosition.y);
+    //CCLOG("tileSize:%f %f", tileSize.width, tileSize.height);
+
     CCLOG("%d %d",x,y);
    
     // 获取该瓦片坐标的GID
     int GID = obstacles->getTileGIDAt(tileCoord);
-
+    
     // 如果GID为0，表示该位置没有瓦片，即不是障碍物
     if (GID == 0) {
         return false;
@@ -173,6 +179,7 @@ void BaseMapLayer::handlePlayerMovement(const cocos2d::Vec2& direction) {
     if (!_playerInstance) return;
 
     // 计算下一个位置
+    CCLOG("PLAYER%f %f", _playerInstance->getPosition().x, _playerInstance->getPosition().y);
     cocos2d::Vec2 nextPosition = _playerInstance->getPosition() + direction;
 
     // 检查是否发生碰撞
