@@ -60,9 +60,15 @@ void Test::switchMap(const std::string& mapName)
 {
     if (mapName == "mine")
     {
-        auto scene = Mine1::createScene();
-        SceneManager::getInstance().goToScene(scene, "mine");
-
+		if (SceneManager::getInstance().isMapInHistory("mine"))
+		{
+			SceneManager::getInstance().returnToPreviousScene();
+			return;
+        }
+        else {
+            auto scene = Mine1::createScene();
+            SceneManager::getInstance().goToScene(scene, "mine");
+        }
     }
 	else
 	{
