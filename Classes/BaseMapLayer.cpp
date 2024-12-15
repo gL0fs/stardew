@@ -1,3 +1,4 @@
+
 #include "BaseMapLayer.h"
 
 USING_NS_CC;
@@ -278,5 +279,81 @@ void BaseMapLayer::setViewPointCenter(Point position) {
     auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
     auto viewPoint = centerOfView - actualPosition ;
     this->setPosition(viewPoint);
+}
+void BaseMapLayer::initMouseEvent() {
+    // ��������¼�������
+    _mouseListener = cocos2d::EventListenerMouse::create();
+
+    // ����������¼�
+    _mouseListener->onMouseDown = [this](cocos2d::Event* event) {
+        auto mouseEvent = static_cast<cocos2d::EventMouse*>(event);
+
+        // ��ȡ�����OpenGL����ϵ�е�λ��
+        cocos2d::Vec2 mouseLocation = mouseEvent->getLocationInView();
+
+        // ת��Ϊ��������
+        cocos2d::Vec2 worldLocation = this->convertToNodeSpace(mouseLocation);
+
+        // ����Ƿ��������
+        if (canPlantTreeAtPosition(worldLocation)) {
+            plantTree(worldLocation);
+        }
+        };
+
+    // �����¼�������
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
+}
+void BaseMapLayer::plantTree(cocos2d::Vec2 position) {
+    // ������ľ����
+    auto treeSprite = cocos2d::Sprite::create("tree1_spring.png");
+    
+    auto tileSize = _map->getTileSize();
+    float scaleX = tileSize.width / treeSprite->getContentSize().width;
+    float scaleY = tileSize.height / treeSprite->getContentSize().height;
+    treeSprite->setScale(scaleX, scaleY);
+ 
+    treeSprite->setPosition(position);
+    // ���ӵ���ͼ
+    _map->addChild(treeSprite, 1);  
+   
+    _treesVector.pushBack(treeSprite);
+  
+    // CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("plant.wav");
+}
+bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
+    
+    auto objectGroup = _map->getObjectGroup("PlantArea");
+    if (!objectGroup) {
+        CCLOG("No PlantArea object group found!");
+        return false;
+    }
+
+
+    Vec2 mapPosition = _map->convertToNodeSpace(position);
+
+    // ��������ֲ����
+    for (auto& plantAreaValue : objectGroup->getObjects()) {
+        auto plantArea = plantAreaValue.asValueMap();  // ȷ�� ValueMap ת��
+
+        float x = plantArea["x"].asFloat();
+        float y = plantArea["y"].asFloat();
+        float width = plantArea["width"].asFloat();
+        float height = plantArea["height"].asFloat();
+
+        cocos2d::Rect plantRect(x, y, width, height);
+
+        // ���λ���Ƿ��ڿ���ֲ������
+        if (plantRect.containsPoint(mapPosition)) {
+            // ����Ƿ��Ѿ�����
+            for (auto tree : _treesVector) {
+                if (tree && tree->getBoundingBox().intersectsRect(plantRect)) {
+                    return false;  // �Ѿ�������
+                }
+            }
+            return true;  // ������ֲ
+        }
+    }
+
+    return false;  // ���ڿ���ֲ������
 }
 

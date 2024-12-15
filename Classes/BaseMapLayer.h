@@ -1,3 +1,5 @@
+
+
 #pragma once
 #ifndef __BASEMAPLAYER_H__
 #define __BASEMAPLAYER_H__
@@ -26,6 +28,11 @@ public:
     
 
     void update(float delta);  // 每帧更新
+    
+    
+     void initMouseEvent();
+
+    bool canPlantTreeAtPosition(cocos2d::Vec2 position);
 protected:
     cocos2d::TMXTiledMap* _map;
     // 移除_player，改为使用Player单例
@@ -34,5 +41,17 @@ protected:
 
     // 添加初始化玩家的方法
     virtual void initializePlayer();
+private:
+   cocos2d::Vector<cocos2d::Sprite*> _treesVector;
+
+    
+    std::string _treeSpriteFile = "tree.png";
+
+    void plantTree(cocos2d::Vec2 position);
+
+ 
+    cocos2d::EventListenerMouse* _mouseListener;
+    
 };
 #endif
+
