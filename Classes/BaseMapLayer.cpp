@@ -1,7 +1,7 @@
 #include "BaseMapLayer.h"
-#include "BaseMapLayer.h"
-USING_NS_CC;
 
+USING_NS_CC;
+#define COCOS2D_DEBUG 1
 BaseMapLayer::BaseMapLayer() : _map(nullptr), _playerInstance(nullptr) {
 }
 
@@ -15,20 +15,20 @@ BaseMapLayer* BaseMapLayer::create(const std::string& tmxFile)
     }
     CC_SAFE_DELETE(layer);
     return nullptr;
-}
+} 
 
 bool BaseMapLayer::init() {
     if (!Layer::init()) {
         return false;
     }
 
-    // ÉèÖÃ¼üÅÌ¼àÌı
+    // è®¾ç½®é”®ç›˜ç›‘å¬
     auto keyboardListener = EventListenerKeyboard::create();
     keyboardListener->onKeyPressed = CC_CALLBACK_2(BaseMapLayer::onKeyPressed, this);
     keyboardListener->onKeyReleased = CC_CALLBACK_2(BaseMapLayer::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
-    // ÉèÖÃ¶¨Ê±Æ÷£¬¸üĞÂÍæ¼ÒÎ»ÖÃ
+    // è®¾ç½®å®šæ—¶å™¨ï¼Œæ›´æ–°ç©å®¶ä½ç½®
     this->scheduleUpdate();
 
     return true;
@@ -52,20 +52,16 @@ void BaseMapLayer::loadMap(const std::string& tmxFile)
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    // ½«µØÍ¼·Å´óËÄ±¶
+    // å°†åœ°å›¾æ”¾å¤§å››å€
     _map->setScale(2.5f);
+    _map->setAnchorPoint(Vec2(0, 0));
+    // ç›´æ¥å°†åœ°å›¾çš„å·¦ä¸‹è§’æ”¾ç½®åœ¨å±‚çš„å·¦ä¸‹è§’
+    _map->setPosition(0,0);
 
-    // ¼ÆËãµØÍ¼µÄĞÂÎ»ÖÃ£¬È·±£µØÍ¼¾ÓÖĞÏÔÊ¾
-    float scaledWidth = mapSize.width * _map->getScale();
-    float scaledHeight = mapSize.height * _map->getScale();
-    float x = origin.x + (visibleSize.width - scaledWidth) / 2;
-    float y = origin.y + (visibleSize.height - scaledHeight) / 2;
-    _map->setPosition(x, y);
-
-    // Ìí¼ÓµØÍ¼µ½²ã
+    // æ·»åŠ åœ°å›¾åˆ°å±‚
     this->addChild(_map, -1);
 
-    // ³õÊ¼»¯ÊÓ½ÇÖĞĞÄÎªÍæ¼ÒÎ»ÖÃ
+    // åˆå§‹åŒ–è§†è§’ä¸­å¿ƒä¸ºç©å®¶ä½ç½®
     if (_playerInstance) {
         setViewPointCenter(_playerInstance->getPosition());
     }
@@ -74,98 +70,119 @@ void BaseMapLayer::loadMap(const std::string& tmxFile)
 
 void BaseMapLayer::initializePlayer() {
     
-   // »ñÈ¡Íæ¼Òµ¥Àı
+   // è·å–ç©å®¶å•ä¾‹
     _playerInstance = Player::getInstance();
-    // ³õÊ¼»¯Íæ¼Ò¾«Áé
+    // åˆå§‹åŒ–ç©å®¶ç²¾çµ
     if (!_playerInstance->initPlayer("Player.png")) {
         return;
     }
 
-    // »ñÈ¡ÍßÆ¬µØÍ¼µÄÍßÆ¬³ß´ç
+    // è·å–ç“¦ç‰‡åœ°å›¾çš„ç“¦ç‰‡å°ºå¯¸
     auto tileSize = _map->getTileSize();
 
-    // »ñÈ¡Íæ¼Ò¾«ÁéµÄÔ­Ê¼³ß´ç
+    // è·å–ç©å®¶ç²¾çµçš„åŸå§‹å°ºå¯¸
     auto playerContentSize = _playerInstance->getContentSize();
 
-    // ¼ÆËãËõ·Å±ÈÀı
-    // Íæ¼Ò¿í¶ÈËõ·ÅÎªµØÍ¼¸ñ×Ó¿í¶È
+    // è®¡ç®—ç¼©æ”¾æ¯”ä¾‹
+    // ç©å®¶å®½åº¦ç¼©æ”¾ä¸ºåœ°å›¾æ ¼å­å®½åº¦
     float scaleWidth = tileSize.width / playerContentSize.width;
-    // Íæ¼Ò¸ß¶ÈËõ·ÅÎªÁ½¸öµØÍ¼¸ñ×Ó¸ß¶È
+    // ç©å®¶é«˜åº¦ç¼©æ”¾ä¸ºä¸¤ä¸ªåœ°å›¾æ ¼å­é«˜åº¦
     float scaleHeight = (2 * tileSize.height) / playerContentSize.height;
 
-    // ÉèÖÃÍæ¼Ò¾«ÁéµÄËõ·Å±ÈÀı
+    // è®¾ç½®ç©å®¶ç²¾çµçš„ç¼©æ”¾æ¯”ä¾‹
     _playerInstance->setScale(scaleWidth, scaleHeight);
 
-    // ÉèÖÃÍæ¼ÒÎ»ÖÃ
+    // è®¾ç½®ç©å®¶ä½ç½®
     setPlayerPosition("Objects", "SpawnPoint");
 
-    // Ìí¼ÓÍæ¼Ò¾«Áéµ½µØÍ¼²ã
+    // æ·»åŠ ç©å®¶ç²¾çµåˆ°åœ°å›¾å±‚
     this->addChild(_playerInstance);
 }
 
 void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName) {
     if (!_map || !_playerInstance) return;
 
-    // ´ÓµØÍ¼¶ÔÏó×é»ñÈ¡³öÉúµã
+    // ä»åœ°å›¾å¯¹è±¡ç»„è·å–å‡ºç”Ÿç‚¹
     auto objectGroup = _map->getObjectGroup(objectGroupName);
     if (!objectGroup) return;
 
     auto spawnPoint = objectGroup->getObject(spawnPointName);
     if (spawnPoint.empty()) return;
 
-    // ÉèÖÃÍæ¼ÒÎ»ÖÃ
-    float x = spawnPoint["x"].asFloat();
-    float y = spawnPoint["y"].asFloat();
-   
+    // è·å–åœ°å›¾çš„å°ºå¯¸å’Œç¼©æ”¾æ¯”ä¾‹
+    float mapScale = _map->getScale();
+    cocos2d::Size mapSize = _map->getMapSize();
+    cocos2d::Size tileSize = _map->getTileSize();
+
+    // æ ¹æ®åœ°å›¾ç¼©æ”¾æ¯”ä¾‹è°ƒæ•´spawn pointåæ ‡
+    float x = spawnPoint["x"].asFloat() * mapScale;
+    // è½¬æ¢yåæ ‡ï¼šä»å·¦ä¸Šè§’åŸç‚¹è½¬æ¢ä¸ºå·¦ä¸‹è§’åŸç‚¹
+    float y = spawnPoint["y"].asFloat() * mapScale;
+    CCLOG("MAPSIZE%f %f", mapSize.width, mapSize.height);
+    CCLOG("SPAWN %f %f", spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
+    
+    CCLOG("SPAWN %f %f", x, y);
+    
+
+    // è®¾ç½®ç©å®¶ä½ç½®
     _playerInstance->setPosition(cocos2d::Vec2(x, y));
     setViewPointCenter(_playerInstance->getPosition());
+   
 }
 
 bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) {
-    // »ñÈ¡ÕÏ°­Îï²ã
-    auto obstacles = _map->getLayer("BackGround"); // ¼ÙÉèÕÏ°­Îï²ãÃûÎª"Obstacles"
+    // è·å–éšœç¢ç‰©å±‚
+    auto obstacles = _map->getLayer("BackGround"); // å‡è®¾éšœç¢ç‰©å±‚åä¸º"Obstacles"
     if (!obstacles) {
-        // Èç¹ûÃ»ÓĞÕÏ°­Îï²ã£¬Ôò²»½øĞĞÅö×²¼ì²â
+        // å¦‚æœæ²¡æœ‰éšœç¢ç‰©å±‚ï¼Œåˆ™ä¸è¿›è¡Œç¢°æ’æ£€æµ‹
         return false;
     }
 
-    // »ñÈ¡ÍßÆ¬´óĞ¡ºÍµØÍ¼´óĞ¡
+    // è·å–ç“¦ç‰‡å¤§å°ã€åœ°å›¾å¤§å°å’Œåœ°å›¾ç¼©æ”¾æ¯”ä¾‹
     auto tileSize = this->_map->getTileSize();
     auto mapSize = this->_map->getMapSize();
-
-    // ½«ÏÂÒ»¸öÎ»ÖÃ×ª»»ÎªÍßÆ¬×ø±ê
-    int x = nextPosition.x / tileSize.width;
-    int y = (mapSize.height * tileSize.height - nextPosition.y) / tileSize.height;
+    auto mapScale = this->_map->getScale(); // è·å–åœ°å›¾çš„ç¼©æ”¾æ¯”ä¾‹
+    
+    // å°†ä¸‹ä¸€ä¸ªä½ç½®è½¬æ¢ä¸ºç“¦ç‰‡åæ ‡ï¼Œè€ƒè™‘åœ°å›¾ç¼©æ”¾
+    int x = static_cast<int>(nextPosition.x / 17.83) ;
+    int y = static_cast<int>(mapSize.height * 17.83 - nextPosition.y) / (17.83);
     auto tileCoord = cocos2d::Vec2(x, y);
+    CCLOG("nextPosition:%f %f", nextPosition.x, nextPosition.y);
+    //CCLOG("tileSize:%f %f", tileSize.width, tileSize.height);
 
-    // »ñÈ¡¸ÃÍßÆ¬×ø±êµÄGID
+    CCLOG("%d %d",x,y);
+   
+    // è·å–è¯¥ç“¦ç‰‡åæ ‡çš„GID
     int GID = obstacles->getTileGIDAt(tileCoord);
-
-    // Èç¹ûGIDÎª0£¬±íÊ¾¸ÃÎ»ÖÃÃ»ÓĞÍßÆ¬£¬¼´²»ÊÇÕÏ°­Îï
+    
+    // å¦‚æœGIDä¸º0ï¼Œè¡¨ç¤ºè¯¥ä½ç½®æ²¡æœ‰ç“¦ç‰‡ï¼Œå³ä¸æ˜¯éšœç¢ç‰©
     if (GID == 0) {
         return false;
     }
+    
 
-    // »ñÈ¡ÍßÆ¬µÄÊôĞÔ
+    // è·å–ç“¦ç‰‡çš„å±æ€§
     cocos2d::Value properties = _map->getPropertiesForGID(GID);
     if (properties.getType() == cocos2d::Value::Type::MAP) {
         cocos2d::ValueMap propMap = properties.asValueMap();
-        // ¼ì²éÊÇ·ñÓĞ"collidable"ÊôĞÔ²¢ÇÒÖµÎªtrue
+        // æ£€æŸ¥æ˜¯å¦æœ‰"collidable"å±æ€§å¹¶ä¸”å€¼ä¸ºtrue
         bool collidable = propMap.find("collidable") != propMap.end() && propMap.at("collidable").asBool();
+        CCLOG("collision%d %d", x, y);
         return collidable;
     }
-
-    // Ä¬ÈÏ²»·¢ÉúÅö×²
+    
+    // é»˜è®¤ä¸å‘ç”Ÿç¢°æ’
     return false;
 }
 
 void BaseMapLayer::handlePlayerMovement(const cocos2d::Vec2& direction) {
     if (!_playerInstance) return;
 
-    // ¼ÆËãÏÂÒ»¸öÎ»ÖÃ
+    // è®¡ç®—ä¸‹ä¸€ä¸ªä½ç½®
+    CCLOG("PLAYER%f %f", _playerInstance->getPosition().x, _playerInstance->getPosition().y);
     cocos2d::Vec2 nextPosition = _playerInstance->getPosition() + direction;
 
-    // ¼ì²éÊÇ·ñ·¢ÉúÅö×²
+    // æ£€æŸ¥æ˜¯å¦å‘ç”Ÿç¢°æ’
     if (!isCollisionAtNextPosition(nextPosition)) {
         _playerInstance->setPosition(nextPosition);
         this->setViewPointCenter(nextPosition);
@@ -173,9 +190,9 @@ void BaseMapLayer::handlePlayerMovement(const cocos2d::Vec2& direction) {
 }
 
 void BaseMapLayer::update(float delta) {
-    // Èç¹û´æÔÚÍæ¼Ò²¢ÇÒÓĞ°´¼ü±»°´ÏÂ£¬Ö´ĞĞ³ÖĞøÒÆ¶¯
+    // å¦‚æœå­˜åœ¨ç©å®¶å¹¶ä¸”æœ‰æŒ‰é”®è¢«æŒ‰ä¸‹ï¼Œæ‰§è¡ŒæŒç»­ç§»åŠ¨
     if (_playerInstance && !_moveDirection.equals(Vec2::ZERO)) {
-        handlePlayerMovement(_moveDirection);  // ³ÖĞøÒÆ¶¯
+        handlePlayerMovement(_moveDirection);  // æŒç»­ç§»åŠ¨
     }
 }
 
@@ -186,22 +203,22 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
     switch (keyCode) {
     case cocos2d::EventKeyboard::KeyCode::KEY_W:
     case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
-        _moveDirection.y = 1;  // ÏòÉÏÒÆ¶¯
+        _moveDirection.y = 1;  // å‘ä¸Šç§»åŠ¨
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_S:
     case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-        _moveDirection.y = -1;  // ÏòÏÂÒÆ¶¯
+        _moveDirection.y = -1;  // å‘ä¸‹ç§»åŠ¨
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_A:
     case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-        _moveDirection.x = -1;  // Ïò×óÒÆ¶¯
+        _moveDirection.x = -1;  // å‘å·¦ç§»åŠ¨
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_D:
     case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-        _moveDirection.x = 1;  // ÏòÓÒÒÆ¶¯
+        _moveDirection.x = 1;  // å‘å³ç§»åŠ¨
         break;
     }
-	//¹éÒ»»¯ÒÆ¶¯·½Ïò
+	//å½’ä¸€åŒ–ç§»åŠ¨æ–¹å‘
 	_moveDirection.normalize();
 }
 
@@ -211,26 +228,26 @@ void BaseMapLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
     switch (keyCode) {
     case cocos2d::EventKeyboard::KeyCode::KEY_W:
     case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
-        _moveDirection.y = 0;  // Í£Ö¹ÏòÉÏÒÆ¶¯
+        _moveDirection.y = 0;  // åœæ­¢å‘ä¸Šç§»åŠ¨
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_S:
     case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-        _moveDirection.y = 0;  // Í£Ö¹ÏòÏÂÒÆ¶¯
+        _moveDirection.y = 0;  // åœæ­¢å‘ä¸‹ç§»åŠ¨
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_A:
     case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-        _moveDirection.x = 0;  // Í£Ö¹Ïò×óÒÆ¶¯
+        _moveDirection.x = 0;  // åœæ­¢å‘å·¦ç§»åŠ¨
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_D:
     case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-        _moveDirection.x = 0;  // Í£Ö¹ÏòÓÒÒÆ¶¯
+        _moveDirection.x = 0;  // åœæ­¢å‘å³ç§»åŠ¨
         break;
     }
-	//¹éÒ»»¯ÒÆ¶¯·½Ïò
+	//å½’ä¸€åŒ–ç§»åŠ¨æ–¹å‘
 	_moveDirection.normalize();
 }
 void BaseMapLayer::setViewPointCenter(Point position) {
-    auto winSize = Director::getInstance()->getWinSize();
+    /*auto winSize = Director::getInstance()->getWinSize();
     int x=MAX(position.x,winSize.width/2);
     int y = MAX(position.y, winSize.height / 2);
 
@@ -240,5 +257,26 @@ void BaseMapLayer::setViewPointCenter(Point position) {
 
     auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
     auto viewPoint = centerOfView - actualPosition;
+    this->setPosition(viewPoint);*/
+    auto winSize = Director::getInstance()->getWinSize();
+    auto mapScale = _map->getScale(); // è·å–åœ°å›¾çš„ç¼©æ”¾æ¯”ä¾‹
+
+    // è®¡ç®—åœ°å›¾çš„åƒç´ å°ºå¯¸
+    float mapPixelWidth = _map->getMapSize().width * _map->getTileSize().width * mapScale;
+    float mapPixelHeight = _map->getMapSize().height * _map->getTileSize().height * mapScale;
+
+    // è®¡ç®—é™åˆ¶ä½ç½®ï¼Œç¡®ä¿è§†å›¾ä¸ä¼šè¶…å‡ºåœ°å›¾è¾¹ç•Œ
+    int x = MAX(position.x, winSize.width / 2);
+    int y = MAX(position.y, winSize.height / 2);
+    x = MIN(x, mapPixelWidth - winSize.width / 2);
+    y = MIN(y, mapPixelHeight - winSize.height / 2);
+
+    // è®¡ç®—å®é™…ä½ç½®ï¼Œè€ƒè™‘ç¼©æ”¾
+    auto actualPosition = Point(x, y);
+
+    // è®¡ç®—è§†å›¾ç‚¹ï¼Œè€ƒè™‘ç¼©æ”¾
+    auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
+    auto viewPoint = centerOfView - actualPosition ;
     this->setPosition(viewPoint);
 }
+

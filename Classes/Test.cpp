@@ -50,7 +50,7 @@ bool Test::initMap()
         return false;
     }
  
-    loadMap("Forest/Forest.tmx"); 
+    loadMap("mine1.tmx"); 
 	initializePlayer();
 
     return true;
