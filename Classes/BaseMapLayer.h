@@ -6,6 +6,7 @@
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
 #include "Player.h"  // 添加Player头文件引用
+#include "Toolbar.h"
 using namespace cocos2d;
 
 class BaseMapLayer : public cocos2d::Layer
@@ -29,6 +30,7 @@ public:
 
     void update(float delta);  // 每帧更新
     
+
     
      void initMouseEvent();
 
@@ -37,6 +39,7 @@ protected:
     cocos2d::TMXTiledMap* _map;
     // 移除_player，改为使用Player单例
     Player* _playerInstance;  // 添加Player单例指针
+    Toolbar* toolbar = Toolbar::getInstance();//添加工具栏单例指针
     cocos2d::Vec2 _moveDirection;  // 移动方向
 
     // 添加初始化玩家的方法
