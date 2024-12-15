@@ -5,17 +5,9 @@ USING_NS_CC;
 BaseMapLayer::BaseMapLayer() : _map(nullptr), _playerInstance(nullptr) {
 }
 
-BaseMapLayer* BaseMapLayer::create(const std::string& tmxFile)
-{
-    BaseMapLayer* layer = new (std::nothrow) BaseMapLayer();
-    if (layer && layer->initMap(tmxFile))
-    {
-        layer->autorelease();
-        return layer;
-    }
-    CC_SAFE_DELETE(layer);
+BaseMapLayer* create(const std::string& tmxFile) {
     return nullptr;
-} 
+}
 
 bool BaseMapLayer::init() {
     if (!Layer::init()) {
@@ -95,8 +87,9 @@ void BaseMapLayer::initializePlayer() {
     // 设置玩家位置
     setPlayerPosition("Objects", "SpawnPoint");
 
-    // 添加玩家精灵到地图层
-    this->addChild(_playerInstance);
+    //在没添加的情况下，添加玩家精灵到地图层
+	if (!_playerInstance->getParent())
+        this->addChild(_playerInstance);
 }
 
 void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName) {
@@ -159,7 +152,8 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
     if (GID == 0) {
         return false;
     }
-    
+    else
+		return true;
 
     // 获取瓦片的属性
     cocos2d::Value properties = _map->getPropertiesForGID(GID);
@@ -187,6 +181,7 @@ void BaseMapLayer::handlePlayerMovement(const cocos2d::Vec2& direction) {
         _playerInstance->setPosition(nextPosition);
         this->setViewPointCenter(nextPosition);
     }
+    checkChangeMap(nextPosition);
 }
 
 void BaseMapLayer::update(float delta) {
@@ -278,4 +273,63 @@ void BaseMapLayer::setViewPointCenter(Point position) {
     auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
     auto viewPoint = centerOfView - actualPosition ;
     this->setPosition(viewPoint);
+}
+
+void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
+    //打开对象层
+    auto objectGroup = _map->getObjectGroup("Objects");
+    if (!objectGroup) {
+        CCLOG("Object layer not found!");
+        return;
+    }
+    CCLOG("open successful");
+
+    // 获取瓦片大小、地图大小和地图缩放比例
+    auto tileSize = this->_map->getTileSize();
+    auto mapSize = this->_map->getMapSize();
+    auto mapScale = this->_map->getScale(); // 获取地图的缩放比例
+
+    // 将下一个位置转换为瓦片坐标，考虑地图缩放
+    int x = static_cast<int>(nextPosition.x / 17.83);
+    int y = static_cast<int>(mapSize.height * 17.83 - nextPosition.y) / (17.83);
+	CCLOG("%d x %d y", x, y);
+
+	// 获取全部对象的坐标,存到vector中
+    int i = 1;
+    while (true) {
+        std::string objectName = std::to_string(i);
+        auto object = objectGroup->getObject(objectName);
+        if (object.empty()) {
+			CCLOG("No more objects found!");
+            break;
+        }
+        CCLOG("object %d", i);
+        // 获取地图的尺寸和缩放比例
+        float mapScale = _map->getScale();
+        cocos2d::Size mapSize = _map->getMapSize();
+        cocos2d::Size tileSize = _map->getTileSize();
+
+        // 根据地图缩放比例调整spawn point坐标
+        float objectX = object["x"].asFloat() * mapScale;
+        // 转换y坐标：从左上角原点转换为左下角原点
+        float objectY = object["y"].asFloat() * mapScale;
+        int obx = static_cast<int>(objectX / 17.83);
+        int oby = static_cast<int>(mapSize.height * 17.83 - objectY) / (17.83);
+
+        CCLOG("%d obx %d oby", obx, oby);
+        if (x == obx
+            && y == oby ) {
+            // 玩家与对象碰撞
+            CCLOG("Player collided with object!");
+            // 检查是否有"MapName"属性
+            if (object.find("MapName") != object.end()) {
+                // 获取目的地地图文件名
+                std::string destination = object.at("MapName").asString();
+                // 加载目的地地图
+				switchMap(destination);
+                return;
+            }
+        }
+        i++;
+    }
 }

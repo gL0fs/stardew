@@ -50,8 +50,22 @@ bool Test::initMap()
         return false;
     }
  
-    loadMap("mine1.tmx"); 
+    loadMap("Forest/Forest.tmx"); 
 	initializePlayer();
 
     return true;
+}
+
+void Test::switchMap(const std::string& mapName)
+{
+    if (mapName == "mine")
+    {
+        auto scene = Mine1::createScene();
+        SceneManager::getInstance().goToScene(scene, "mine");
+
+    }
+	else
+	{
+		CCLOG("Unknown map: %s", mapName.c_str());
+	}
 }

@@ -11,7 +11,7 @@ public:
     static cocos2d::Scene* createScene();
     static Mine1* create();
     bool Mine1::init();
-
+	void switchMap(const std::string& mapName) override;
 
 protected:
     Mine1();

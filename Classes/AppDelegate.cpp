@@ -24,6 +24,7 @@
 
 #include "AppDelegate.h"
 #include "MainMenuScene.h"
+#include "SceneManager.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -119,6 +120,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     auto scene = MainMenuScene::createScene();
+
+    // 在应用程序启动时创建 SceneManager 的单例
+    SceneManager::getInstance();  // 调用一次单例，确保它被创建
 
     // run
     director->runWithScene(scene);
