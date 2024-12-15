@@ -3,7 +3,7 @@
 #define __BASEMAPLAYER_H__
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
-#include "Player.h"  // Ìí¼ÓPlayerÍ·ÎÄ¼şÒıÓÃ
+#include "Player.h"  // æ·»åŠ Playerå¤´æ–‡ä»¶å¼•ç”¨
 using namespace cocos2d;
 
 class BaseMapLayer : public cocos2d::Layer
@@ -16,23 +16,23 @@ public:
     void loadMap(const std::string& tmxFile);
     void setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName);
 
-    // ĞŞ¸ÄÅö×²¼ì²âºÍÒÆ¶¯Ïà¹Øº¯ÊıÒÔÊ¹ÓÃPlayerµ¥Àı
+    // ä¿®æ”¹ç¢°æ’æ£€æµ‹å’Œç§»åŠ¨ç›¸å…³å‡½æ•°ä»¥ä½¿ç”¨Playerå•ä¾‹
     bool isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition);
-    void handlePlayerMovement(const cocos2d::Vec2& direction);  // ´¦ÀíÍæ¼ÒµÄÒÆ¶¯
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // °´¼ü°´ÏÂ
-    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // °´¼üËÉ¿ª
+    void handlePlayerMovement(const cocos2d::Vec2& direction);  // å¤„ç†ç©å®¶çš„ç§»åŠ¨
+    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // æŒ‰é”®æŒ‰ä¸‹
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // æŒ‰é”®æ¾å¼€
     
-    void setViewPointCenter(Point position);//ÊÓ½ÇËæ×ÅplayerÒÆ¶¯¶øÒÆ¶¯
+    void setViewPointCenter(Point position);//è§†è§’éšç€playerç§»åŠ¨è€Œç§»åŠ¨
     
 
-    void update(float delta);  // Ã¿Ö¡¸üĞÂ
+    void update(float delta);  // æ¯å¸§æ›´æ–°
 protected:
     cocos2d::TMXTiledMap* _map;
-    // ÒÆ³ı_player£¬¸ÄÎªÊ¹ÓÃPlayerµ¥Àı
-    Player* _playerInstance;  // Ìí¼ÓPlayerµ¥ÀıÖ¸Õë
-    cocos2d::Vec2 _moveDirection;  // ÒÆ¶¯·½Ïò
+    // ç§»é™¤_playerï¼Œæ”¹ä¸ºä½¿ç”¨Playerå•ä¾‹
+    Player* _playerInstance;  // æ·»åŠ Playerå•ä¾‹æŒ‡é’ˆ
+    cocos2d::Vec2 _moveDirection;  // ç§»åŠ¨æ–¹å‘
 
-    // Ìí¼Ó³õÊ¼»¯Íæ¼ÒµÄ·½·¨
+    // æ·»åŠ åˆå§‹åŒ–ç©å®¶çš„æ–¹æ³•
     virtual void initializePlayer();
 };
 #endif
