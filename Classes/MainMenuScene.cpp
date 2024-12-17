@@ -1,3 +1,5 @@
+
+
 #include "MainMenuScene.h"
 #include "Test.h"
 
@@ -10,44 +12,44 @@ Scene* MainMenuScene::createScene() {
 bool MainMenuScene::init() {
     if (!Scene::init()) return false;
 
-    // ÉèÖÃ±³¾°ÑÕÉ«
+    // è®¾ç½®èƒŒæ™¯é¢œè‰²
     /*auto background = LayerColor::create(Color4B(50, 150, 255, 255));
     this->addChild(background);*/
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
 
-    // ´´½¨Ò»¸öLayer
+    // åˆ›å»ºä¸€ä¸ªLayer
     auto layer = cocos2d::Layer::create();
 
-    // ´´½¨±³¾°Sprite
+    // åˆ›å»ºèƒŒæ™¯Sprite
     auto background = cocos2d::Sprite::create("stardewPanorama.png");
 
-    // Èç¹ûÐèÒª£¬¿ÉÒÔÉèÖÃ±³¾°SpriteµÄÎ»ÖÃºÍ´óÐ¡
+    // å¦‚æžœéœ€è¦ï¼Œå¯ä»¥è®¾ç½®èƒŒæ™¯Spriteçš„ä½ç½®å’Œå¤§å°
     background->setPosition(origin + visibleSize / 2);
     background->setScaleX(visibleSize.width / background->getContentSize().width);
     background->setScaleY(visibleSize.height / background->getContentSize().height);
 
-    // ½«±³¾°SpriteÌí¼Óµ½LayerÖÐ
+    // å°†èƒŒæ™¯Spriteæ·»åŠ åˆ°Layerä¸­
     layer->addChild(background);
 
-    // ½«LayerÌí¼Óµ½³¡¾°ÖÐ
+    // å°†Layeræ·»åŠ åˆ°åœºæ™¯ä¸­
     this->addChild(layer);
-    // ´´½¨±êÇ©
+    // åˆ›å»ºæ ‡ç­¾
    
   
     auto sprite = Sprite::create("yellowLettersLogo.png");
 
     Vec2 spritePosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + visibleSize.height / 4);
 
-    // ÉèÖÃ¾«ÁéÎ»ÖÃ
+    // è®¾ç½®ç²¾çµä½ç½®
     sprite->setPosition(spritePosition);
     this->addChild(sprite);
 
-    // ´´½¨°´Å¥
+    // åˆ›å»ºæŒ‰é’®
     auto playButton = MenuItemLabel::create(
         Label::createWithTTF("Play", "fonts/Marker Felt.ttf", 32),
         [](Ref* sender) {
-            // ÇÐ»»µ½Å©³¡³¡¾°
+            // åˆ‡æ¢åˆ°å†œåœºåœºæ™¯
             auto scene = Test::createScene();
             Director::getInstance()->replaceScene(TransitionFade::create(0.5, scene, Color3B(0, 0, 0)));
         }

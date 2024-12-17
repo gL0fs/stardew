@@ -6,6 +6,8 @@
 #include "Player.h"
 #include "Mine1.h"
 #include "MainMenuScene.h"
+#include "Toolbar.h"
+#include "ui/CocosGUI.h"
 
 class Test : public BaseMapLayer
 {

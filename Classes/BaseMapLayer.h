@@ -3,9 +3,8 @@
 #define __BASEMAPLAYER_H__
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
-#include "Player.h"  // Ìí¼ÓPlayerÍ·ÎÄ¼şÒıÓÃ
-#include <string>
-#include "MainMenuScene.h"
+#include "Player.h"  // æ·»åŠ Playerå¤´æ–‡ä»¶å¼•ç”¨
+#include "Toolbar.h"
 #include "SceneManager.h"
 using namespace cocos2d;
 
@@ -13,30 +12,48 @@ class BaseMapLayer : public cocos2d::Layer
 {
 public:
     BaseMapLayer();
-    BaseMapLayer* create(const std::string& tmxFile);
+    static BaseMapLayer* create(const std::string& tmxFile);
     virtual bool init() override;
     bool initMap(const std::string& tmxFile);
     void loadMap(const std::string& tmxFile);
     void setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName);
 
-    // ĞŞ¸ÄÅö×²¼ì²âºÍÒÆ¶¯Ïà¹Øº¯ÊıÒÔÊ¹ÓÃPlayerµ¥Àı
+    // ä¿®æ”¹ç¢°æ’æ£€æµ‹å’Œç§»åŠ¨ç›¸å…³å‡½æ•°ä»¥ä½¿ç”¨Playerå•ä¾‹
     bool isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition);
-    void handlePlayerMovement(const cocos2d::Vec2& direction);  // ´¦ÀíÍæ¼ÒµÄÒÆ¶¯
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // °´¼ü°´ÏÂ
-    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // °´¼üËÉ¿ª
+    void handlePlayerMovement(const cocos2d::Vec2& direction);  // å¤„ç†ç©å®¶çš„ç§»åŠ¨
+    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // æŒ‰é”®æŒ‰ä¸‹
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // æŒ‰é”®æ¾å¼€
     
-    void setViewPointCenter(Point position);//ÊÓ½ÇËæ×ÅplayerÒÆ¶¯¶øÒÆ¶¯
-	void checkChangeMap(const cocos2d::Vec2& nextPosition);//¼ì²éÊÇ·ñĞèÒªÇĞ»»µØÍ¼
+    void setViewPointCenter(Point position);//è§†è§’éšç€playerç§»åŠ¨è€Œç§»åŠ¨
+    
 
-    void update(float delta);  // Ã¿Ö¡¸üĞÂ
-	virtual void switchMap(const std::string& mapName)=0;//ÇĞ»»µØÍ¼
+    void update(float delta);  // æ¯å¸§æ›´æ–°
+    void checkChangeMap(const cocos2d::Vec2& nextPosition);//ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Òªï¿½Ğ»ï¿½ï¿½ï¿½Í¼
+    virtual void switchMap(const std::string& mapName)=0;//ï¿½Ğ»ï¿½ï¿½ï¿½Í¼
+    
+     void initMouseEvent();
+
+    bool canPlantTreeAtPosition(cocos2d::Vec2 position);
 protected:
     cocos2d::TMXTiledMap* _map;
-    // ÒÆ³ı_player£¬¸ÄÎªÊ¹ÓÃPlayerµ¥Àı
-    Player* _playerInstance;  // Ìí¼ÓPlayerµ¥ÀıÖ¸Õë
-    cocos2d::Vec2 _moveDirection;  // ÒÆ¶¯·½Ïò
+    // ç§»é™¤_playerï¼Œæ”¹ä¸ºä½¿ç”¨Playerå•ä¾‹
+    Player* _playerInstance;  // æ·»åŠ Playerå•ä¾‹æŒ‡é’ˆ
+    Toolbar* toolbar = Toolbar::getInstance();//æ·»åŠ å·¥å…·æ å•ä¾‹æŒ‡é’ˆ
+    cocos2d::Vec2 _moveDirection;  // ç§»åŠ¨æ–¹å‘
 
-    // Ìí¼Ó³õÊ¼»¯Íæ¼ÒµÄ·½·¨
+    // æ·»åŠ åˆå§‹åŒ–ç©å®¶çš„æ–¹æ³•
     virtual void initializePlayer();
+private:
+   cocos2d::Vector<cocos2d::Sprite*> _treesVector;
+
+    
+    std::string _treeSpriteFile = "tree.png";
+
+    void plantTree(cocos2d::Vec2 position);
+
+ 
+    cocos2d::EventListenerMouse* _mouseListener;
+    
 };
 #endif
+
