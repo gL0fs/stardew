@@ -1,6 +1,6 @@
 
 #include "BaseMapLayer.h"
-
+#include "Toolbar.h"
 USING_NS_CC;
 #define COCOS2D_DEBUG 1
 BaseMapLayer::BaseMapLayer() : _map(nullptr), _playerInstance(nullptr) {
@@ -248,17 +248,6 @@ void BaseMapLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
 	_moveDirection.normalize();
 }
 void BaseMapLayer::setViewPointCenter(Point position) {
-    /*auto winSize = Director::getInstance()->getWinSize();
-    int x=MAX(position.x,winSize.width/2);
-    int y = MAX(position.y, winSize.height / 2);
-
-    x = MIN(x, (_map->getMapSize().width * this->_map->getTileSize().width) - winSize.height / 2);
-    y = MIN(y, (_map->getMapSize().height * this->_map->getTileSize().width) - winSize.height / 2);
-    auto actualPosition = Point(x, y);
-
-    auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
-    auto viewPoint = centerOfView - actualPosition;
-    this->setPosition(viewPoint);*/
     auto winSize = Director::getInstance()->getWinSize();
     auto mapScale = _map->getScale(); // 获取地图的缩放比例
 
@@ -281,30 +270,27 @@ void BaseMapLayer::setViewPointCenter(Point position) {
     this->setPosition(viewPoint);
 }
 void BaseMapLayer::initMouseEvent() {
-    // ��������¼�������
+   
     _mouseListener = cocos2d::EventListenerMouse::create();
 
-    // ����������¼�
     _mouseListener->onMouseDown = [this](cocos2d::Event* event) {
         auto mouseEvent = static_cast<cocos2d::EventMouse*>(event);
 
-        // ��ȡ�����OpenGL����ϵ�е�λ��
         cocos2d::Vec2 mouseLocation = mouseEvent->getLocationInView();
 
-        // ת��Ϊ��������
+       
         cocos2d::Vec2 worldLocation = this->convertToNodeSpace(mouseLocation);
 
-        // ����Ƿ��������
-        if (canPlantTreeAtPosition(worldLocation)) {
+        /*if (canPlantTreeAtPosition(worldLocation)) {
             plantTree(worldLocation);
-        }
+        }*/
         };
 
-    // �����¼�������
+  
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 }
 void BaseMapLayer::plantTree(cocos2d::Vec2 position) {
-    // ������ľ����
+    
     auto treeSprite = cocos2d::Sprite::create("tree1_spring.png");
     
     auto tileSize = _map->getTileSize();
@@ -313,7 +299,7 @@ void BaseMapLayer::plantTree(cocos2d::Vec2 position) {
     treeSprite->setScale(scaleX, scaleY);
  
     treeSprite->setPosition(position);
-    // ���ӵ���ͼ
+   
     _map->addChild(treeSprite, 1);  
    
     _treesVector.pushBack(treeSprite);
@@ -331,7 +317,7 @@ bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
 
     Vec2 mapPosition = _map->convertToNodeSpace(position);
 
-    // ��������ֲ����
+
     for (auto& plantAreaValue : objectGroup->getObjects()) {
         auto plantArea = plantAreaValue.asValueMap();  // ȷ�� ValueMap ת��
 
@@ -342,18 +328,18 @@ bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
 
         cocos2d::Rect plantRect(x, y, width, height);
 
-        // ���λ���Ƿ��ڿ���ֲ������
+       
         if (plantRect.containsPoint(mapPosition)) {
-            // ����Ƿ��Ѿ�����
+         
             for (auto tree : _treesVector) {
                 if (tree && tree->getBoundingBox().intersectsRect(plantRect)) {
-                    return false;  // �Ѿ�������
+                    return false;  
                 }
             }
-            return true;  // ������ֲ
+            return true;  
         }
     }
 
-    return false;  // ���ڿ���ֲ������
+    return false;  
 }
 
