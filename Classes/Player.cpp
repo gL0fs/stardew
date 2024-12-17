@@ -1,5 +1,3 @@
-
-
 #include "Player.h"
 
 Player* Player::_instance = nullptr;

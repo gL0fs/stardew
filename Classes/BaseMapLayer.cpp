@@ -7,13 +7,6 @@ BaseMapLayer::BaseMapLayer() : _map(nullptr), _playerInstance(nullptr) {
 
 BaseMapLayer* BaseMapLayer::create(const std::string& tmxFile)
 {
-    BaseMapLayer* layer = new (std::nothrow) BaseMapLayer();
-    if (layer && layer->initMap(tmxFile))
-    {
-        layer->autorelease();
-        return layer;
-    }
-    CC_SAFE_DELETE(layer);
     return nullptr;
 } 
 
@@ -96,7 +89,13 @@ void BaseMapLayer::initializePlayer() {
     setPlayerPosition("Objects", "SpawnPoint");
 
     // 添加玩家精灵到地图层
-    this->addChild(_playerInstance);
+    //如果没有添加
+	if (_playerInstance->getParent() == nullptr)
+        this->addChild(_playerInstance);
+    else {
+        _playerInstance->getParent()->removeChild(_playerInstance, false);
+		this->addChild(_playerInstance);
+    }
 }
 
 void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName) {
@@ -159,10 +158,10 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
     if (GID == 0) {
         return false;
     }
-    
-
+    else return true;
     // 获取瓦片的属性
     cocos2d::Value properties = _map->getPropertiesForGID(GID);
+    CCLOG("GET_PRO");
     if (properties.getType() == cocos2d::Value::Type::MAP) {
         cocos2d::ValueMap propMap = properties.asValueMap();
         // 检查是否有"collidable"属性并且值为true
@@ -187,6 +186,7 @@ void BaseMapLayer::handlePlayerMovement(const cocos2d::Vec2& direction) {
         _playerInstance->setPosition(nextPosition);
         this->setViewPointCenter(nextPosition);
     }
+	checkChangeMap(nextPosition);
 }
 
 void BaseMapLayer::update(float delta) {
@@ -318,7 +318,7 @@ bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
 
 
     for (auto& plantAreaValue : objectGroup->getObjects()) {
-        auto plantArea = plantAreaValue.asValueMap();  // ȷ�� ValueMap ת��
+        auto plantArea = plantAreaValue.asValueMap();  
 
         float x = plantArea["x"].asFloat();
         float y = plantArea["y"].asFloat();
@@ -343,7 +343,6 @@ bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
 }
 
 void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
-    //�򿪶����
     auto objectGroup = _map->getObjectGroup("Objects");
     if (!objectGroup) {
         CCLOG("Object layer not found!");
@@ -351,17 +350,14 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
     }
     CCLOG("open successful");
 
-    // ��ȡ��Ƭ��С����ͼ��С�͵�ͼ���ű���
     auto tileSize = this->_map->getTileSize();
     auto mapSize = this->_map->getMapSize();
-    auto mapScale = this->_map->getScale(); // ��ȡ��ͼ�����ű���
+    auto mapScale = this->_map->getScale(); 
 
-    // ����һ��λ��ת��Ϊ��Ƭ���꣬���ǵ�ͼ����
     int x = static_cast<int>(nextPosition.x / 17.83);
     int y = static_cast<int>(mapSize.height * 17.83 - nextPosition.y) / (17.83);
 	CCLOG("%d x %d y", x, y);
 
-	// ��ȡȫ�����������,�浽vector��
     int i = 1;
     while (true) {
         std::string objectName = std::to_string(i);
@@ -371,14 +367,11 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
             break;
         }
         CCLOG("object %d", i);
-        // ��ȡ��ͼ�ĳߴ�����ű���
         float mapScale = _map->getScale();
         cocos2d::Size mapSize = _map->getMapSize();
         cocos2d::Size tileSize = _map->getTileSize();
 
-        // ���ݵ�ͼ���ű�������spawn point����
         float objectX = object["x"].asFloat() * mapScale;
-        // ת��y���꣺�����Ͻ�ԭ��ת��Ϊ���½�ԭ��
         float objectY = object["y"].asFloat() * mapScale;
         int obx = static_cast<int>(objectX / 17.83);
         int oby = static_cast<int>(mapSize.height * 17.83 - objectY) / (17.83);
@@ -386,13 +379,9 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
         CCLOG("%d obx %d oby", obx, oby);
         if (x == obx
             && y == oby ) {
-            // ����������ײ
             CCLOG("Player collided with object!");
-            // ����Ƿ���"MapName"����
             if (object.find("MapName") != object.end()) {
-                // ��ȡĿ�ĵص�ͼ�ļ���
                 std::string destination = object.at("MapName").asString();
-                // ����Ŀ�ĵص�ͼ
 				switchMap(destination);
                 return;
             }

@@ -51,7 +51,7 @@ bool Test::initMap()
     }
  
     loadMap("Forest/Forest.tmx");//加入地图层 
-	  initializePlayer();//加入玩家层
+	initializePlayer();//加入玩家层
 
     auto toolbar = Toolbar::getInstance();//工具栏实例
     auto uiLayer = Layer::create();
