@@ -1,4 +1,3 @@
-
 #include "BaseMapLayer.h"
 #include "Toolbar.h"
 USING_NS_CC;
@@ -341,5 +340,64 @@ bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
     }
 
     return false;  
+}
+
+void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
+    //�򿪶����
+    auto objectGroup = _map->getObjectGroup("Objects");
+    if (!objectGroup) {
+        CCLOG("Object layer not found!");
+        return;
+    }
+    CCLOG("open successful");
+
+    // ��ȡ��Ƭ��С����ͼ��С�͵�ͼ���ű���
+    auto tileSize = this->_map->getTileSize();
+    auto mapSize = this->_map->getMapSize();
+    auto mapScale = this->_map->getScale(); // ��ȡ��ͼ�����ű���
+
+    // ����һ��λ��ת��Ϊ��Ƭ���꣬���ǵ�ͼ����
+    int x = static_cast<int>(nextPosition.x / 17.83);
+    int y = static_cast<int>(mapSize.height * 17.83 - nextPosition.y) / (17.83);
+	CCLOG("%d x %d y", x, y);
+
+	// ��ȡȫ�����������,�浽vector��
+    int i = 1;
+    while (true) {
+        std::string objectName = std::to_string(i);
+        auto object = objectGroup->getObject(objectName);
+        if (object.empty()) {
+			CCLOG("No more objects found!");
+            break;
+        }
+        CCLOG("object %d", i);
+        // ��ȡ��ͼ�ĳߴ�����ű���
+        float mapScale = _map->getScale();
+        cocos2d::Size mapSize = _map->getMapSize();
+        cocos2d::Size tileSize = _map->getTileSize();
+
+        // ���ݵ�ͼ���ű�������spawn point����
+        float objectX = object["x"].asFloat() * mapScale;
+        // ת��y���꣺�����Ͻ�ԭ��ת��Ϊ���½�ԭ��
+        float objectY = object["y"].asFloat() * mapScale;
+        int obx = static_cast<int>(objectX / 17.83);
+        int oby = static_cast<int>(mapSize.height * 17.83 - objectY) / (17.83);
+
+        CCLOG("%d obx %d oby", obx, oby);
+        if (x == obx
+            && y == oby ) {
+            // ����������ײ
+            CCLOG("Player collided with object!");
+            // ����Ƿ���"MapName"����
+            if (object.find("MapName") != object.end()) {
+                // ��ȡĿ�ĵص�ͼ�ļ���
+                std::string destination = object.at("MapName").asString();
+                // ����Ŀ�ĵص�ͼ
+				switchMap(destination);
+                return;
+            }
+        }
+        i++;
+    }
 }
 

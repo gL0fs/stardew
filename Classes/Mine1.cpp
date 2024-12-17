@@ -65,9 +65,15 @@ bool Mine1::initMap()
     loadMap("mine1.tmx"); // 假设你的地图文件名为 Mine1.tmx
 
     // 设置玩家位置，假设对象组名为 "Objects"，生成点名为 "SpawnPoint"
-    setPlayerPosition("Objects", "SpawnPoint");
+	initializePlayer();
 
     // 在这里添加任何特定的地图初始化代码
 
     return true;
+}
+
+void Mine1::switchMap(const std::string& mapName)
+{
+	// 在这里添加切换地图的代码
+    return;
 }

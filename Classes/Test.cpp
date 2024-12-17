@@ -1,6 +1,5 @@
 #include "Test.h"
-#include "Toolbar.h"
-#include "ui/CocosGUI.h"
+
 USING_NS_CC;
 
 Test::Test()
@@ -51,27 +50,49 @@ bool Test::initMap()
         return false;
     }
  
-    loadMap("mine1.tmx");//¼ÓÈëµØÍ¼²ã 
-	initializePlayer();//¼ÓÈëÍæ¼Ò²ã
+    loadMap("Forest/Forest.tmx");//åŠ å…¥åœ°å›¾å±‚ 
+	  initializePlayer();//åŠ å…¥çŽ©å®¶å±‚
 
-    auto toolbar = Toolbar::getInstance();//¹¤¾ßÀ¸ÊµÀý
+    auto toolbar = Toolbar::getInstance();//å·¥å…·æ å®žä¾‹
     auto uiLayer = Layer::create();
     this->addChild(uiLayer);
 
-    // ÔÚUI²ãÖÐÌí¼Ótoolbar
-    int toolbarHeight = 16; // ¼ÙÉè¹¤¾ßÀ¸µÄ¸ß¶ÈÊÇ16ÏñËØ
+    // åœ¨UIå±‚ä¸­æ·»åŠ toolbar
+    int toolbarHeight = 16; // å‡è®¾å·¥å…·æ çš„é«˜åº¦æ˜¯16åƒç´ 
     auto winSize = Director::getInstance()->getWinSize();
     auto toolbarLayout = ui::Layout::create();
-    toolbarLayout->setSize(Size(winSize.width, toolbarHeight)); // ÉèÖÃ²¼¾Ö´óÐ¡
+    toolbarLayout->setSize(Size(winSize.width, toolbarHeight)); // è®¾ç½®å¸ƒå±€å¤§å°
     toolbarLayout->setIgnoreAnchorPointForPosition(true);
-    toolbarLayout->setPosition(Vec2(0, winSize.height / 2 - toolbarHeight / 2)); // ÉèÖÃ²¼¾ÖÎ»ÖÃÎªÆÁÄ»´¹Ö±ÖÐÐÄ
+    toolbarLayout->setPosition(Vec2(0, winSize.height / 2 - toolbarHeight / 2)); // è®¾ç½®å¸ƒå±€ä½ç½®ä¸ºå±å¹•åž‚ç›´ä¸­å¿ƒ
     uiLayer->addChild(toolbarLayout);
 
-    // ´´½¨toolbar²¢Ìí¼Óµ½²¼¾Ö
+    // åˆ›å»ºtoolbarå¹¶æ·»åŠ åˆ°å¸ƒå±€
    
-    // ÉèÖÃtoolbarµÄÎ»ÖÃÎª²¼¾ÖµÄÖÐÐÄ
+    // è®¾ç½®toolbarçš„ä½ç½®ä¸ºå¸ƒå±€çš„ä¸­å¿ƒ
     toolbar->setPosition(Vec2(toolbarLayout->getContentSize().width / 2, toolbarLayout->getContentSize().height / 2));
     toolbarLayout->addChild(toolbar);
     CCLOG("add toolbar");
     return true;
+
 }
+
+void Test::switchMap(const std::string& mapName)
+{
+    if (mapName == "mine")
+    {
+		if (SceneManager::getInstance().isMapInHistory("mine"))
+		{
+			SceneManager::getInstance().returnToPreviousScene();
+			return;
+        }
+        else {
+            auto scene = Mine1::createScene();
+            SceneManager::getInstance().goToScene(scene, "mine");
+        }
+    }
+	else
+	{
+		CCLOG("Unknown map: %s", mapName.c_str());
+	}
+}
+

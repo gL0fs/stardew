@@ -1,6 +1,8 @@
 #include "AppDelegate.h"
 #include "Map1.h"
 #include "MainMenuScene.h"
+
+#include "SceneManager.h"
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -97,6 +99,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     auto scene = MainMenuScene::createScene();
+
+    // ��Ӧ�ó�������ʱ���� SceneManager �ĵ���
+    SceneManager::getInstance();  // ����һ�ε�����ȷ����������
 
     // run
     director->runWithScene(scene);
