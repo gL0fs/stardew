@@ -1,3 +1,4 @@
+
 #ifndef TOOLBAR_H
 #define TOOLBAR_H
 
@@ -6,24 +7,23 @@
 class Toolbar : public cocos2d::Layer
 {
 public:
-    static Toolbar* getInstance(); // »ñÈ¡µ¥ÀıÊµÀıµÄ¾²Ì¬·½·¨
-    int getCurrentToolIndex(); // ·µ»Øµ±Ç°¹¤¾ßµÄË÷Òı
+    static Toolbar* getInstance(); // è·å–å•ä¾‹å®ä¾‹çš„é™æ€æ–¹æ³•
+    int getCurrentToolIndex(); // è¿”å›å½“å‰å·¥å…·çš„ç´¢å¼•
 
     CREATE_FUNC(Toolbar);
 
-    int currentToolIndex; // µ±Ç°ÏÔÊ¾µÄ¹¤¾ßµÄË÷Òı
-
+    int currentToolIndex; // å½“å‰æ˜¾ç¤ºçš„å·¥å…·çš„ç´¢å¼•
+    void Toolbar::setPositionOnLeft();
 private:
-    Toolbar(); // Ë½ÓĞ¹¹Ôìº¯Êı
-    virtual ~Toolbar(); // Ë½ÓĞÎö¹¹º¯Êı
+    Toolbar(); // ç§æœ‰æ„é€ å‡½æ•°
+    virtual ~Toolbar(); // ç§æœ‰ææ„å‡½æ•°
 
-    static Toolbar* _instance; // µ¥ÀıÊµÀıµÄ¾²Ì¬Ö¸Õë
+    static Toolbar* _instance; // å•ä¾‹å®ä¾‹çš„é™æ€æŒ‡é’ˆ
 
-    cocos2d::Vector<cocos2d::Sprite*> _tools; // ´æ´¢¹¤¾ßÍ¼±êµÄÏòÁ¿
+    cocos2d::Vector<cocos2d::Sprite*> _tools; // å­˜å‚¨å·¥å…·å›¾æ ‡çš„å‘é‡
    
 
-    bool init(); // ³õÊ¼»¯·½·¨
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event); // ¼üÅÌÊÂ¼ş»Øµ÷º¯Êı
-    void switchTool(int toolIndex); // ÇĞ»»¹¤¾ßµÄ·½·¨
+    bool init(); // åˆå§‹åŒ–æ–¹æ³•
+    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event); // é”®ç›˜äº‹ä»¶å›è°ƒå‡½æ•°
+    void switchTool(int toolIndex); // åˆ‡æ¢å·¥å…·çš„æ–¹æ³•
 };
-#endif

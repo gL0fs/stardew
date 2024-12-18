@@ -28,6 +28,7 @@ public:
     void moveLeft();
     void moveRight();
 
+    Vec2 Player::getxy();//得到玩家当前的瓦片坐标
 private:
     Player();
 

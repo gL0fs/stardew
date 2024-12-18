@@ -1,3 +1,4 @@
+
 #pragma once
 #ifndef __BASEMAPLAYER_H__
 #define __BASEMAPLAYER_H__
@@ -56,4 +57,5 @@ private:
     
 };
 #endif
+
 

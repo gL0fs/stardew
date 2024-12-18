@@ -1,5 +1,6 @@
 #include "Test.h"
-
+#include "Toolbar.h"
+#include "ui/CocosGUI.h"
 USING_NS_CC;
 
 Test::Test()
@@ -50,6 +51,7 @@ bool Test::initMap()
         return false;
     }
  
+
     loadMap("Forest/Forest.tmx");//加入地图层 
 	initializePlayer();//加入玩家层
 
@@ -69,6 +71,7 @@ bool Test::initMap()
     // 创建toolbar并添加到布局
    
     // 设置toolbar的位置为布局的中心
+
     toolbar->setPosition(Vec2(toolbarLayout->getContentSize().width / 2, toolbarLayout->getContentSize().height / 2));
     toolbarLayout->addChild(toolbar);
     CCLOG("add toolbar");

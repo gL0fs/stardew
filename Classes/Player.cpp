@@ -1,5 +1,6 @@
 #include "Player.h"
-
+#include "cocos2d.h"
+USING_NS_CC;
 Player* Player::_instance = nullptr;
 
 Player::Player() : _health(100), _stamina(100) {}
@@ -58,4 +59,13 @@ void Player::moveLeft() {
 void Player::moveRight() {
     this->setPositionX(this->getPositionX() + 10);
 
+}
+Vec2 Player::getxy() {
+    Vec2 worldPos = _instance->getPosition();
+   
+    int x = static_cast<int>(worldPos.x / 17.83);
+    int y = static_cast<int>(30 * 17.83 - worldPos.y) / (17.83);
+    CCLOG("player%d %d", x, y);
+
+    return cocos2d::Vec2(x, y);
 }
