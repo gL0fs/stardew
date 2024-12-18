@@ -80,3 +80,6 @@ bool Map1::initMap()
     return true;
 }
 
+void Map1::switchMap(const std::string& mapName) {
+    return;
+}

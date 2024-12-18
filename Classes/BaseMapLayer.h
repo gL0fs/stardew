@@ -1,5 +1,4 @@
 
-
 #pragma once
 #ifndef __BASEMAPLAYER_H__
 #define __BASEMAPLAYER_H__
@@ -7,6 +6,7 @@
 #include "extensions/cocos-ext.h"
 #include "Player.h"  // 添加Player头文件引用
 #include "Toolbar.h"
+#include "SceneManager.h"
 using namespace cocos2d;
 
 class BaseMapLayer : public cocos2d::Layer
@@ -14,7 +14,6 @@ class BaseMapLayer : public cocos2d::Layer
 public:
     BaseMapLayer();
     static BaseMapLayer* create(const std::string& tmxFile);
-    Scene* BaseMapLayer::createScene();
     virtual bool init() override;
     bool initMap(const std::string& tmxFile);
     void loadMap(const std::string& tmxFile);
@@ -30,22 +29,21 @@ public:
     
 
     void update(float delta);  // 每帧更新
+    void checkChangeMap(const cocos2d::Vec2& nextPosition);//����Ƿ���Ҫ�л���ͼ
+    virtual void switchMap(const std::string& mapName)=0;//�л���ͼ
     
-
-    
-     virtual void initMouseEvent();//鼠标触发函数
+     void initMouseEvent();
 
     bool canPlantTreeAtPosition(cocos2d::Vec2 position);
 protected:
     cocos2d::TMXTiledMap* _map;
     // 移除_player，改为使用Player单例
     Player* _playerInstance;  // 添加Player单例指针
-   
+    Toolbar* toolbar = Toolbar::getInstance();//添加工具栏单例指针
     cocos2d::Vec2 _moveDirection;  // 移动方向
 
     // 添加初始化玩家的方法
     virtual void initializePlayer();
-    cocos2d::EventListenerMouse* _mouseListener;
 private:
    cocos2d::Vector<cocos2d::Sprite*> _treesVector;
 
@@ -55,8 +53,9 @@ private:
     void plantTree(cocos2d::Vec2 position);
 
  
-
+    cocos2d::EventListenerMouse* _mouseListener;
     
 };
 #endif
+
 
