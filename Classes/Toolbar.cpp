@@ -1,28 +1,26 @@
-
 // Toolbar.cpp
 #include "Toolbar.h"
-#include "cocos2d.h"
-USING_NS_CC;
-Toolbar* Toolbar::_instance = nullptr; // åˆå§‹åŒ–å•ä¾‹å®ä¾‹æŒ‡é’ˆ
+
+Toolbar* Toolbar::_instance = nullptr; // ³õÊ¼»¯µ¥ÀıÊµÀıÖ¸Õë
 
 Toolbar* Toolbar::getInstance()
 {
     if (_instance == nullptr)
     {
         _instance = Toolbar::create();
-        _instance->retain(); // ä¿æŒå¼•ç”¨ï¼Œé˜²æ­¢è¢«è‡ªåŠ¨é‡Šæ”¾
+        _instance->retain(); // ±£³ÖÒıÓÃ£¬·ÀÖ¹±»×Ô¶¯ÊÍ·Å
     }
     return _instance;
 }
 
 Toolbar::Toolbar()
 {
-    currentToolIndex = -1; // åˆå§‹åŒ–å½“å‰å·¥å…·ç´¢å¼•ä¸º-1
+    currentToolIndex = -1; // ³õÊ¼»¯µ±Ç°¹¤¾ßË÷ÒıÎª-1
 }
 
 Toolbar::~Toolbar()
 {
-    _instance = nullptr; // æ¸…ç†å•ä¾‹å®ä¾‹æŒ‡é’ˆ
+    _instance = nullptr; // ÇåÀíµ¥ÀıÊµÀıÖ¸Õë
 }
 
 
@@ -33,22 +31,23 @@ bool Toolbar::init()
         return false;
     }
 
-    // åˆå§‹åŒ–å·¥å…·å›¾æ ‡
+    // ³õÊ¼»¯¹¤¾ßÍ¼±ê
     for (int i = 1; i <= 5; ++i)
     {
         std::string toolName = "tool" + std::to_string(i) + ".png";
         cocos2d::Sprite* tool = cocos2d::Sprite::create(toolName);
-        tool->setAnchorPoint(Vec2(0, 0)); // è®¾ç½®é”šç‚¹ä¸ºå·¦ä¸‹è§’
-        tool->setPosition(0, 30); // æ ¹æ®éœ€è¦è°ƒæ•´ä½ç½®
-        tool->setVisible(false); // åˆå§‹æ—¶éšè—æ‰€æœ‰å·¥å…·
-        tool->setScale(2.5); // å°†ç²¾çµæ”¾å¤§ 2.5 å€
+        tool->setPosition(i * 50, 0); // ¸ù¾İĞèÒªµ÷ÕûÎ»ÖÃ
+        tool->setVisible(false); // ³õÊ¼Ê±Òş²ØËùÓĞ¹¤¾ß
         this->addChild(tool);
         _tools.pushBack(tool);
     }
 
-   
+    // ÉèÖÃ¹¤¾ßÀ¸Î»ÖÃ
+    this->ignoreAnchorPointForPosition(false);
+    this->setAnchorPoint(cocos2d::Vec2(0.5, 1));
+    this->setPosition(cocos2d::Director::getInstance()->getVisibleSize().width / 2, cocos2d::Director::getInstance()->getVisibleSize().height);
 
-    // æ·»åŠ é”®ç›˜äº‹ä»¶ç›‘å¬
+    // Ìí¼Ó¼üÅÌÊÂ¼ş¼àÌı
     auto keyboardListener = cocos2d::EventListenerKeyboard::create();
     keyboardListener->onKeyPressed = CC_CALLBACK_2(Toolbar::onKeyPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
@@ -82,36 +81,22 @@ void Toolbar::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Eve
 
 void Toolbar::switchTool(int toolIndex)
 {
-    // éšè—æ‰€æœ‰å·¥å…·
+    // Òş²ØËùÓĞ¹¤¾ß
     for (auto tool : _tools)
     {
         tool->setVisible(false);
     }
 
-    // æ˜¾ç¤ºé€‰ä¸­çš„å·¥å…·
+    // ÏÔÊ¾Ñ¡ÖĞµÄ¹¤¾ß
     if (toolIndex >= 1 && toolIndex <= 5)
     {
         _tools.at(toolIndex - 1)->setVisible(true);
     }
-    currentToolIndex = toolIndex; // æ›´æ–°å½“å‰å·¥å…·ç´¢å¼•
+    currentToolIndex = toolIndex; // ¸üĞÂµ±Ç°¹¤¾ßË÷Òı
     CCLOG("switchtool%d", toolIndex);
 }
 int Toolbar::getCurrentToolIndex()
 {
     int temp = currentToolIndex;
-    return temp; // è¿”å›å½“å‰å·¥å…·çš„ç´¢å¼•
+    return temp; // ·µ»Øµ±Ç°¹¤¾ßµÄË÷Òı
 }
-void Toolbar::setPositionOnLeft()
-{
-    // è·å–çª—å£å¤§å°
-       // è·å–çª—å£å¤§å°
-    auto director = cocos2d::Director::getInstance();
-    cocos2d::Size visibleSize = director->getVisibleSize();
-
-    // è®¾ç½®å·¥å…·æ çš„é”šç‚¹ä¸ºå·¦è¾¹ä¸­ç‚¹
-    this->setAnchorPoint(cocos2d::Vec2(0, 0.5));
-
-    // è®¾ç½®å·¥å…·æ å±‚çš„ä½ç½®ï¼Œä½¿å·¦è¾¹ä¸­ç‚¹ä½äºåœºæ™¯å·¦è¾¹ä¸­ç‚¹
-    this->setPosition(cocos2d::Vec2(0, visibleSize.height / 2));
-}
-
