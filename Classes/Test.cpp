@@ -89,7 +89,7 @@ void Test::switchMap(const std::string& mapName)
 			return;
         }
         else {
-            auto scene = Mine1::createScene();
+            auto scene = Mine::createScene();
             SceneManager::getInstance().goToScene(scene, "mine");
         }
     }

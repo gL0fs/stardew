@@ -1,4 +1,3 @@
-
 #ifndef TOOLBAR_H
 #define TOOLBAR_H
 
@@ -27,3 +26,4 @@ private:
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event); // 键盘事件回调函数
     void switchTool(int toolIndex); // 切换工具的方法
 };
+#endif

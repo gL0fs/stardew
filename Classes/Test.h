@@ -4,7 +4,7 @@
 
 #include "BaseMapLayer.h"
 #include "Player.h"
-#include "Mine1.h"
+#include "Mine.h"
 #include "MainMenuScene.h"
 #include "Toolbar.h"
 #include "ui/CocosGUI.h"
