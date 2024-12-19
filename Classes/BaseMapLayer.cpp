@@ -101,6 +101,10 @@ void BaseMapLayer::initializePlayer() {
         _playerInstance->getParent()->removeChild(_playerInstance, false);
 		this->addChild(_playerInstance);
     }
+    
+    _playerInstance->addInventory("tool1", 5);
+    for(int i=0;i<14;i++){ _playerInstance->addInventory("tool2", 13); }//用于测试背包功能
+    
 }
 
 void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName) {
@@ -227,6 +231,9 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
     case cocos2d::EventKeyboard::KeyCode::KEY_D:
     case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         _moveDirection.x = 1;  // 向右移动
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_E:
+        _playerInstance->getInventory()->displayInventory();
         break;
     }
 	//归一化移动方向

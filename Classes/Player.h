@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "cocos2d.h"
+#include "Backpack.h"
 #include <vector>
 #include <string>
 
@@ -20,8 +21,9 @@ public:
     void setStamina(int stamina);
     int getStamina() const;
 
-    void addItemToInventory(const std::string& item);
-    const std::vector<std::string>& getInventory() const;
+    Inventory* Player::getInventory();
+    void addInventory(const std::string& name, int quantity);
+    void removeInventory(const std::string& name, int quantity);
 
     void moveUp();
     void moveDown();
@@ -36,7 +38,7 @@ private:
 
     int _health;
     int _stamina;
-    std::vector<std::string> _inventory;
+    Inventory* _inventory;
 
     CC_DISALLOW_COPY_AND_ASSIGN(Player);
 };
