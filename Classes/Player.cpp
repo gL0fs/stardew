@@ -2,19 +2,15 @@
 #include "cocos2d.h"
 USING_NS_CC;
 Player* Player::_instance = nullptr;
-
-Player::Player()
-    : _health(100),      
-    _stamina(100),     
-    _inventory(nullptr){
-    _inventory = new Inventory(36); 
-    
-}
+int Player:: money = 500;
+Player::Player() : _health(100), _stamina(100) {}
 
 Player* Player::getInstance() {
     if (!_instance) {
+      
         _instance = new (std::nothrow) Player();
     }
+   
     return _instance;
 }
 
@@ -42,15 +38,11 @@ int Player::getStamina() const {
     return _stamina;
 }
 
-void Player::addInventory(const std::string& name, int quantity) {
-    _inventory->addItemToInventory(name, quantity);
+void Player::addItemToInventory(const std::string& item) {
+    _inventory.push_back(item);
 }
 
-void Player::removeInventory(const std::string& name, int quantity) {
-    _inventory->removeItem(name, quantity);
-}
-
-Inventory* Player::getInventory() {
+const std::vector<std::string>& Player::getInventory() const {
     return _inventory;
 }
 
@@ -78,4 +70,11 @@ Vec2 Player::getxy() {
     CCLOG("player%d %d", x, y);
 
     return cocos2d::Vec2(x, y);
+}
+
+int Player::getmoney() {
+    return money;
+}
+void Player::changemoney(int cost) {
+    money = money + cost;
 }
