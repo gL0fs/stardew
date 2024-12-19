@@ -8,6 +8,7 @@
 #include "MainMenuScene.h"
 #include "Toolbar.h"
 #include "ui/CocosGUI.h"
+#include "Forest.h"
 
 class Test : public BaseMapLayer
 {

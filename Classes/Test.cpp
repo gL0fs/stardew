@@ -52,7 +52,7 @@ bool Test::initMap()
     }
  
 
-    loadMap("Forest/Forest.tmx");//加入地图层 
+    loadMap("Test/Test.tmx");//加入地图层 
 	initializePlayer();//加入玩家层
 
     auto toolbar = Toolbar::getInstance();//工具栏实例
@@ -91,6 +91,18 @@ void Test::switchMap(const std::string& mapName)
         else {
             auto scene = Mine::createScene();
             SceneManager::getInstance().goToScene(scene, "mine");
+        }
+    }
+    else if (mapName == "forest")
+    {
+        if (SceneManager::getInstance().isMapInHistory("forest"))
+        {
+            SceneManager::getInstance().returnToPreviousScene();
+            return;
+        }
+        else {
+            auto scene = Forest::createScene();
+            SceneManager::getInstance().goToScene(scene, "forest");
         }
     }
 	else

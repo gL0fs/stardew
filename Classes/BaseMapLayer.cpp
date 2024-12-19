@@ -352,18 +352,19 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
 
     auto tileSize = this->_map->getTileSize();
     auto mapSize = this->_map->getMapSize();
-    auto mapScale = this->_map->getScale(); 
+    auto mapScale = this->_map->getScale();
 
     int x = static_cast<int>(nextPosition.x / 17.83);
     int y = static_cast<int>(mapSize.height * 17.83 - nextPosition.y) / (17.83);
-	CCLOG("%d x %d y", x, y);
+    auto position = cocos2d::Vec2(x, y);
+    CCLOG("%d x %d y", x, y);
 
     int i = 1;
     while (true) {
         std::string objectName = std::to_string(i);
         auto object = objectGroup->getObject(objectName);
         if (object.empty()) {
-			CCLOG("No more objects found!");
+            CCLOG("No more objects found!");
             break;
         }
         CCLOG("object %d", i);
@@ -371,22 +372,30 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
         cocos2d::Size mapSize = _map->getMapSize();
         cocos2d::Size tileSize = _map->getTileSize();
 
+        
+        // 获取object的位置和大小
         float objectX = object["x"].asFloat() * mapScale;
         float objectY = object["y"].asFloat() * mapScale;
+        float width = object["width"].asFloat() * mapScale;
+        float height = object["height"].asFloat() * mapScale;
         int obx = static_cast<int>(objectX / 17.83);
         int oby = static_cast<int>(mapSize.height * 17.83 - objectY) / (17.83);
+		int obwidth = static_cast<int>(width / 17.83)+1;
+		int obheight = static_cast<int>(height / 17.83)+1;
+        // 创建矩形
+        CCLOG("obx %d oby %d", obx, oby);
+        CCLOG("width %d height %d", obwidth, obheight);
+        cocos2d::Rect objectRect(obx- obwidth, oby-obheight, obwidth, obheight);
 
-        CCLOG("%d obx %d oby", obx, oby);
-        if (x == obx
-            && y == oby ) {
-            CCLOG("Player collided with object!");
-            if (object.find("MapName") != object.end()) {
-                std::string destination = object.at("MapName").asString();
-				switchMap(destination);
-                return;
-            }
+        // 检查位置是否在矩形内
+        if (objectRect.containsPoint(position)) {
+			CCLOG("hit_object %d", i);
+			// 获取目标地图名称
+			std::string mapName = object["MapName"].asString();
+			// 切换地图
+			switchMap(mapName);
+			break;
         }
         i++;
     }
 }
-
