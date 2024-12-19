@@ -54,7 +54,14 @@ Scene* Mine::createScene()
 
     auto toolbarLayer = Toolbar::getInstance();
     toolbarLayer->setPositionOnLeft(); // 设置工具栏层位置
-    scene->addChild(toolbarLayer,1); // 将工具栏层添加到场景中
+
+    if (toolbarLayer->getParent() == nullptr)
+        scene->addChild(toolbarLayer, 1); // 将工具栏层添加到场景中
+    else {
+        toolbarLayer->getParent()->removeChild(toolbarLayer, false);
+        scene->addChild(toolbarLayer);
+    }
+    
     CCLOG("add toolbar");
     
     return scene;

@@ -36,9 +36,6 @@
     <ClCompile Include="..\Classes\Map1.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Mine1.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\SceneManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -46,6 +43,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Tree.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Mine.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,9 +80,6 @@
     <ClInclude Include="..\Classes\Map1.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Mine1.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\SceneManager.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -90,6 +87,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Tree.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Mine.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
