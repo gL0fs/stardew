@@ -3,6 +3,7 @@
 #include "MainMenuScene.h"
 #include "Test.h"
 #include "Mine.h"
+#include "Festival.h"
 USING_NS_CC;
 
 Scene* MainMenuScene::createScene() {
@@ -50,7 +51,7 @@ bool MainMenuScene::init() {
         Label::createWithTTF("Play", "fonts/Marker Felt.ttf", 32),
         [](Ref* sender) {
             // 切换到农场场景
-            auto scene = Test::createScene();
+            auto scene = Festival::createScene();
             Director::getInstance()->replaceScene(TransitionFade::create(0.5, scene, Color3B(0, 0, 0)));
         }
     );
