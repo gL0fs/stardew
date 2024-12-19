@@ -12,7 +12,9 @@ public:
     std::string name;    // Item name
     int quantity;        // Item quantity
     // Function to display item information
-    void display(float x, float y, bool display) const;
+    cocos2d::ui::Text* text;
+    cocos2d::ui::ImageView* itemImage;
+    void display(float x, float y) const;
     
 };
 
@@ -20,7 +22,6 @@ class Inventory : public cocos2d::Layer {
 private:
     std::vector<Item> items;
     size_t capacity;
-    bool initial;
     cocos2d::ui::ImageView* bagImage;
 public:
     Inventory(size_t c); // 私有构造函数
@@ -33,8 +34,10 @@ public:
     // Remove an item from the inventory
     std::vector<Item> getItems();
 
+    void items_display(std::vector<Item> items) const;
+
     // Display the inventory contents (show all items)
-    void displayInventory() ;
+    void displayInventory() const;
    
 
     // Get the maximum capacity of the inventory

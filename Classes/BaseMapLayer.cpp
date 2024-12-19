@@ -102,8 +102,8 @@ void BaseMapLayer::initializePlayer() {
 		this->addChild(_playerInstance);
     }
     
-    _playerInstance->addInventory("tool1", 5);
-    for(int i=0;i<14;i++){ _playerInstance->addInventory("tool2", 13); }//用于测试背包功能
+    _playerInstance->addInventory("tool1", 5);//用于测试背包功能
+    for (int i = 0; i < 14; i++) { _playerInstance->addInventory("tool2", 13); }
     
 }
 
@@ -234,6 +234,9 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_E:
         _playerInstance->getInventory()->displayInventory();
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_Q:
+        _playerInstance->addInventory("tool2", 13);//测试按键Q
         break;
     }
 	//归一化移动方向
