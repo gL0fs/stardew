@@ -86,7 +86,12 @@ void BaseMapLayer::initializePlayer() {
     _playerInstance->setScale(scaleWidth, scaleHeight);
 
     // 设置玩家位置
-    setPlayerPosition("Objects", "SpawnPoint");
+	if (_path == 0)
+        setPlayerPosition("Objects", "SpawnPoint");
+    else {
+		//根据路径设置玩家位置
+		setPlayerPosition("Objects", "SpawnPoint"+std::to_string(_path));
+    }
 
     // 添加玩家精灵到地图层
     //如果没有添加
@@ -101,12 +106,18 @@ void BaseMapLayer::initializePlayer() {
 void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName) {
     if (!_map || !_playerInstance) return;
 
+
     // 从地图对象组获取出生点
     auto objectGroup = _map->getObjectGroup(objectGroupName);
     if (!objectGroup) return;
 
     auto spawnPoint = objectGroup->getObject(spawnPointName);
-    if (spawnPoint.empty()) return;
+	// 如果没有找到指定名称的出生点，则使用默认名称
+    if (spawnPoint.empty()) {
+        auto spawnPoint = objectGroup->getObject("SpawnPoint");
+    }
+
+	if (spawnPoint.empty()) return;
 
     // 获取地图的尺寸和缩放比例
     float mapScale = _map->getScale();
@@ -380,7 +391,7 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
         float height = object["height"].asFloat() * mapScale;
         int obx = static_cast<int>(objectX / 17.83);
         int oby = static_cast<int>(mapSize.height * 17.83 - objectY) / (17.83);
-		int obwidth = static_cast<int>(width / 17.83)+1;
+		int obwidth = static_cast<int>(width / 17.83);
 		int obheight = static_cast<int>(height / 17.83)+1;
         // 创建矩形
         CCLOG("obx %d oby %d", obx, oby);
@@ -393,7 +404,7 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
 			// 获取目标地图名称
 			std::string mapName = object["MapName"].asString();
 			// 切换地图
-			switchMap(mapName);
+			switchMap(mapName,i);
 			break;
         }
         i++;

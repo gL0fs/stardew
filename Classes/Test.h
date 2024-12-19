@@ -13,17 +13,18 @@
 class Test : public BaseMapLayer
 {
 public:
-    static cocos2d::Scene* createScene();
-    static Test* create();
+    static cocos2d::Scene* createScene(int path = 0);
+    static Test* create(int path);
     virtual bool init() override;
-    void switchMap(const std::string& mapName) override;
+    void switchMap(const std::string& mapName,int path) override;
+
 protected:
     Test();
     virtual ~Test();
 
 private:
     bool initMap();
-	
+
 };
 
 #endif // __MAP1_H__

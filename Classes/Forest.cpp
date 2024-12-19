@@ -10,21 +10,22 @@ Forest::Forest()
 Forest::~Forest()
 {
 }
-Scene* Forest::createScene()
+Scene* Forest::createScene(int path)
 {
     auto scene = Scene::create();
-
-    auto layer = Forest::create();
-
+    
+    auto layer = Forest::create(path);
+	
     if (layer != nullptr)
     {
         scene->addChild(layer);
     }
     return scene;
 }
-Forest* Forest::create()
+Forest* Forest::create(int path)
 {
     Forest* forest = new (std::nothrow) Forest();
+	forest->_path = path;
     if (forest && forest->initMap())
     {
         forest->autorelease();
@@ -80,19 +81,20 @@ bool Forest::initMap()
 
 }
 
-void Forest::switchMap(const std::string& mapName)
+void Forest::switchMap(const std::string& mapName,int path)
 {
-    if (mapName == "mine")
+    if (mapName == "test")
     {
-        if (SceneManager::getInstance().isMapInHistory("mine"))
+        /*if (SceneManager::getInstance().isMapInHistory("test"))
         {
             SceneManager::getInstance().returnToPreviousScene();
             return;
         }
         else {
-            auto scene = Mine::createScene();
-            SceneManager::getInstance().goToScene(scene, "mine");
-        }
+        */
+            auto scene = Test::createScene(path);
+            SceneManager::getInstance().goToScene(scene, "forest");
+        //}
     }
 	else if (mapName == "farm")
 	{
@@ -103,7 +105,7 @@ void Forest::switchMap(const std::string& mapName)
 		}
 		else {
 			auto scene = Map1::createScene();
-			SceneManager::getInstance().goToScene(scene, "farm");
+			SceneManager::getInstance().goToScene(scene, "forest");
 		}
 	}
     else

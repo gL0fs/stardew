@@ -9,14 +9,15 @@
 #include "MainMenuScene.h"
 #include "Toolbar.h"
 #include "ui/CocosGUI.h"
+#include "Test.h"
 
 class Forest : public BaseMapLayer
 {
 public:
-    static cocos2d::Scene* createScene();
-    static Forest* create();
+    static cocos2d::Scene* createScene(int path=0);
+    static Forest* create(int path);
     virtual bool init() override;
-    void switchMap(const std::string& mapName) override;
+    void switchMap(const std::string& mapName,int path) override;
 protected:
     Forest();
     virtual ~Forest();

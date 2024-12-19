@@ -213,6 +213,6 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
     }
 }
 
-void Mine::switchMap(const std::string& mapName) {
+void Mine::switchMap(const std::string& mapName,int path) {
     return;
 }

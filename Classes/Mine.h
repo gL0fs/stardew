@@ -15,7 +15,7 @@ public:
     void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord);
     void Mine::initializeNaijiuMap();
     bool initMap();
-    void switchMap(const std::string& mapName) override;
+    void switchMap(const std::string& mapName,int path) override;
 protected:
     Mine();
     virtual ~Mine();

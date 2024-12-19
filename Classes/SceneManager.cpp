@@ -33,10 +33,10 @@ void SceneManager::goToScene(Scene* newScene, const std::string& mapID) {
 void SceneManager::returnToPreviousScene() {
     auto director = Director::getInstance();
 
-    if (mapHistory.size() > 1) {
+    if (mapHistory.size() > 0) {
         director->popScene(); // 返回上一场景
         mapHistory.pop_back(); // 删除当前地图记录
-        CCLOG("Returned to previous map: %s", mapHistory.back().c_str());
+        CCLOG("Returned to previous map");
     }
     else {
         CCLOG("No previous map to return to.");

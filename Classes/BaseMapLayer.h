@@ -7,6 +7,7 @@
 #include "Player.h"  // 添加Player头文件引用
 #include "Toolbar.h"
 #include "SceneManager.h"
+#include <string.h>
 using namespace cocos2d;
 
 class BaseMapLayer : public cocos2d::Layer
@@ -30,11 +31,12 @@ public:
 
     void update(float delta);  // 每帧更新
     void checkChangeMap(const cocos2d::Vec2& nextPosition);//����Ƿ���Ҫ�л���ͼ
-    virtual void switchMap(const std::string& mapName)=0;//�л���ͼ
+    virtual void switchMap(const std::string& mapName,int path)=0;//�л���ͼ
     
      void initMouseEvent();
 
     bool canPlantTreeAtPosition(cocos2d::Vec2 position);
+    int _path = 0;
 protected:
     cocos2d::TMXTiledMap* _map;
     // 移除_player，改为使用Player单例
@@ -52,7 +54,7 @@ private:
 
     void plantTree(cocos2d::Vec2 position);
 
- 
+
     cocos2d::EventListenerMouse* _mouseListener;
     
 };
