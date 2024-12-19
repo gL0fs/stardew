@@ -3,6 +3,7 @@
 #include "MainMenuScene.h"
 #include "Test.h"
 #include "Mine.h"
+#include "Festival.h"
 USING_NS_CC;
 
 Scene* MainMenuScene::createScene() {

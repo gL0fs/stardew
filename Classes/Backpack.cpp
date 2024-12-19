@@ -33,7 +33,7 @@ void Item::display(float x, float y) const {
         bool TextisVisible = text->isVisible();
         if (!TextisVisible) {
             text->setPosition(position);
-            Director::getInstance()->getRunningScene()->addChild(text);
+            Director::getInstance()->getRunningScene()->addChild(text,100);
         }
         else {
             Director::getInstance()->getRunningScene()->removeChild(text);
@@ -46,7 +46,7 @@ void Item::display(float x, float y) const {
             // 设置标签的显示位置
             itemImage->setPosition(position); // 使用传入的 x, y 作为位置
             // 将标签添加到父节点（ui 层）
-            Director::getInstance()->getRunningScene()->addChild(itemImage);
+            Director::getInstance()->getRunningScene()->addChild(itemImage, 100);
         }
         else {
             Director::getInstance()->getRunningScene()->removeChild(itemImage);
@@ -156,7 +156,7 @@ void Inventory::items_display(std::vector<Item> items) const {
 void Inventory::displayInventory()const {
     bool isVisible = bagImage->isVisible();
     if (!isVisible) {
-        Director::getInstance()->getRunningScene()->addChild(bagImage);   
+        Director::getInstance()->getRunningScene()->addChild(bagImage);
     }
     else {
         Director::getInstance()->getRunningScene()->removeChild(bagImage);

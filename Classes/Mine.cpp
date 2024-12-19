@@ -7,16 +7,19 @@ USING_NS_CC;
 
 
 void Mine::initializeNaijiuMap() {
-    minemap = TMXTiledMap::create("mine1.tmx");
-  
-    cocos2d::TMXLayer* mineralsLayer = minemap->getLayer("mineral");
+    
    
+    const auto mineralsLayer = minemap->getLayer("mineral");
+    if (mineralsLayer == NULL)
+        CCLOG("null");
     cocos2d::Size mapSize = minemap->getMapSize();
     
     for (int x = 0; x < 40; ++x) {
         for (int y = 0; y < 30; ++y) {
             cocos2d::Vec2 tileCoord(x, y);
+            CCLOG("1");
             int tileGID = mineralsLayer->getTileGIDAt(tileCoord);
+            CCLOG("2");
             // 设置默认耐久度为0或适当的值
             int naijiu = 0;
             if (tileGID != 0) {
@@ -54,14 +57,7 @@ Scene* Mine::createScene()
 
     auto toolbarLayer = Toolbar::getInstance();
     toolbarLayer->setPositionOnLeft(); // 设置工具栏层位置
-
-    if (toolbarLayer->getParent() == nullptr)
-        scene->addChild(toolbarLayer, 1); // 将工具栏层添加到场景中
-    else {
-        toolbarLayer->getParent()->removeChild(toolbarLayer, false);
-        scene->addChild(toolbarLayer);
-    }
-    
+    scene->addChild(toolbarLayer,1); // 将工具栏层添加到场景中
     CCLOG("add toolbar");
     
     return scene;
@@ -98,7 +94,7 @@ bool Mine::initMap()
     // 加载地图
     minemap = TMXTiledMap::create("mine1.tmx");
     
-    this->addChild(minemap); // 将地图添加到当前层
+    //this->addChild(minemap); // 将地图添加到当前层
 
     // 获取矿物图层
     mineralsLayer = minemap->getLayer("mineral");
@@ -160,16 +156,16 @@ cocos2d::Vec2 Mine::getTileCoordForPosition(cocos2d::Vec2 position) {
 
 void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
     
-    const auto minemap_ = TMXTiledMap::create("mine1.tmx");
-  
-
+    const auto _minemap = TMXTiledMap::create("mine1.tmx");
+    const auto _mineralsLayer = _minemap->getLayer("mineral");
+    static auto mineralsLayer = _map->getLayer("mineral");
     // 检查瓷砖索引是否有效
     if (tileCoord.x >= 0 && tileCoord.x < 40 &&
         tileCoord.y >= 0 && tileCoord.y < 30) {
         // 获取当前瓷砖的GID
-       
-        int tileGID = mineralsLayer->getTileGIDAt(tileCoord);
-        
+        CCLOG("1");
+        int tileGID = _mineralsLayer->getTileGIDAt(tileCoord);
+        CCLOG("2");
         // 检查是否有矿物
         if (tileGID != 0) {
             CCLOG("exist");
@@ -179,7 +175,7 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
                 return;
             }
 
-            cocos2d::Value properties = minemap_->getPropertiesForGID(tileGID);
+            cocos2d::Value properties = _minemap->getPropertiesForGID(tileGID);
            
             CCLOG("getid");
             if (!properties.isNull()) {
@@ -198,7 +194,16 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
                         it->second -= 1;
                         // 检查耐久度是否为0
                         if (it->second == 0) {
+                            if (tileCoord.x < 0 || tileCoord.x >= 40 || tileCoord.y < 0 || tileCoord.y >= 30) {
+                                CCLOG("tileCoord out of range: (%d, %d)", tileCoord.x, tileCoord.y);
+                                return;
+                            }
+                            if (mineralsLayer == nullptr) {
+                                CCLOG("mineralsLayer is NULL");
+                                return;
+                            }
                             // 移除矿物
+                            CCLOG("REMOVE");
                             mineralsLayer->setTileGID(0, tileCoord);
                             CCLOG("Tile GID after removal: %d", mineralsLayer->getTileGIDAt(tileCoord));
                             Director::getInstance()->drawScene();
@@ -213,6 +218,7 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
     }
 }
 
-void Mine::switchMap(const std::string& mapName,int path) {
+void Mine::switchMap(const std::string& mapName, int path) {
+
     return;
 }

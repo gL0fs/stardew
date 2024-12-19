@@ -86,12 +86,7 @@ void BaseMapLayer::initializePlayer() {
     _playerInstance->setScale(scaleWidth, scaleHeight);
 
     // 设置玩家位置
-	if (_path == 0)
-        setPlayerPosition("Objects", "SpawnPoint");
-    else {
-		//根据路径设置玩家位置
-		setPlayerPosition("Objects", "SpawnPoint"+std::to_string(_path));
-    }
+    setPlayerPosition("Objects", "SpawnPoint");
 
     // 添加玩家精灵到地图层
     //如果没有添加
@@ -101,27 +96,17 @@ void BaseMapLayer::initializePlayer() {
         _playerInstance->getParent()->removeChild(_playerInstance, false);
 		this->addChild(_playerInstance);
     }
-    
-    _playerInstance->addInventory("tool1", 5);//用于测试背包功能
-    for (int i = 0; i < 14; i++) { _playerInstance->addInventory("tool2", 13); }
-    
 }
 
 void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName) {
     if (!_map || !_playerInstance) return;
-
 
     // 从地图对象组获取出生点
     auto objectGroup = _map->getObjectGroup(objectGroupName);
     if (!objectGroup) return;
 
     auto spawnPoint = objectGroup->getObject(spawnPointName);
-	// 如果没有找到指定名称的出生点，则使用默认名称
-    if (spawnPoint.empty()) {
-        auto spawnPoint = objectGroup->getObject("SpawnPoint");
-    }
-
-	if (spawnPoint.empty()) return;
+    if (spawnPoint.empty()) return;
 
     // 获取地图的尺寸和缩放比例
     float mapScale = _map->getScale();
@@ -239,6 +224,7 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
         _playerInstance->addInventory("tool2", 13);//测试按键Q
         break;
     }
+
 	//归一化移动方向
 	_moveDirection.normalize();
 }
@@ -373,19 +359,18 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
 
     auto tileSize = this->_map->getTileSize();
     auto mapSize = this->_map->getMapSize();
-    auto mapScale = this->_map->getScale();
+    auto mapScale = this->_map->getScale(); 
 
     int x = static_cast<int>(nextPosition.x / 17.83);
     int y = static_cast<int>(mapSize.height * 17.83 - nextPosition.y) / (17.83);
-    auto position = cocos2d::Vec2(x, y);
-    CCLOG("%d x %d y", x, y);
+	CCLOG("%d x %d y", x, y);
 
     int i = 1;
     while (true) {
         std::string objectName = std::to_string(i);
         auto object = objectGroup->getObject(objectName);
         if (object.empty()) {
-            CCLOG("No more objects found!");
+			CCLOG("No more objects found!");
             break;
         }
         CCLOG("object %d", i);
@@ -393,30 +378,22 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
         cocos2d::Size mapSize = _map->getMapSize();
         cocos2d::Size tileSize = _map->getTileSize();
 
-        
-        // 获取object的位置和大小
         float objectX = object["x"].asFloat() * mapScale;
         float objectY = object["y"].asFloat() * mapScale;
-        float width = object["width"].asFloat() * mapScale;
-        float height = object["height"].asFloat() * mapScale;
         int obx = static_cast<int>(objectX / 17.83);
         int oby = static_cast<int>(mapSize.height * 17.83 - objectY) / (17.83);
-		int obwidth = static_cast<int>(width / 17.83);
-		int obheight = static_cast<int>(height / 17.83)+1;
-        // 创建矩形
-        CCLOG("obx %d oby %d", obx, oby);
-        CCLOG("width %d height %d", obwidth, obheight);
-        cocos2d::Rect objectRect(obx- obwidth, oby-obheight, obwidth, obheight);
 
-        // 检查位置是否在矩形内
-        if (objectRect.containsPoint(position)) {
-			CCLOG("hit_object %d", i);
-			// 获取目标地图名称
-			std::string mapName = object["MapName"].asString();
-			// 切换地图
-			switchMap(mapName,i);
-			break;
+        CCLOG("%d obx %d oby", obx, oby);
+        if (x == obx
+            && y == oby ) {
+            CCLOG("Player collided with object!");
+            if (object.find("MapName") != object.end()) {
+                std::string destination = object.at("MapName").asString();
+				switchMap(destination,i);
+                return;
+            }
         }
         i++;
     }
 }
+
