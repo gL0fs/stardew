@@ -18,12 +18,18 @@ public:
     static Forest* create(int path);
     virtual bool init() override;
     void switchMap(const std::string& mapName,int path) override;
+    void Forest::initMouseEvent();
+    cocos2d::Vec2 Forest::getTileCoordForPosition(cocos2d::Vec2 position);
+    void Fishing(cocos2d::Vec2 position);
+	void collect(cocos2d::Vec2 position);
+	void cutTree(cocos2d::Vec2 position);
 protected:
     Forest();
     virtual ~Forest();
 
 private:
     bool initMap();
+    cocos2d::EventListenerMouse* _mouseListener;
 
 };
 
