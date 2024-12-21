@@ -158,12 +158,56 @@ void Shop::updatePlayerMoneyDisplay(int newMoney)
     }
 }
 void Shop::logSelectedItemCoord() {
+    
     // 打印当前选中的瓦片坐标
     CCLOG("Selected item coordinate: (%d, %d)", (int)_selectedItemCoord.x, (int)_selectedItemCoord.y);
     auto player = Player::getInstance();
-    if (_selectedItemCoord.y = 3)
+    if (_selectedItemCoord.x == 3)//鱼类在第三列
     {
-        player->setMoney(player->getmoney() + 30);
+        if (_selectedItemCoord.y == 1)
+        {
+            if (player->getInventory()->removeItem("fish1", 1))
+                player->setMoney(player->getmoney() + 10);
+        }
+        else if (_selectedItemCoord.y == 2)
+        {
+            if (player->getInventory()->removeItem("fish2", 1))
+                player->setMoney(player->getmoney() + 30);
+        }
+        else if (player->getInventory()->removeItem("fish3", 1))
+        {
+            player->setMoney(player->getmoney() + 50);
+        }
+
+    }
+    if (_selectedItemCoord.x == 1)
+    {
+        if (_selectedItemCoord.y == 1)
+        {
+            if (player->getInventory()->removeItem("kuang1", 1))
+                player->setMoney(player->getmoney() + 50);
+        }
+        else if (_selectedItemCoord.y == 2)
+        {
+            if (player->getInventory()->removeItem("kuang2", 1))
+                player->setMoney(player->getmoney() + 10);
+        }
     }
 
+}
+void Shop::setVisible(bool visible) {
+    // 调用父类的 setVisible 方法
+    Layer::setVisible(visible);
+
+    // 根据可见性动态启用或禁用键盘事件监听器
+    if (visible) {
+        // 如果商店可见，重新添加键盘事件监听器
+        auto eventListener = EventListenerKeyboard::create();
+        eventListener->onKeyPressed = CC_CALLBACK_2(Shop::onKeyPressed, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
+    }
+    else {
+        // 如果商店不可见，移除键盘事件监听器
+        _eventDispatcher->removeEventListenersForTarget(this, true);
+    }
 }
