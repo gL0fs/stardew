@@ -5,11 +5,12 @@
 #include "BaseMapLayer.h"
 #include "Player.h"
 #include "Mine.h"
-#include "Map1.h"
+#include "MyFarm.h"
 #include "MainMenuScene.h"
 #include "Toolbar.h"
 #include "ui/CocosGUI.h"
 #include "Test.h"
+#include"House.h"
 
 class Forest : public BaseMapLayer
 {

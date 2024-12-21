@@ -104,10 +104,22 @@ void Forest::switchMap(const std::string& mapName,int path)
 			return;
 		}
 		else {
-			auto scene = Map1::createScene();
+			auto scene = MyFarm::createScene();
 			SceneManager::getInstance().goToScene(scene, "forest");
 		}
 	}
+    else if (mapName == "house")
+    {
+        if (SceneManager::getInstance().isMapInHistory("house"))
+        {
+            SceneManager::getInstance().returnToPreviousScene();
+            return;
+        }
+        else {
+            auto scene = House::createScene();
+            SceneManager::getInstance().goToScene(scene, "forest");
+        }
+    }
     else
     {
         CCLOG("Unknown map: %s", mapName.c_str());

@@ -33,9 +33,6 @@
     <ClCompile Include="..\Classes\Test.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Map1.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\SceneManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -55,6 +52,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\shop.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MyFarm.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\House.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,9 +89,6 @@
     <ClInclude Include="..\Classes\Farm.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Map1.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\SceneManager.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -111,6 +111,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\classes\TimeManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\House.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MyFarm.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

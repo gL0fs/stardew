@@ -155,9 +155,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\BaseMapLayer.cpp" />
     <ClCompile Include="..\Classes\Festival.cpp" />
     <ClCompile Include="..\Classes\Forest.cpp" />
+    <ClCompile Include="..\Classes\House.cpp" />
     <ClCompile Include="..\Classes\MainMenuScene.cpp" />
-    <ClCompile Include="..\Classes\Map1.cpp" />
     <ClCompile Include="..\Classes\Mine.cpp" />
+    <ClCompile Include="..\Classes\MyFarm.cpp" />
     <ClCompile Include="..\Classes\Player.cpp" />
     <ClCompile Include="..\Classes\SceneManager.cpp" />
     <ClCompile Include="..\Classes\shop.cpp" />
@@ -174,9 +175,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Farm.h" />
     <ClInclude Include="..\Classes\Festival.h" />
     <ClInclude Include="..\Classes\Forest.h" />
+    <ClInclude Include="..\Classes\House.h" />
     <ClInclude Include="..\Classes\MainMenuScene.h" />
-    <ClInclude Include="..\Classes\Map1.h" />
     <ClInclude Include="..\Classes\Mine.h" />
+    <ClInclude Include="..\Classes\MyFarm.h" />
     <ClInclude Include="..\Classes\Player.h" />
     <ClInclude Include="..\Classes\SceneManager.h" />
     <ClInclude Include="..\Classes\shop.h" />
