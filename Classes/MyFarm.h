@@ -19,6 +19,6 @@ private:
     //void MyFarm::update(float delta);
     //void MyFarm::checkPlayerCollision(const cocos2d::Vec2& nextPosition);
 
-    void switchMap(const std::string& mapName) override;
+    //void switchMap(const std::string& mapName) override;
 };
 #endif

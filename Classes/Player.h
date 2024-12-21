@@ -36,6 +36,9 @@ public:
     void displayShop(); // œ‘ æ…ÃµÍ
     int Player::getmoney();
     void Player::setMoney(int newMoney);
+    void addzhong();
+    void addyu();
+    void addkuang();
 private:
     Player();
     static int money;
@@ -46,6 +49,9 @@ private:
     Inventory* _inventory;
     Shop* _shopLayer; // …ÃµÍ≤„
     CC_DISALLOW_COPY_AND_ASSIGN(Player);
+    int diaoyu;
+    int wakuang;
+    int zhongdi;
 };
 
 #endif // PLAYER_H

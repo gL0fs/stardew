@@ -193,6 +193,19 @@ void Shop::logSelectedItemCoord() {
                 player->setMoney(player->getmoney() + 10);
         }
     }
+    if (_selectedItemCoord.x == 2)//µÚ¶þÁÐ
+    {
+        if (_selectedItemCoord.y == 1)
+        {
+            if (player->getInventory()->addItemToInventory("seed",1));
+                player->setMoney(player->getmoney() + 50);
+        }
+        else if (_selectedItemCoord.y == 2)
+        {
+            if (player->getInventory()->removeItem("kuang2", 1))
+                player->setMoney(player->getmoney() + 10);
+        }
+    }
 
 }
 void Shop::setVisible(bool visible) {

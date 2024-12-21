@@ -1,6 +1,7 @@
 #include "Forest.h"
 #include "Toolbar.h"
 #include "ui/CocosGUI.h"
+#include "MyFarm.h"
 USING_NS_CC;
 
 Forest::Forest()
@@ -104,7 +105,7 @@ void Forest::switchMap(const std::string& mapName,int path)
 			return;
 		}
 		else {
-			auto scene = Map1::createScene();
+			auto scene = MyFarm::createScene();
 			SceneManager::getInstance().goToScene(scene, "forest");
 		}
 	}

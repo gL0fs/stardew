@@ -4,13 +4,26 @@ USING_NS_CC;
 Player* Player::_instance = nullptr;
 int Player::money = 500;
 Player::Player()
-    : _health(100),      
-    _stamina(100),     
+    : _health(100),
+    _stamina(100),
+    zhongdi(0), diaoyu(0), wakuang(0),
     _inventory(nullptr){
     _inventory = new Inventory(36); 
     _shopLayer = Shop::getInstance(); // 获取单例商店实例
+    
 }
-
+void Player::addzhong()
+{
+    zhongdi++;
+}
+void Player::addyu()
+{
+    diaoyu++;
+}
+void Player::addkuang()
+{
+    wakuang++;
+}
 Player* Player::getInstance() {
     if (!_instance) {
         _instance = new (std::nothrow) Player();
