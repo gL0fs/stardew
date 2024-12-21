@@ -15,6 +15,7 @@ bool BaseMapLayer::init() {
         return false;
     }
 
+
     // 设置键盘监听
     auto keyboardListener = EventListenerKeyboard::create();
     keyboardListener->onKeyPressed = CC_CALLBACK_2(BaseMapLayer::onKeyPressed, this);
@@ -238,6 +239,11 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
     case cocos2d::EventKeyboard::KeyCode::KEY_Q:
         _playerInstance->addInventory("tool2", 13);//测试按键Q
         break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_O:
+        _playerInstance->displayShop(); // 调用 Player 的显示商店函数
+        break;
+        
+    
     }
 	//归一化移动方向
 	_moveDirection.normalize();
@@ -420,3 +426,4 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
         i++;
     }
 }
+

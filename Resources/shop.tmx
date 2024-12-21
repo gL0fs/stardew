@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="6" height="6" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" source="Objects_2.tsx"/>
+ <tileset firstgid="161" source="Festivals.tsx"/>
+ <layer id="1" name="BackGround" width="6" height="6">
+  <data encoding="csv">
+294,294,294,294,294,294,
+294,294,294,294,294,294,
+294,294,294,294,294,294,
+294,294,294,294,294,294,
+294,294,294,294,294,294,
+294,294,294,294,294,294
+</data>
+ </layer>
+ <layer id="2" name="items" width="6" height="6">
+  <data encoding="csv">
+0,0,0,0,0,0,
+0,138,85,18,26,0,
+0,147,86,18,26,0,
+0,61,87,18,26,0,
+0,119,88,18,26,0,
+0,0,0,0,0,0
+</data>
+ </layer>
+</map>

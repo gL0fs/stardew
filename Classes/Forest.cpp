@@ -20,6 +20,17 @@ Scene* Forest::createScene(int path)
     {
         scene->addChild(layer);
     }
+    auto toolbarLayer = Toolbar::getInstance();
+    toolbarLayer->setPositionOnLeft(); // 设置工具栏层位置
+
+    if (toolbarLayer->getParent() == nullptr)
+        scene->addChild(toolbarLayer, 1); // 将工具栏层添加到场景中
+    else {
+        toolbarLayer->getParent()->removeChild(toolbarLayer, false);
+        scene->addChild(toolbarLayer);
+    }
+
+    CCLOG("add toolbar");
     return scene;
 }
 Forest* Forest::create(int path)
@@ -56,27 +67,13 @@ bool Forest::initMap()
     loadMap("Forest/Forest.tmx");//加入地图层 
     initializePlayer();//加入玩家层
 
-    auto toolbar = Toolbar::getInstance();//工具栏实例
-    auto uiLayer = Layer::create();
-    this->addChild(uiLayer);
-
-    // 在UI层中添加toolbar
-    int toolbarHeight = 16; // 假设工具栏的高度是16像素
-    auto winSize = Director::getInstance()->getWinSize();
-    auto toolbarLayout = ui::Layout::create();
-    toolbarLayout->setSize(Size(winSize.width, toolbarHeight)); // 设置布局大小
-    toolbarLayout->setIgnoreAnchorPointForPosition(true);
-    toolbarLayout->setPosition(Vec2(0, winSize.height / 2 - toolbarHeight / 2)); // 设置布局位置为屏幕垂直中心
-    uiLayer->addChild(toolbarLayout);
+   
 
     // 创建toolbar并添加到布局
 
     // 设置toolbar的位置为布局的中心
 
-    toolbar->setPosition(Vec2(toolbarLayout->getContentSize().width / 2, toolbarLayout->getContentSize().height / 2));
-	if (toolbar->getParent() == nullptr)
-        toolbarLayout->addChild(toolbar);
-    CCLOG("add toolbar");
+   
 
 	initMouseEvent();
 

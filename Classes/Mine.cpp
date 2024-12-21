@@ -206,6 +206,11 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
                             }
                             // 移除矿物
                             CCLOG("REMOVE");
+                            // 获取"name"属性，假设它是一个整数值
+                            int mineralNameInt = propMap.at("name").asInt();
+                       
+                            // 或者直接使用整数值来标识物品
+                            _playerInstance->addInventory("kuang" + std::to_string(mineralNameInt), 1);
                             mineralsLayer->setTileGID(0, tileCoord);
                             CCLOG("Tile GID after removal: %d", mineralsLayer->getTileGIDAt(tileCoord));
                             Director::getInstance()->drawScene();

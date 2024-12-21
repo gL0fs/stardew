@@ -8,6 +8,7 @@
 #include "Toolbar.h"
 #include "SceneManager.h"
 #include <string.h>
+#include "shop.h"
 using namespace cocos2d;
 
 class BaseMapLayer : public cocos2d::Layer
@@ -46,6 +47,8 @@ protected:
 
     // 添加初始化玩家的方法
     virtual void initializePlayer();
+
+ 
 private:
    cocos2d::Vector<cocos2d::Sprite*> _treesVector;
 

@@ -2,13 +2,13 @@
 #include "cocos2d.h"
 USING_NS_CC;
 Player* Player::_instance = nullptr;
-
+int Player::money = 500;
 Player::Player()
     : _health(100),      
     _stamina(100),     
     _inventory(nullptr){
     _inventory = new Inventory(36); 
-    
+    _shopLayer = Shop::getInstance(); // 获取单例商店实例
 }
 
 Player* Player::getInstance() {
@@ -78,4 +78,20 @@ Vec2 Player::getxy() {
     CCLOG("player%d %d", x, y);
 
     return cocos2d::Vec2(x, y);
+}
+void Player::displayShop() {
+    if (_shopLayer) {
+        _shopLayer->displayShop(); // 调用 Shop 类的显示函数
+    }
+}
+int Player::getmoney()
+{
+    return money;
+}
+// 假设 player 是一个全局或成员变量
+void Player::setMoney(int newMoney) {
+    money = newMoney;
+
+    // 更新商店中的金钱显示
+    Shop::getInstance()->updatePlayerMoneyDisplay(newMoney);
 }
