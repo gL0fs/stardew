@@ -10,7 +10,7 @@ public:
     static UI* getInstance(); // 单例模式
     void updateUI();          // 更新 UI 显示
     void showUI();            // 显示 UI
-
+   
 private:
     UI(); // 构造函数私有化
     static UI* _instance;     // 单例实例
@@ -23,4 +23,4 @@ private:
     cocos2d::Label* _wakuangLabel;
 };
 
-#endif // UI_H
+#endif   // UI_H

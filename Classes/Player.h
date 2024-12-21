@@ -5,8 +5,9 @@
 #include "Backpack.h"
 #include <vector>
 #include <string>
-#include "Player.h"
+
 #include "shop.h"
+#include "UI.h"
 USING_NS_CC;
 
 class Player : public Sprite {
@@ -17,6 +18,7 @@ public:
     bool initPlayer(const std::string& spriteFile);
 
     void setHealth(int health);
+    void changeHealth();
     int getHealth() const;
 
     void setStamina(int stamina);
@@ -39,19 +41,27 @@ public:
     void addzhong();
     void addyu();
     void addkuang();
+
+    void showUI(); // 添加显示 UI 的方法
+    int diaoyu;
+    int wakuang;
+    int zhongdi;
 private:
     Player();
     static int money;
+
+    
     static Player* _instance;
+
+    
 
     int _health;
     int _stamina;
     Inventory* _inventory;
     Shop* _shopLayer; // 商店层
+    
     CC_DISALLOW_COPY_AND_ASSIGN(Player);
-    int diaoyu;
-    int wakuang;
-    int zhongdi;
+    
 };
 
 #endif // PLAYER_H

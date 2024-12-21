@@ -17,14 +17,14 @@ public:
             }, 1.0f, "update_key");
     }
 
-    void plantCrop(const std::string& name, const std::string& spritefile, Vec2 position)
+    /*void plantCrop(const std::string& name, const std::string& spritefile, Vec2 position)
     {
         Crop* crop = new Crop(name, spritefile);
         crop->setPosition(position);
         this->addChild(crop);
         _crops.push_back(crop);
         crop->plant();  // ÖÖÖ²×÷Îï
-    }
+    }*/
 
     void harvestCrop(int index)
     {

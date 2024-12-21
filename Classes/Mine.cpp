@@ -161,6 +161,7 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
     const auto _minemap = TMXTiledMap::create("mine1.tmx");
     const auto _mineralsLayer = _minemap->getLayer("mineral");
     static auto mineralsLayer = _map->getLayer("mineral");
+    static int gongji = 1;
     // 检查瓷砖索引是否有效
     if (tileCoord.x >= 0 && tileCoord.x < 40 &&
         tileCoord.y >= 0 && tileCoord.y < 30) {
@@ -193,7 +194,9 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
                     if (it != tileNaijiuMap.end()) {
                         // 减少耐久度
                         CCLOG("%d", it->second);
-                        it->second -= 1;
+                        it->second -= gongji;
+                        if (it->second <= 0)
+                            it->second = 0;
                         // 检查耐久度是否为0
                         if (it->second == 0) {
                             if (tileCoord.x < 0 || tileCoord.x >= 40 || tileCoord.y < 0 || tileCoord.y >= 30) {
@@ -210,6 +213,11 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
                             int mineralNameInt = propMap.at("name").asInt();
                        
                             // 或者直接使用整数值来标识物品
+                            _playerInstance->addkuang();
+                            if (_playerInstance->wakuang >= 35 && _playerInstance->wakuang <70)
+                                gongji = 2;
+                            else if (_playerInstance->wakuang >= 70)
+                                gongji == 3;
                             _playerInstance->addInventory("kuang" + std::to_string(mineralNameInt), 1);
                             mineralsLayer->setTileGID(0, tileCoord);
                             CCLOG("Tile GID after removal: %d", mineralsLayer->getTileGIDAt(tileCoord));

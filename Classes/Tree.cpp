@@ -1,8 +1,8 @@
-<<<<<<< HEAD
 
-=======
+
+
 #include "MyFarm.h"
->>>>>>> 96340fc5eaad3341fc487431aca3b1b45a05abce
+
 #include "cocos2d.h"
 #include "BaseMapLayer.h"
 #include "extensions/cocos-ext.h" // For keyboard support

@@ -17,7 +17,7 @@ private:
 
     bool initMap();  // 初始化地图函数
 
-    void switchMap(const std::string& mapName) override;  // 重载 switchMap 函数
+    void switchMap(const std::string& mapName,int path) override;  // 重载 switchMap 函数
 };
 
 #endif

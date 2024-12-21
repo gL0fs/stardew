@@ -67,11 +67,12 @@ void Shop::displayShop() {
     static int visible=1;
     if (!shop->getParent()) {
         Director::getInstance()->getRunningScene()->addChild(shop);
-        
+        CCLOG("¿É¼û");
     }
     else {
         visible = 1 - visible;
         shop->setVisible(visible);
+        CCLOG("ÇÐ»»");
     }
 }
 
