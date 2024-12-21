@@ -54,7 +54,14 @@
     <ClCompile Include="..\Classes\shop.cpp">
       <Filter>src</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="UI.cpp">
+=======
+    <ClCompile Include="..\Classes\MyFarm.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\House.cpp">
+>>>>>>> 96340fc5eaad3341fc487431aca3b1b45a05abce
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,7 +117,14 @@
     <ClInclude Include="..\classes\TimeManager.h">
       <Filter>src</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="UI.h">
+=======
+    <ClInclude Include="..\Classes\House.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MyFarm.h">
+>>>>>>> 96340fc5eaad3341fc487431aca3b1b45a05abce
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

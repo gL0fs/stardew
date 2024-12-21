@@ -5,11 +5,16 @@
 #include "BaseMapLayer.h"
 #include "Player.h"
 #include "Mine.h"
+<<<<<<< HEAD
 
+=======
+#include "MyFarm.h"
+>>>>>>> 96340fc5eaad3341fc487431aca3b1b45a05abce
 #include "MainMenuScene.h"
 #include "Toolbar.h"
 #include "ui/CocosGUI.h"
 #include "Test.h"
+#include"House.h"
 
 class Forest : public BaseMapLayer
 {
