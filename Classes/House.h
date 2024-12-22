@@ -7,17 +7,15 @@
 class House : public BaseMapLayer 
 {
 public:
-    static cocos2d::Scene* createScene();  // 创建场景函数
-    static House* create();  // 创建 House 实例
-    virtual bool init();  // 声明 init 函数，确保是 virtual
+    static cocos2d::Scene* createScene(const std::string& spawnPointName);  // 创建场景函数
+    static House* create(const std::string& spawnPointName);  // 创建 House 实例
+    bool init() override;  // 声明 init 函数，确保是 virtual
 
 
 
 private:
 
-    bool initMap();  // 初始化地图函数
-
-    void switchMap(const std::string& mapName,int path) override;  // 重载 switchMap 函数
+    bool initMap(const std::string& spawnPointName) override;  // 初始化地图函数
 };
 
 #endif

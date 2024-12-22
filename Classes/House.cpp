@@ -5,13 +5,13 @@
 
 USING_NS_CC;
 
-Scene* House::createScene()  // 将 MyFarm 改为 House
+Scene* House::createScene(const std::string& spawnPointName)  // 将 MyFarm 改为 House
 {
     // 创建一个场景对象，不要自动释放
     auto scene = Scene::create();
 
     // 创建 House 实例，并设置为场景的子节点
-    auto layer = House::create();
+    auto layer = House::create(spawnPointName);
 
     // 如果 layer 创建成功，则添加到场景中
     if (layer != nullptr)
@@ -23,10 +23,10 @@ Scene* House::createScene()  // 将 MyFarm 改为 House
     return scene;
 }
 
-House* House::create()  // 将 MyFarm 改为 House
+House* House::create(const std::string& spawnPointName)  // 将 MyFarm 改为 House
 {
     House* house = new (std::nothrow) House();
-    if (house && house->initMap())
+    if (house && house->initMap(spawnPointName))
     {
         house->autorelease();
         return house;
@@ -47,7 +47,7 @@ bool House::init()  // 将 MyFarm 改为 House
     return true;
 }
 
-bool House::initMap()  // 将 MyFarm 改为 House
+bool House::initMap(const std::string& spawnPointName)  // 将 MyFarm 改为 House
 {
     if (!init())
     {
@@ -57,11 +57,7 @@ bool House::initMap()  // 将 MyFarm 改为 House
     // 调用基类的方法来加载地图
     loadMap("house.tmx");  // 更改为 house.tmx
 
-    initializePlayer();
+    initializePlayer(spawnPointName);
 
     return true;
-}
-
-void House::switchMap(const std::string& mapName,int path) {  // 将 MyFarm 改为 House
-    return;
 }

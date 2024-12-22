@@ -2,18 +2,18 @@
 #include "MyFarm.h"
 #include "CropSystem.h"
 USING_NS_CC;
-Scene* MyFarm::createScene() {
+Scene* MyFarm::createScene(const std::string& spawnPointName) {
     auto scene = Scene::create();
-    auto layer = MyFarm::create();
+    auto layer = MyFarm::create(spawnPointName);
     if (layer != nullptr) {
         scene->addChild(layer);
     }
     return scene;
 }
 
-MyFarm* MyFarm::create() {
+MyFarm* MyFarm::create(const std::string& spawnPointName) {
     MyFarm* myFarm = new (std::nothrow) MyFarm();
-    if (myFarm && myFarm->initMap()) {
+    if (myFarm && myFarm->initMap(spawnPointName)) {
         myFarm->autorelease();
         return myFarm;
     }
@@ -40,7 +40,7 @@ void MyFarm::initCropSystem() {
     }
 }
 
-bool MyFarm::initMap() {
+bool MyFarm::initMap(const std::string& spawnPointName) {
     if (!init()) {
         return false;
     }
@@ -55,7 +55,7 @@ bool MyFarm::initMap() {
     _toolbar = Toolbar::getInstance();
     _toolbar->setPositionOnLeft();
     this->addChild(_toolbar, 10);
-    initializePlayer();
+    initializePlayer(spawnPointName);
 
     // 初始化作物系统
     initCropSystem();
@@ -73,9 +73,6 @@ bool MyFarm::initMap() {
     return true;
 }
 
-void MyFarm::switchMap(const std::string& mapName, int path) {
-    // 实现地图切换逻辑
-}
 void MyFarm::onKeyPressed1(EventKeyboard::KeyCode keyCode, Event* event) {
     // 处理工具选择（1-5键）
     if (keyCode >= EventKeyboard::KeyCode::KEY_1 &&

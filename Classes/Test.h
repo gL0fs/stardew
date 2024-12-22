@@ -13,17 +13,16 @@
 class Test : public BaseMapLayer
 {
 public:
-    static cocos2d::Scene* createScene(int path = 0);
-    static Test* create(int path);
-    virtual bool init() override;
-    void switchMap(const std::string& mapName,int path) override;
+    static cocos2d::Scene* createScene(const std::string& spawnPointName);
+    static Test* create(const std::string& spawnPointName);
+    bool init() override;
 
 protected:
     Test();
     virtual ~Test();
 
 private:
-    bool initMap();
+    bool initMap(const std::string& spawnPointName)override;
 
 };
 

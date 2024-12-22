@@ -17,10 +17,9 @@
 class Forest : public BaseMapLayer
 {
 public:
-    static cocos2d::Scene* createScene(int path=0);
-    static Forest* create(int path);
-    virtual bool init() override;
-    void switchMap(const std::string& mapName,int path) override;
+    static cocos2d::Scene* createScene(const std::string& spawnPointName);
+    static Forest* create(const std::string& spawnPointName);
+    bool init() override;
     void Forest::initMouseEvent();
     cocos2d::Vec2 Forest::getTileCoordForPosition(cocos2d::Vec2 position);
     void Fishing(cocos2d::Vec2 position);
@@ -31,7 +30,7 @@ protected:
     virtual ~Forest();
 
 private:
-    bool initMap();
+    bool initMap(const std::string& spawnPointName)override;
     cocos2d::EventListenerMouse* _mouseListener;
 	void deleteWholeObject(cocos2d::Vec2 position, TMXLayer* layer);
 };

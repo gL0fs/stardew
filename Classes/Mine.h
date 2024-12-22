@@ -7,15 +7,14 @@
 class Mine : public BaseMapLayer
 {
 public:
-    static cocos2d::Scene* createScene();
-    static Mine* create();
-    virtual bool init() override;
+    static cocos2d::Scene* createScene(const std::string& spawnPointName);
+    static Mine* create(const std::string& spawnPointName);
+    bool init() override;
     void Mine::initMouseEvent() ;
     cocos2d::Vec2 Mine::getTileCoordForPosition(cocos2d::Vec2 position);
     void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord);
     void Mine::initializeNaijiuMap();
-    bool initMap();
-    void switchMap(const std::string& mapName,int path) override;
+    bool initMap(const std::string& spawnPointName) override;
 protected:
     Mine();
     virtual ~Mine();

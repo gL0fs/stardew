@@ -10,22 +10,21 @@ Test::Test()
 Test::~Test()
 {
 }
-Scene* Test::createScene(int path)
+Scene* Test::createScene(const std::string& spawnPointName)
 {
     auto scene = Scene::create();
 
-    auto layer = Test::create(path);
+    auto layer = Test::create(spawnPointName);
     if (layer != nullptr)
     {
         scene->addChild(layer);
     }
     return scene;
 }
-Test* Test::create(int path)
+Test* Test::create(const std::string& spawnPointName)
 {
     Test* test = new (std::nothrow) Test();
-	test->_path = path;
-    if (test && test->initMap())
+    if (test && test->initMap(spawnPointName))
     {
         test->autorelease();
         return test;
@@ -44,7 +43,7 @@ bool Test::init()
     return true;
 }
 
-bool Test::initMap()
+bool Test::initMap(const std::string& spawnPointName)
 {
     if (!init())
     {
@@ -53,7 +52,7 @@ bool Test::initMap()
 
 
     loadMap("Test/Test.tmx");//加入地图层 
-    initializePlayer();//加入玩家层
+    initializePlayer(spawnPointName);//加入玩家层
 
     auto toolbar = Toolbar::getInstance();//工具栏实例
     auto uiLayer = Layer::create();
@@ -79,39 +78,3 @@ bool Test::initMap()
     return true;
 
 }
-
-void Test::switchMap(const std::string& mapName,int path)
-{
-    if (mapName == "mine")
-    {
-		if (SceneManager::getInstance().isMapInHistory("mine"))
-		{
-			SceneManager::getInstance().returnToPreviousScene();
-			return;
-        }
-        else {
-            auto scene = Mine::createScene();
-            SceneManager::getInstance().goToScene(scene, "test");
-        }
-    }
-    else if (mapName == "forest")
-    {
-        /*if (SceneManager::getInstance().isMapInHistory("forest"))
-        {
-            SceneManager::getInstance().returnToPreviousScene();
-            return;
-        }
-        else {
-        */
-            auto scene = Forest::createScene(path);
-            SceneManager::getInstance().goToScene(scene, "house");
-        //}
-    }
-	else
-	{
-		CCLOG("Unknown map: %s", mapName.c_str());
-	}
-}
-
-
-

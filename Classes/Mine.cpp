@@ -40,11 +40,11 @@ Mine::Mine()
 Mine::~Mine()
 {
 }
-Scene* Mine::createScene()
+Scene* Mine::createScene(const std::string& spawnPointName)
 {
     auto scene = Scene::create();
 
-    auto layer = Mine::create();
+    auto layer = Mine::create(spawnPointName);
 
     if (layer != nullptr)
     {
@@ -67,10 +67,10 @@ Scene* Mine::createScene()
     return scene;
 
 }
-Mine* Mine::create()
+Mine* Mine::create(const std::string& spawnPointName)
 {
     Mine* mine = new (std::nothrow) Mine();
-    if (mine && mine->initMap())
+    if (mine && mine->initMap(spawnPointName))
     {
         mine->autorelease();
         return mine;
@@ -89,7 +89,7 @@ bool Mine::init()
     return true;
 }
 
-bool Mine::initMap()
+bool Mine::initMap(const std::string& spawnPointName)
 {
     if (!init())
     {
@@ -103,7 +103,7 @@ bool Mine::initMap()
     mineralsLayer = minemap->getLayer("mineral");
  
     loadMap("mine1.tmx");//加入地图层 
-    initializePlayer();//加入玩家层
+    initializePlayer(spawnPointName);//加入玩家层
     this->initMouseEvent();
     this->initializeNaijiuMap();
     
@@ -232,8 +232,4 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
             }
         }
     }
-}
-
-void Mine::switchMap(const std::string& mapName,int path) {
-    return;
 }
