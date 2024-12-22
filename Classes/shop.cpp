@@ -1,5 +1,6 @@
 #include "Shop.h"
 #include "Player.h"
+#include "MarketPriceSystem.h"
 Shop* Shop::_instance = nullptr; // 初始化单例实例
 
 Shop* Shop::getInstance() {
@@ -51,7 +52,7 @@ bool Shop::init() {
 
     // 初始化选中的物品坐标
     _selectedItemCoord = Vec2(SHOP_AREA_START_X, SHOP_AREA_START_Y);
-
+   
     // 监听键盘事件
     auto eventListener = EventListenerKeyboard::create();
     eventListener->onKeyPressed = CC_CALLBACK_2(Shop::onKeyPressed, this);
@@ -118,6 +119,8 @@ void Shop::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event*
         case cocos2d::EventKeyboard::KeyCode::KEY_ENTER: // 处理 Enter 键
             logSelectedItemCoord();
             break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_SPACE:
+            buySelectedItemCoord();
         default:
             return;
     }
@@ -163,6 +166,29 @@ void Shop::logSelectedItemCoord() {
     // 打印当前选中的瓦片坐标
     CCLOG("Selected item coordinate: (%d, %d)", (int)_selectedItemCoord.x, (int)_selectedItemCoord.y);
     auto player = Player::getInstance();
+    if (_selectedItemCoord.y == 4)//第四行为采集物
+    {
+        if (_selectedItemCoord.x == 1)
+        {
+            if (player->getInventory()->removeItem("flower", 1))
+                player->setMoney(player->getmoney() + 30);
+        }
+        else if (_selectedItemCoord.x == 2)
+        {
+            if (player->getInventory()->removeItem("plant", 1))
+                player->setMoney(player->getmoney() + 30);
+        }
+        else if (_selectedItemCoord.x == 3)
+        {
+            if (player->getInventory()->removeItem("wood", 1))
+                player->setMoney(player->getmoney() + 10);
+        }
+        else if (_selectedItemCoord.x == 4)
+        {
+            if (player->getInventory()->removeItem("berry", 1))
+                player->setMoney(player->getmoney() + 30);
+        }
+    }
     if (_selectedItemCoord.x == 3)//鱼类在第三列
     {
         if (_selectedItemCoord.y == 1)
@@ -181,7 +207,7 @@ void Shop::logSelectedItemCoord() {
         }
 
     }
-    if (_selectedItemCoord.x == 1)
+    if (_selectedItemCoord.x == 1)//矿石在第一列
     {
         if (_selectedItemCoord.y == 1)
         {
@@ -193,19 +219,43 @@ void Shop::logSelectedItemCoord() {
             if (player->getInventory()->removeItem("kuang2", 1))
                 player->setMoney(player->getmoney() + 10);
         }
+        else if (_selectedItemCoord.y == 3)
+        {
+            if (player->getInventory()->removeItem("kuang3", 1))
+                player->setMoney(player->getmoney() + 10);
+        }
     }
     if (_selectedItemCoord.x == 2)//第二列
     {
         if (_selectedItemCoord.y == 1)
         {
-            if (player->getInventory()->addItemToInventory("seed",1));
-                player->setMoney(player->getmoney() + 50);
+            if (player->getInventory()->removeItem("carrot3", 1));
+                player->setMoney(player->getmoney() + 30);
         }
         else if (_selectedItemCoord.y == 2)
         {
-            if (player->getInventory()->removeItem("kuang2", 1))
-                player->setMoney(player->getmoney() + 10);
+            if (player->getInventory()->removeItem("crop2", 1))
+                player->setMoney(player->getmoney() + 60);
         }
+        else if (_selectedItemCoord.y == 3)
+        {
+            if (player->getInventory()->removeItem("crop3", 1))
+                player->setMoney(player->getmoney() + 100);
+        }
+    }
+    if (_selectedItemCoord.x == 4)//第四列
+    {
+        if (_selectedItemCoord.y == 1)
+        {
+            if (player->getInventory()->removeItem("egg", 1));
+            player->setMoney(player->getmoney() + 30);
+        }
+        else if (_selectedItemCoord.y == 2)
+        {
+            if (player->getInventory()->removeItem("cow", 1))
+                player->setMoney(player->getmoney() + 40);
+        }
+     
     }
 
 }
@@ -224,4 +274,37 @@ void Shop::setVisible(bool visible) {
         // 如果商店不可见，移除键盘事件监听器
         _eventDispatcher->removeEventListenersForTarget(this, true);
     }
+}
+void Shop::buySelectedItemCoord() {
+    auto player = Player::getInstance();
+
+    // 打印当前选中的瓦片坐标
+    CCLOG("Selected item coordinate: (%d, %d)", (int)_selectedItemCoord.x, (int)_selectedItemCoord.y);
+   
+    if (_selectedItemCoord.x ==2 )//第二列为种子
+    {
+        if (_selectedItemCoord.y == 1)
+        {
+            if (player->getInventory()->addItemToInventory("seed1", 1))
+                player->setMoney(player->getmoney() - 10);
+        }
+        else if (_selectedItemCoord.y == 2)
+        {
+            if (player->zhongdi >= 30)
+            {
+                if (player->getInventory()->addItemToInventory("seed2", 1))
+                    player->setMoney(player->getmoney() + 30);
+            }
+        }
+        else if (_selectedItemCoord.y == 3)
+        {
+            if (player->zhongdi >= 50)
+            {
+                if (player->getInventory()->addItemToInventory("seed3", 1))
+                    player->setMoney(player->getmoney() + 60);
+            }
+        }
+       
+    }
+   
 }

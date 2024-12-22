@@ -11,6 +11,7 @@ public:
     void displayPlayerMoney();
     void updatePlayerMoneyDisplay(int money);
     void logSelectedItemCoord();
+    void buySelectedItemCoord();
     void setVisible(bool visible);
 private:
     Shop(); // 私有构造函数，防止外部创建实例

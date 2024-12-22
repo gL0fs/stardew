@@ -195,6 +195,7 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
                         // 减少耐久度
                         CCLOG("%d", it->second);
                         it->second -= gongji;
+                        _playerInstance->changeHealth();
                         if (it->second <= 0)
                             it->second = 0;
                         // 检查耐久度是否为0

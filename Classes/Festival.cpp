@@ -103,11 +103,12 @@ void Festival::initMouseEvent() {
                 else {
                     // 检查food属性
                     if (properties.find("food") != properties.end() && properties.at("food").asBool()) {
-                        CCLOG("FOOD");
+                        auto player = Player::getInstance();
+                        player->setHealth(100);
                     }
                     // 检查shop属性
                     if (properties.find("shop") != properties.end() && properties.at("shop").asBool()) {
-                        CCLOG("shop");
+                        
                     }
                 }
             }

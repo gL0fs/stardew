@@ -42,5 +42,6 @@
     <ClInclude Include="..\Classes\GameTimeUI.h" />
     <ClInclude Include="..\Classes\House.h" />
     <ClInclude Include="..\Classes\MyFarm.h" />
+    <ClInclude Include="..\Classes\MarketPriceSystem.h" />
   </ItemGroup>
 </Project>
