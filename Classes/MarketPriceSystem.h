@@ -5,6 +5,7 @@
 #include <string>
 #include <cstdlib> // for rand()
 #include <ctime>   // for time()
+#include <unordered_map> // 用于记录销量
 
 class MarketPriceSystem {
 public:
@@ -23,12 +24,45 @@ public:
         return 0; // 默认价格为 0
     }
 
-    // 更新商品价格（可以动态调整）
-    void updatePrices() {
+    // 促销函数：随机调整商品价格
+    void applyPromotion() {
         for (auto& item : prices) {
-            item.second += rand() % 10 - 5; // 价格在 -5 到 +5 之间波动
+            int discount = rand() % 20 ; // 价格在0 到 +20 之间波动
+            item.second += discount;
             if (item.second < 1) item.second = 1; // 确保价格不为负数
         }
+    }
+
+    // 价格更新函数：根据销量调整商品价格
+    void updatePricesBasedOnSales() {
+        for (const auto& sale : sales) {
+            const std::string& itemName = sale.first;
+            int quantitySold = sale.second;
+            if (quantitySold > 0) {
+                auto it = prices.find(itemName);
+                if (it != prices.end()) {
+                    it->second -= quantitySold / 2; // 每卖出 2个，价格降低 1
+                    if (it->second < 1) it->second = 1; // 确保价格不为负数
+                }
+            }
+        }
+       //sales.clear(); // 清空销量记录
+    }
+    void resetPricesWithVariation() {
+        // 重置为初始价格
+        initializePrices();
+        sales.clear(); // 清空销量记录
+        // 添加小幅度随机变化
+        for (auto& item : prices) {
+            int variation = rand() % 6 - 3; // 价格在 -3 到 +3 之间波动
+            item.second += variation;
+            if (item.second < 1) item.second = 1; // 确保价格不为负数
+        }
+    }
+
+    // 记录商品销量
+    void recordSale(const std::string& itemName, int quantity) {
+        sales[itemName] += quantity;
     }
 
     // 打印所有商品价格（用于调试）
@@ -37,6 +71,8 @@ public:
             printf("%s: %d coins\n", item.first.c_str(), item.second);
         }
     }
+
+    // 初始化商品价格
     void initializePrices() {
         prices["flower"] = 30;
         prices["plant"] = 30;
@@ -49,10 +85,11 @@ public:
         prices["kuang2"] = 10;
         prices["kuang3"] = 10;
         prices["carrot3"] = 30;
-        prices["crop2"] = 60;
-        prices["crop3"] = 100;
+
         prices["egg"] = 30;
         prices["cow"] = 40;
+        prices["redflower3"] = 60;   // 新商品 redflower3，价格为 60
+        prices["smalltree3"] = 120;  // 新商品 smalltree3，价格为 120
     }
 
 private:
@@ -66,9 +103,8 @@ private:
     MarketPriceSystem(const MarketPriceSystem&) = delete;
     MarketPriceSystem& operator=(const MarketPriceSystem&) = delete;
 
-
-
     std::map<std::string, int> prices; // 商品名称 -> 价格
+    std::unordered_map<std::string, int> sales; // 商品名称 -> 销量
 };
 
 #endif // MARKET_PRICE_SYSTEM_H

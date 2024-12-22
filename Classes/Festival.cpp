@@ -4,6 +4,7 @@
 USING_NS_CC;
 #include <map>
 #include "BaseMapLayer.h"
+#include "MarketPriceSystem.h"
 Festival::Festival()
 {
 }
@@ -108,6 +109,12 @@ void Festival::initMouseEvent() {
                     }
                     // ºÏ≤Èshop Ù–‘
                     if (properties.find("shop") != properties.end() && properties.at("shop").asBool()) {
+                        static int i = 0;
+                        if (i == 0)
+                        {
+                            i++;
+                            MarketPriceSystem::getInstance().applyPromotion();
+                        }
                         
                     }
                 }

@@ -162,102 +162,134 @@ void Shop::updatePlayerMoneyDisplay(int newMoney)
     }
 }
 void Shop::logSelectedItemCoord() {
-    
     // 打印当前选中的瓦片坐标
     CCLOG("Selected item coordinate: (%d, %d)", (int)_selectedItemCoord.x, (int)_selectedItemCoord.y);
     auto player = Player::getInstance();
-    if (_selectedItemCoord.y == 4)//第四行为采集物
-    {
-        if (_selectedItemCoord.x == 1)
-        {
-            if (player->getInventory()->removeItem("flower", 1))
-                player->setMoney(player->getmoney() + 30);
-        }
-        else if (_selectedItemCoord.x == 2)
-        {
-            if (player->getInventory()->removeItem("plant", 1))
-                player->setMoney(player->getmoney() + 30);
-        }
-        else if (_selectedItemCoord.x == 3)
-        {
-            if (player->getInventory()->removeItem("wood", 1))
-                player->setMoney(player->getmoney() + 10);
-        }
-        else if (_selectedItemCoord.x == 4)
-        {
-            if (player->getInventory()->removeItem("berry", 1))
-                player->setMoney(player->getmoney() + 30);
-        }
-    }
-    if (_selectedItemCoord.x == 3)//鱼类在第三列
-    {
-        if (_selectedItemCoord.y == 1)
-        {
-            if (player->getInventory()->removeItem("fish1", 1))
-                player->setMoney(player->getmoney() + 10);
-        }
-        else if (_selectedItemCoord.y == 2)
-        {
-            if (player->getInventory()->removeItem("fish2", 1))
-                player->setMoney(player->getmoney() + 30);
-        }
-        else if (player->getInventory()->removeItem("fish3", 1))
-        {
-            player->setMoney(player->getmoney() + 50);
-        }
+    MarketPriceSystem& market = MarketPriceSystem::getInstance();
 
-    }
-    if (_selectedItemCoord.x == 1)//矿石在第一列
+    if (_selectedItemCoord.y == 4) // 第四行为采集物
     {
-        if (_selectedItemCoord.y == 1)
-        {
-            if (player->getInventory()->removeItem("kuang1", 1))
-                player->setMoney(player->getmoney() + 50);
+        if (_selectedItemCoord.x == 1) {
+            if (player->getInventory()->removeItem("flower", 1)) {
+                int price = market.getPrice("flower");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("flower", 1); // 记录销量
+            }
         }
-        else if (_selectedItemCoord.y == 2)
-        {
-            if (player->getInventory()->removeItem("kuang2", 1))
-                player->setMoney(player->getmoney() + 10);
+        else if (_selectedItemCoord.x == 2) {
+            if (player->getInventory()->removeItem("plant", 1)) {
+                int price = market.getPrice("plant");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("plant", 1); // 记录销量
+            }
         }
-        else if (_selectedItemCoord.y == 3)
-        {
-            if (player->getInventory()->removeItem("kuang3", 1))
-                player->setMoney(player->getmoney() + 10);
+        else if (_selectedItemCoord.x == 3) {
+            if (player->getInventory()->removeItem("wood", 1)) {
+                int price = market.getPrice("wood");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("wood", 1); // 记录销量
+            }
         }
-    }
-    if (_selectedItemCoord.x == 2)//第二列
-    {
-        if (_selectedItemCoord.y == 1)
-        {
-            if (player->getInventory()->removeItem("carrot3", 1));
-                player->setMoney(player->getmoney() + 30);
+        else if (_selectedItemCoord.x == 4) {
+            if (player->getInventory()->removeItem("berry", 1)) {
+                int price = market.getPrice("berry");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("berry", 1); // 记录销量
+            }
         }
-        else if (_selectedItemCoord.y == 2)
-        {
-            if (player->getInventory()->removeItem("crop2", 1))
-                player->setMoney(player->getmoney() + 60);
-        }
-        else if (_selectedItemCoord.y == 3)
-        {
-            if (player->getInventory()->removeItem("crop3", 1))
-                player->setMoney(player->getmoney() + 100);
-        }
-    }
-    if (_selectedItemCoord.x == 4)//第四列
-    {
-        if (_selectedItemCoord.y == 1)
-        {
-            if (player->getInventory()->removeItem("egg", 1));
-            player->setMoney(player->getmoney() + 30);
-        }
-        else if (_selectedItemCoord.y == 2)
-        {
-            if (player->getInventory()->removeItem("cow", 1))
-                player->setMoney(player->getmoney() + 40);
-        }
-     
     }
 
+    if (_selectedItemCoord.x == 3) // 鱼类在第三列
+    {
+        if (_selectedItemCoord.y == 1) {
+            if (player->getInventory()->removeItem("fish1", 1)) {
+                int price = market.getPrice("fish1");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("fish1", 1); // 记录销量
+            }
+        }
+        else if (_selectedItemCoord.y == 2) {
+            if (player->getInventory()->removeItem("fish2", 1)) {
+                int price = market.getPrice("fish2");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("fish2", 1); // 记录销量
+            }
+        }
+        else if (player->getInventory()->removeItem("fish3", 1)) {
+            int price = market.getPrice("fish3");
+            player->setMoney(player->getmoney() + price);
+            market.recordSale("fish3", 1); // 记录销量
+        }
+    }
+
+    if (_selectedItemCoord.x == 1) // 矿石在第一列
+    {
+        if (_selectedItemCoord.y == 1) {
+            if (player->getInventory()->removeItem("kuang1", 1)) {
+                int price = market.getPrice("kuang1");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("kuang1", 1); // 记录销量
+            }
+        }
+        else if (_selectedItemCoord.y == 2) {
+            if (player->getInventory()->removeItem("kuang2", 1)) {
+                int price = market.getPrice("kuang2");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("kuang2", 1); // 记录销量
+            }
+        }
+        else if (_selectedItemCoord.y == 3) {
+            if (player->getInventory()->removeItem("kuang3", 1)) {
+                int price = market.getPrice("kuang3");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("kuang3", 1); // 记录销量
+            }
+        }
+    }
+
+    if (_selectedItemCoord.x == 2) // 第二列
+    {
+        if (_selectedItemCoord.y == 1) {
+            if (player->getInventory()->removeItem("carrot3", 1)) {
+                int price = market.getPrice("carrot3");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("carrot3", 1); // 记录销量
+            }
+        }
+        else if (_selectedItemCoord.y == 2) {
+            if (player->getInventory()->removeItem("redflower3", 1)) {
+                int price = market.getPrice("redflower3");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("redflower3", 1); // 记录销量
+            }
+        }
+        else if (_selectedItemCoord.y == 3) {
+            if (player->getInventory()->removeItem("smalltree3", 1)) {
+                int price = market.getPrice("smalltree3");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("smalltree3", 1); // 记录销量
+            }
+        }
+    }
+
+    if (_selectedItemCoord.x == 4) // 第四列
+    {
+        if (_selectedItemCoord.y == 1) {
+            if (player->getInventory()->removeItem("egg", 1)) {
+                int price = market.getPrice("egg");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("egg", 1); // 记录销量
+            }
+        }
+        else if (_selectedItemCoord.y == 2) {
+            if (player->getInventory()->removeItem("cow", 1)) {
+                int price = market.getPrice("cow");
+                player->setMoney(player->getmoney() + price);
+                market.recordSale("cow", 1); // 记录销量
+            }
+        }
+    }
+    market.updatePricesBasedOnSales();//更新价格
 }
 void Shop::setVisible(bool visible) {
     // 调用父类的 setVisible 方法
