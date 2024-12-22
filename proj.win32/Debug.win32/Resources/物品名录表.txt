@@ -1,5 +1,0 @@
-tool1.png 鱼竿
-tool2.png 锄头
-tool3.png 镐子
-tool4.png 斧头
-tool5.png 水壶
