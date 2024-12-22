@@ -33,7 +33,7 @@ protected:
 private:
     bool initMap();
     cocos2d::EventListenerMouse* _mouseListener;
-
+	void deleteWholeObject(cocos2d::Vec2 position, TMXLayer* layer);
 };
 
 #endif // __FOREST_H__

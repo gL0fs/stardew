@@ -65,7 +65,40 @@ bool Forest::initMap()
     }
 
 
-    loadMap("Forest/Forest.tmx");//加入地图层 
+    _map = TMXTiledMap::create("Forest/Forest.tmx");
+    Size mapSize = _map->getContentSize();
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+    // 将地图放大四倍
+    _map->setScale(2.5f);
+    _map->setAnchorPoint(Vec2(0, 0));
+    // 直接将地图的左下角放置在层的左下角
+    _map->setPosition(0, 0);
+
+    //修改可见度
+	auto layer = _map->getLayer("fishing");
+    for (int x = 0; x < 60; ++x) {
+        for (int y = 0; y < 45; ++y) {
+            // 获取每个瓦片的位置
+            Vec2 tilePos(x, y);
+
+            // 获取当前瓦片的 GID
+            int gid = layer->getTileGIDAt(tilePos);
+
+            // 获取瓦片对象
+            Sprite* tileSprite = layer->getTileAt(tilePos);
+
+            if (tileSprite) {
+                // 设置瓦片透明度为 0（不可见）
+                tileSprite->setOpacity(0);
+            }
+        }
+    }
+
+    // 添加地图到层
+    this->addChild(_map, -1);
+
     initializePlayer();//加入玩家层
 
    
@@ -149,13 +182,28 @@ void Forest::initMouseEvent() {
 
         // 将鼠标位置转换为地图坐标
         cocos2d::Vec2 tileCoord = this->getTileCoordForPosition(worldLocation);
-        static auto toolbarLayer = Toolbar::getInstance();
-        int choice = toolbarLayer->getCurrentToolIndex();
-        switch (choice) {
-        case 1:
-            Fishing(worldLocation);
-            break;
-        }
+
+        if (mouseEvent->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT) {
+            // 处理左键按下的逻辑
+            CCLOG("左键按下");
+            static auto toolbarLayer = Toolbar::getInstance();
+            int choice = toolbarLayer->getCurrentToolIndex();
+            switch (choice) {
+            case 1:
+                Fishing(tileCoord);
+                break;
+            case 4:
+				cutTree(tileCoord);
+				break;
+            }
+		}
+		else if (mouseEvent->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT) {
+			// 处理右键按下的逻辑
+			CCLOG("右键按下");
+			collect(tileCoord);
+		}
+
+        
 
     };
 
@@ -172,8 +220,7 @@ cocos2d::Vec2 Forest::getTileCoordForPosition(cocos2d::Vec2 position) {
     return cocos2d::Vec2(x, y);
 }
 
-void Forest::Fishing(cocos2d::Vec2 worldposition) {
-    auto position = this->getTileCoordForPosition(worldposition);
+void Forest::Fishing(cocos2d::Vec2 position) {
     cocos2d::Size mapSize = _map->getMapSize();
     cocos2d::Size tileSize = _map->getTileSize();
     int x = static_cast<int>(_playerInstance->getPosition().x / 17.83);
@@ -208,18 +255,78 @@ void Forest::Fishing(cocos2d::Vec2 worldposition) {
     CCLOG("width %d height %d", obwidth, obheight);
     cocos2d::Rect fishRect(obx, oby- obheight, obwidth, obheight);
 	if (fishRect.containsPoint(position)) {
-		auto fish = Sprite::create("fishing.png");
-        fish->setScale(10);
-
-		fish->setPosition(worldposition);
-        this->addChild(fish,1000);
+		auto layer=_map->getLayer("fishing");
+        Sprite* tileSprite = layer->getTileAt(position);
+		// 钓鱼动画
+        if (tileSprite) {
+            tileSprite->setOpacity(255);  
+        }
 		//等待一段时间后钓到鱼
-		Sleep(2000);
-		this->removeChild(fish,1000);
-   
-		
-		srand(time(0));
-		int random = rand() % 3 + 1;
-		_playerInstance->addInventory("fish"+std::to_string(random), 1);
+        this->scheduleOnce([=](float dt) {
+            tileSprite->setOpacity(0);
+            srand(time(0));
+            int random = rand() % 3 + 1;
+            _playerInstance->addInventory("fish" + std::to_string(random), 1);
+            }, 2.0f, "delay_action_key");  // 延迟2秒后执行
 	}
+}
+
+void Forest::deleteWholeObject(cocos2d::Vec2 position, TMXLayer* layer) {
+	auto gid = layer->getTileGIDAt(position);
+	if (gid != 0) {
+		layer->removeTileAt(position);
+		deleteWholeObject(Vec2(position.x+1,position.y), layer);
+		deleteWholeObject(Vec2(position.x - 1, position.y), layer);
+		deleteWholeObject(Vec2(position.x, position.y + 1), layer);
+		deleteWholeObject(Vec2(position.x, position.y - 1), layer);
+	}
+    else {
+        return;
+    }
+}
+
+void Forest::collect(cocos2d::Vec2 position) {
+	auto gid1 = _map->getLayer("collecting1")->getTileGIDAt(position);
+	auto gid2 = _map->getLayer("collecting2")->getTileGIDAt(position);
+	auto gid3 = _map->getLayer("collecting3")->getTileGIDAt(position);
+	if (gid1 != 0) {
+		deleteWholeObject(position, _map->getLayer("collecting1"));
+		_playerInstance->addInventory("berry", 1);
+	}
+	else if (gid2 != 0) {
+		deleteWholeObject(position, _map->getLayer("collecting2"));
+		_playerInstance->addInventory("plant", 1);
+	}
+	else if (gid3 != 0) {
+		deleteWholeObject(position, _map->getLayer("collecting3"));
+		_playerInstance->addInventory("flower", 1);
+	}
+	
+}
+
+void Forest::cutTree(cocos2d::Vec2 position) {
+	static auto _position = position;
+    static int count = 1;
+	if (_position != position) {
+		_position = position;
+		count = 1;
+    }
+    else {
+		count++;
+    }
+	CCLOG("count%d", count);
+	if (count > 5) {
+        auto gid1 = _map->getLayer("tree1")->getTileGIDAt(position);
+        auto gid2 = _map->getLayer("tree2")->getTileGIDAt(position);
+
+        if (gid1 != 0) {
+            deleteWholeObject(position, _map->getLayer("tree1"));
+            _playerInstance->addInventory("wood", 5);
+        }
+        else if (gid2 != 0) {
+            deleteWholeObject(position, _map->getLayer("tree2"));
+            _playerInstance->addInventory("wood", 10);
+        }
+	}
+    
 }
