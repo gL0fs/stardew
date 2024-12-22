@@ -240,7 +240,10 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
         _playerInstance->addInventory("tool2", 13);//测试按键Q
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_O:
+        CCLOG("o");
         _playerInstance->displayShop(); // 调用 Player 的显示商店函数
+    case cocos2d::EventKeyboard::KeyCode::KEY_U:
+        Player::getInstance()->showUI();
         break;
         
     

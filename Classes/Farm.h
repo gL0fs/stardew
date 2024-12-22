@@ -26,10 +26,21 @@ public:
         return true;
     }
 
+<<<<<<< HEAD
     void plantCrop(const std::string& name, const std::string& spriteFile, Vec2 position, int daysToMature)
     {
         // 转换鼠标/触摸位置到网格位置
         Vec2 gridPos = positionToGrid(position);
+=======
+    /*void plantCrop(const std::string& name, const std::string& spritefile, Vec2 position)
+    {
+        Crop* crop = new Crop(name, spritefile);
+        crop->setPosition(position);
+        this->addChild(crop);
+        _crops.push_back(crop);
+        crop->plant();  // 种植作物
+    }*/
+>>>>>>> d841b37f330871413230ac34b19f244d8218b63f
 
         // 检查该位置是否已有作物
         if (getCropAtGrid(gridPos)) {

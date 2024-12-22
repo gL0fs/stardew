@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 c:\users\jialuw\desktop\aaaaa\stardew\proj.win32\debug.win32\librecast.pdb
 c:\users\jialuw\desktop\aaaaa\stardew\cocos2d\external\recast\proj.win32\debug.win32\fastlz.obj
 c:\users\jialuw\desktop\aaaaa\stardew\cocos2d\external\recast\proj.win32\debug.win32\detournavmesh.obj
@@ -24,3 +25,31 @@ c:\users\jialuw\desktop\aaaaa\stardew\cocos2d\external\recast\proj.win32\debug.w
 c:\users\jialuw\desktop\aaaaa\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\lib-link.read.1.tlog
 c:\users\jialuw\desktop\aaaaa\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\lib-link.write.1.tlog
 c:\users\jialuw\desktop\aaaaa\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\lib.command.1.tlog
+=======
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\librecast.pdb
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\fastlz.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourcrowd.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detournavmeshbuilder.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourpathcorridor.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detournavmeshquery.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourpathqueue.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detouralloc.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourtilecache.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detournode.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourproximitygrid.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourcommon.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourtilecachebuilder.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourdebugdraw.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourobstacleavoidance.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detournavmesh.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\detourlocalboundary.obj
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\debugdraw.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\librecast.lib
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\cl.command.1.tlog
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\cl.items.tlog
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\cl.read.1.tlog
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\cl.write.1.tlog
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\lib-link.read.1.tlog
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\lib-link.write.1.tlog
+c:\users\cheng\desktop\stardew\cocos2d\external\recast\proj.win32\debug.win32\librecast.tlog\lib.command.1.tlog
+>>>>>>> d841b37f330871413230ac34b19f244d8218b63f

@@ -2,6 +2,9 @@
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="6" height="6" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="1">
  <tileset firstgid="1" source="Objects_2.tsx"/>
  <tileset firstgid="161" source="Festivals.tsx"/>
+ <tileset firstgid="1185" source="fish1.tsx"/>
+ <tileset firstgid="1186" source="fish2.tsx"/>
+ <tileset firstgid="1187" source="fish3.tsx"/>
  <layer id="1" name="BackGround" width="6" height="6">
   <data encoding="csv">
 294,294,294,294,294,294,

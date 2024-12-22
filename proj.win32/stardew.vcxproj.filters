@@ -1,17 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="win32">
-      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="resource">
-      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\Backpack.cpp" />
+    <ClCompile Include="..\Classes\BaseMapLayer.cpp" />
+    <ClCompile Include="..\Classes\Festival.cpp" />
+    <ClCompile Include="..\Classes\Forest.cpp" />
+    <ClCompile Include="..\Classes\MainMenuScene.cpp" />
+    <ClCompile Include="..\Classes\Mine.cpp" />
+    <ClCompile Include="..\Classes\Player.cpp" />
+    <ClCompile Include="..\Classes\SceneManager.cpp" />
+    <ClCompile Include="..\Classes\shop.cpp" />
+    <ClCompile Include="..\Classes\Test.cpp" />
+    <ClCompile Include="..\Classes\Toolbar.cpp" />
+    <ClCompile Include="..\Classes\Tree.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\Classes\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
@@ -133,5 +140,26 @@
     <ResourceCompile Include="game.rc">
       <Filter>resource</Filter>
     </ResourceCompile>
+=======
+    <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\Backpack.h" />
+    <ClInclude Include="..\Classes\BaseMapLayer.h" />
+    <ClInclude Include="..\Classes\Festival.h" />
+    <ClInclude Include="..\Classes\Forest.h" />
+    <ClInclude Include="..\Classes\MainMenuScene.h" />
+    <ClInclude Include="..\Classes\Mine.h" />
+    <ClInclude Include="..\Classes\Player.h" />
+    <ClInclude Include="..\Classes\SceneManager.h" />
+    <ClInclude Include="..\Classes\shop.h" />
+    <ClInclude Include="..\Classes\Test.h" />
+    <ClInclude Include="..\classes\TimeManager.h" />
+    <ClInclude Include="..\Classes\Toolbar.h" />
+    <ClInclude Include="..\Classes\Tree.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="..\Classes\UI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc" />
+>>>>>>> d841b37f330871413230ac34b19f244d8218b63f
   </ItemGroup>
 </Project>

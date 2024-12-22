@@ -1,6 +1,7 @@
 #include "Forest.h"
 #include "Toolbar.h"
 #include "ui/CocosGUI.h"
+#include "MyFarm.h"
 USING_NS_CC;
 
 Forest::Forest()
@@ -96,7 +97,7 @@ void Forest::switchMap(const std::string& mapName,int path)
             SceneManager::getInstance().goToScene(scene, "forest");
         //}
     }
-	else if (mapName == "farm")
+	/*else if (mapName == "farm")
 	{
 		if (SceneManager::getInstance().isMapInHistory("farm"))
 		{
@@ -107,8 +108,8 @@ void Forest::switchMap(const std::string& mapName,int path)
 			auto scene = MyFarm::createScene();
 			SceneManager::getInstance().goToScene(scene, "forest");
 		}
-	}
-    else if (mapName == "house")
+	}*/
+    /*else if (mapName == "house")
     {
         if (SceneManager::getInstance().isMapInHistory("house"))
         {
@@ -119,7 +120,7 @@ void Forest::switchMap(const std::string& mapName,int path)
             auto scene = House::createScene();
             SceneManager::getInstance().goToScene(scene, "forest");
         }
-    }
+    }*/
     else
     {
         CCLOG("Unknown map: %s", mapName.c_str());

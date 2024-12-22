@@ -67,11 +67,12 @@ void Shop::displayShop() {
     static int visible=1;
     if (!shop->getParent()) {
         Director::getInstance()->getRunningScene()->addChild(shop);
-        
+        CCLOG("可见");
     }
     else {
         visible = 1 - visible;
         shop->setVisible(visible);
+        CCLOG("切换");
     }
 }
 
@@ -185,6 +186,19 @@ void Shop::logSelectedItemCoord() {
         if (_selectedItemCoord.y == 1)
         {
             if (player->getInventory()->removeItem("kuang1", 1))
+                player->setMoney(player->getmoney() + 50);
+        }
+        else if (_selectedItemCoord.y == 2)
+        {
+            if (player->getInventory()->removeItem("kuang2", 1))
+                player->setMoney(player->getmoney() + 10);
+        }
+    }
+    if (_selectedItemCoord.x == 2)//第二列
+    {
+        if (_selectedItemCoord.y == 1)
+        {
+            if (player->getInventory()->addItemToInventory("seed",1));
                 player->setMoney(player->getmoney() + 50);
         }
         else if (_selectedItemCoord.y == 2)
