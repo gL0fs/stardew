@@ -21,7 +21,10 @@ bool BaseMapLayer::init() {
     keyboardListener->onKeyPressed = CC_CALLBACK_2(BaseMapLayer::onKeyPressed, this);
     keyboardListener->onKeyReleased = CC_CALLBACK_2(BaseMapLayer::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
-
+    auto mouseListener = cocos2d::EventListenerMouse::create();
+    mouseListener->onMouseScroll = CC_CALLBACK_1(BaseMapLayer::onMouseScroll, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+    
     // 设置定时器，更新玩家位置
     this->scheduleUpdate();
 
@@ -103,9 +106,10 @@ void BaseMapLayer::initializePlayer() {
 		this->addChild(_playerInstance);
     }
     
-    _playerInstance->addInventory("tool1", 5);//用于测试背包功能
-    for (int i = 0; i < 14; i++) { _playerInstance->addInventory("tool2", 13); }
-    
+    _playerInstance->addInventory("tool1", 1);//用于测试背包功能
+    for (int i = 0; i < 14; i++) { _playerInstance->addInventory("tool2", 1); }
+    _playerInstance->addInventory("fish1", 13);
+    _playerInstance->addInventory("fish1", 12);
 }
 
 void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName) {
@@ -240,7 +244,7 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
         _playerInstance->getInventory()->displayInventory();
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_Q:
-        _playerInstance->addInventory("tool2", 13);//测试按键Q
+        _playerInstance->addInventory("fish2", 13);//测试按键Q
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_O:
         CCLOG("o");
@@ -430,6 +434,13 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
 			break;
         }
         i++;
+    }
+}
+
+void BaseMapLayer::onMouseScroll(cocos2d::Event* event) {
+    auto* e = dynamic_cast<cocos2d::EventMouse*>(event);
+    if (_playerInstance->getInventory()->isOpen()) {
+        _playerInstance->getInventory()->updateSelectedItem(e);
     }
 }
 
