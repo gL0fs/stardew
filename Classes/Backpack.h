@@ -14,7 +14,7 @@ public:
     // Function to display item information
     cocos2d::ui::Text* text;
     cocos2d::ui::ImageView* itemImage;
-    void display(float x, float y) const;
+    void display(float x, float y, int size = 2) const;
     
 };
 
@@ -23,6 +23,7 @@ private:
     std::vector<Item> items;
     size_t capacity;
     cocos2d::ui::ImageView* bagImage;
+    size_t currentIndex;
 public:
     Inventory(size_t c); // 私有构造函数
     virtual ~Inventory(); // 私有析构函数
@@ -30,16 +31,18 @@ public:
     bool addItemToInventory(const std::string& name, int quantity);
     // Add an item to the inventory
     bool removeItem(const std::string& name, int quantity);
-
+    bool isOpen();
     // Remove an item from the inventory
     std::vector<Item> getItems();
 
-    void items_display(std::vector<Item> items) const;
+    void items_display(size_t currentIndex = -1) const;
 
     // Display the inventory contents (show all items)
     void displayInventory() const;
    
-
+    
+    void updateSelectedItem(cocos2d::EventMouse* e);
+    Item getSelectedItem() const;
     // Get the maximum capacity of the inventory
     size_t getCapacity() const;
 

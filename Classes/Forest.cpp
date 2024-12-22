@@ -77,21 +77,24 @@ bool Forest::initMap()
     _map->setPosition(0, 0);
 
     //修改可见度
-	auto layer = _map->getLayer("fishing");
+	auto layer1 = _map->getLayer("fishing");
+	auto layer2 = _map->getLayer("cutting");
     for (int x = 0; x < 60; ++x) {
         for (int y = 0; y < 45; ++y) {
             // 获取每个瓦片的位置
             Vec2 tilePos(x, y);
 
-            // 获取当前瓦片的 GID
-            int gid = layer->getTileGIDAt(tilePos);
-
             // 获取瓦片对象
-            Sprite* tileSprite = layer->getTileAt(tilePos);
+            Sprite* tileSprite1 = layer1->getTileAt(tilePos);
+			Sprite* tileSprite2 = layer2->getTileAt(tilePos);
 
-            if (tileSprite) {
+            if (tileSprite1) {
                 // 设置瓦片透明度为 0（不可见）
-                tileSprite->setOpacity(0);
+                tileSprite1->setOpacity(0);
+            }
+            if (tileSprite2) {
+                // 设置瓦片透明度为 0（不可见）
+                tileSprite2->setOpacity(0);
             }
         }
     }
@@ -286,9 +289,17 @@ void Forest::deleteWholeObject(cocos2d::Vec2 position, TMXLayer* layer) {
 }
 
 void Forest::collect(cocos2d::Vec2 position) {
+    int x = static_cast<int>(_playerInstance->getPosition().x / 17.83);
+    int y = static_cast<int>(45 * 17.83 - _playerInstance->getPosition().y) / (17.83);
+    //如果离点击的采集物区域太远，不会收集
+    if (abs(x - position.x) > 1 || abs(y - position.y) > 1) {
+        return;
+    }
+
 	auto gid1 = _map->getLayer("collecting1")->getTileGIDAt(position);
 	auto gid2 = _map->getLayer("collecting2")->getTileGIDAt(position);
 	auto gid3 = _map->getLayer("collecting3")->getTileGIDAt(position);
+
 	if (gid1 != 0) {
 		deleteWholeObject(position, _map->getLayer("collecting1"));
 		_playerInstance->addInventory("berry", 1);
@@ -305,6 +316,15 @@ void Forest::collect(cocos2d::Vec2 position) {
 }
 
 void Forest::cutTree(cocos2d::Vec2 position) {
+    int x = static_cast<int>(_playerInstance->getPosition().x / 17.83);
+    int y = static_cast<int>(45 * 17.83 - _playerInstance->getPosition().y) / (17.83);
+
+    //如果离点击的树太远，不会砍
+    if (abs(x - position.x) > 1 || abs(y - position.y) > 1) {
+        return;
+    }
+
+
 	static auto _position = position;
     static int count = 1;
 	if (_position != position) {
@@ -313,6 +333,16 @@ void Forest::cutTree(cocos2d::Vec2 position) {
     }
     else {
 		count++;
+		//显示砍树动画
+        auto layer = _map->getLayer("cutting");
+        Sprite* tileSprite = layer->getTileAt(position);
+        // 砍树鱼动画
+        if (tileSprite) {
+            tileSprite->setOpacity(255);
+        }
+        this->scheduleOnce([=](float dt) {
+            tileSprite->setOpacity(0);
+            }, 0.3f, "delay_action_key");  // 延迟0.3秒后执行
     }
 	CCLOG("count%d", count);
 	if (count > 5) {

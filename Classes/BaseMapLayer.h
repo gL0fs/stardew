@@ -35,7 +35,7 @@ public:
     virtual void switchMap(const std::string& mapName,int path)=0;//�л���ͼ
     
      void initMouseEvent();
-
+     void onMouseScroll(cocos2d::Event* event);
     bool canPlantTreeAtPosition(cocos2d::Vec2 position);
     int _path = 0;
 protected:

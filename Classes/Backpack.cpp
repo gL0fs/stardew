@@ -9,7 +9,7 @@ Item::Item(const std::string& itemName, int itemQuantity)
 
     text = ui::Text::create(std::to_string(quantity), "fonts/Marker Felt.ttf", 8);
     if (text) {
-        text->setAnchorPoint(Vec2(-0.5, 1.3)); 
+        text->setAnchorPoint(Vec2(-0.3, 1.3)); 
         text->setVisible(false);
         text->retain();
     }
@@ -24,7 +24,7 @@ Item::Item(const std::string& itemName, int itemQuantity)
 }
 
 // Function to display item information
-void Item::display(float x, float y) const {
+void Item::display(float x, float y, int size) const {
     
     Vec2 position(x, y);
     
@@ -32,6 +32,7 @@ void Item::display(float x, float y) const {
     if (quantity != 1 && text) { 
         bool TextisVisible = text->isVisible();
         if (!TextisVisible) {
+            text->setFontSize(8*size/2);
             text->setPosition(position);
             Director::getInstance()->getRunningScene()->addChild(text);
         }
@@ -44,6 +45,7 @@ void Item::display(float x, float y) const {
         bool ImageisVisible = itemImage->isVisible();
         if (!ImageisVisible) {        
             // 设置标签的显示位置
+            itemImage->setScale(size);
             itemImage->setPosition(position); // 使用传入的 x, y 作为位置
             // 将标签添加到父节点（ui 层）
             Director::getInstance()->getRunningScene()->addChild(itemImage);
@@ -56,7 +58,7 @@ void Item::display(float x, float y) const {
 }
 
 
-Inventory::Inventory(size_t c) : capacity(c), items(){
+Inventory::Inventory(size_t c) : capacity(c), items(), currentIndex(0){
     items.reserve(c);
 
     bagImage = ui::ImageView::create("bag.png");
@@ -78,9 +80,16 @@ Inventory::~Inventory()
     
 }
 
-bool Inventory::removeItem(const std::string& name, int quantity) {
+bool Inventory::isOpen() {
     if (bagImage->isVisible()) {
-        items_display(items);
+        return true;
+    }
+    return false;
+}
+
+bool Inventory::removeItem(const std::string& name, int quantity) {
+    if (isOpen()) {
+        items_display();
     }
     for (auto it = items.begin(); it != items.end(); ++it) {
         if (it->name == name) {
@@ -89,8 +98,8 @@ bool Inventory::removeItem(const std::string& name, int quantity) {
                 if (it->quantity == 0) {
                     items.erase(it);
                 }
-                if (bagImage->isVisible()) {
-                    items_display(items);
+                if (isOpen()) {
+                    items_display();
                 }
                 return true;
             }
@@ -100,22 +109,22 @@ bool Inventory::removeItem(const std::string& name, int quantity) {
             }
         }
     }
-    if (bagImage->isVisible()) {
-        items_display(items);
+    if (isOpen()) {
+        items_display();
     }
     return false;
 }
 
 bool Inventory::addItemToInventory(const std::string& name, int quantity) {
-    if (bagImage->isVisible()) {
-        items_display(items);
+    if (isOpen()) {
+        items_display();
     }
-    if (items.empty()) {
+    if (!items.empty() && name.substr(0,4) != "tool") {
         for (auto& item : items) {
             if (item.name == name) {
                 item.quantity += quantity;
-                if (bagImage->isVisible()) {
-                    items_display(items);
+                if (isOpen()) {
+                    items_display();
                 }
                 return true;
             }
@@ -126,8 +135,8 @@ bool Inventory::addItemToInventory(const std::string& name, int quantity) {
         }
     }
     items.emplace_back(name, quantity);
-    if (bagImage->isVisible()) {
-        items_display(items);
+    if (isOpen()) {
+        items_display();
     }
     return true;
 }
@@ -137,13 +146,15 @@ std::vector<Item> Inventory::getItems() {
 }
 
 
-void Inventory::items_display(std::vector<Item> items) const {
+void Inventory::items_display(size_t currentIndex) const {
     float xOffset = (Director::getInstance()->getVisibleSize().width) * 0.24; // Start X offset for items
     float yOffset = (Director::getInstance()->getVisibleSize().height) / 3 * 2.12; // Start Y offset for items
-    float Xgap = (Director::getInstance()->getVisibleSize().width) * 0.047;
-    float Ygap = (Director::getInstance()->getVisibleSize().height) * 0.098;
+    const float Xgap = (Director::getInstance()->getVisibleSize().width) * 0.047;
+    const float Ygap = (Director::getInstance()->getVisibleSize().height) * 0.098;
     for (int count = 0; count < items.size();) {
-        items[count].display(xOffset, yOffset);  // Display each item, you may want to set its position too
+        items[count].text->setString(std::to_string(items[count].quantity));
+        if(count== currentIndex)items[count].display(xOffset, yOffset, 3);  // Display each item, you may want to set its position too
+        else items[count].display(xOffset, yOffset);
         xOffset += Xgap;
         count++;
         if (count % 12 == 0) {
@@ -154,7 +165,7 @@ void Inventory::items_display(std::vector<Item> items) const {
 }
 
 void Inventory::displayInventory()const {
-    bool isVisible = bagImage->isVisible();
+    const bool isVisible = bagImage->isVisible();
     if (!isVisible) {
         Director::getInstance()->getRunningScene()->addChild(bagImage);   
     }
@@ -166,9 +177,37 @@ void Inventory::displayInventory()const {
     if (items.empty()) {
         return;
     }
-    items_display(items);    
+    items_display();    
 }
    
 
+void Inventory::updateSelectedItem(cocos2d::EventMouse* e) {
+    if (e) {
+        float scrollY = e->getScrollY();
+
+        // 根据滚轮方向调整当前物品索引
+        if (scrollY > 0) {  // 向上滚动
+            if (currentIndex > 0) {
+                currentIndex--;
+            }
+        }
+        else {  // 向下滚动
+            if (currentIndex < items.size() - 1) {
+                currentIndex++;
+            }
+        }
+
+        // 在控制台输出选中的物品名称
+        CCLOG("Selected Item: %s", items[currentIndex].name.c_str());
+
+        // 更新显示选中的物品
+        items_display(currentIndex);
+        items_display(currentIndex);
+    } 
+}
+
+Item Inventory::getSelectedItem() const {
+    return items[currentIndex];  // 返回当前选中的物品
+}
 
 
