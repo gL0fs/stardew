@@ -245,6 +245,7 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
     case cocos2d::EventKeyboard::KeyCode::KEY_O:
         CCLOG("o");
         _playerInstance->displayShop(); // 调用 Player 的显示商店函数
+        break;
     case cocos2d::EventKeyboard::KeyCode::KEY_U:
         Player::getInstance()->showUI();
         break;
