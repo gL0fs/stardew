@@ -69,12 +69,16 @@ bool MyFarm::initMap()
 
     // 调用基类的方法来加载地图
     loadMap("Farm3.tmx"); // 假设你的地图文件名为 Farm3.tmx
-
+    // 创建并添加时间UI
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    _timeUI = GameTimeUI::create();
+    _timeUI->setPosition(Vec2(visibleSize.width - 120, visibleSize.height - 50));
+    this->addChild(_timeUI, 10);  // 使用较高的Z序确保UI显示在最上层
     initializePlayer();
 
     return true;
 }
 
-void MyFarm::switchMap(const std::string& mapName) {
+void MyFarm::switchMap(const std::string& mapName,int path) {
     return;
 }

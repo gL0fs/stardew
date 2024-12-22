@@ -104,7 +104,7 @@ void Test::switchMap(const std::string& mapName,int path)
         else {
         */
             auto scene = Forest::createScene(path);
-            SceneManager::getInstance().goToScene(scene, "test");
+            SceneManager::getInstance().goToScene(scene, "house");
         //}
     }
 	else

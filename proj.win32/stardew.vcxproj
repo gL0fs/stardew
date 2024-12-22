@@ -155,6 +155,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\BaseMapLayer.cpp" />
     <ClCompile Include="..\Classes\Festival.cpp" />
     <ClCompile Include="..\Classes\Forest.cpp" />
+    <ClCompile Include="..\Classes\GameTimeUI.cpp" />
     <ClCompile Include="..\Classes\House.cpp" />
     <ClCompile Include="..\Classes\MainMenuScene.cpp" />
     <ClCompile Include="..\Classes\Mine.cpp" />
@@ -165,6 +166,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Test.cpp" />
     <ClCompile Include="..\Classes\Toolbar.cpp" />
     <ClCompile Include="..\Classes\Tree.cpp" />
+    <ClCompile Include="..\Classes\xuanting.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +186,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\shop.h" />
     <ClInclude Include="..\Classes\Test.h" />
     <ClInclude Include="..\classes\TimeManager.h" />
+    <ClInclude Include="..\Classes\GameTimeUI.h" />
     <ClInclude Include="..\Classes\Toolbar.h" />
     <ClInclude Include="..\Classes\Tree.h" />
     <ClInclude Include="main.h" />

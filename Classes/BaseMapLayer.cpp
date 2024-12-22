@@ -174,7 +174,7 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
     if (GID == 0) {
         return false;
     }
-    else return true;
+    
     // 获取瓦片的属性
     cocos2d::Value properties = _map->getPropertiesForGID(GID);
     CCLOG("GET_PRO");

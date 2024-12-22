@@ -60,6 +60,12 @@
     <ClCompile Include="..\Classes\House.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\xuanting.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameTimeUI.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -117,6 +123,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MyFarm.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameTimeUI.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -62,6 +62,6 @@ bool House::initMap()  // 将 MyFarm 改为 House
     return true;
 }
 
-void House::switchMap(const std::string& mapName) {  // 将 MyFarm 改为 House
+void House::switchMap(const std::string& mapName,int path) {  // 将 MyFarm 改为 House
     return;
 }
