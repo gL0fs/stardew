@@ -13,6 +13,7 @@ public:
 
     int currentToolIndex; // 当前显示的工具的索引
     void Toolbar::setPositionOnLeft();
+    void switchTool(int toolIndex); // 切换工具的方法
 private:
     Toolbar(); // 私有构造函数
     virtual ~Toolbar(); // 私有析构函数
@@ -24,6 +25,6 @@ private:
 
     bool init(); // 初始化方法
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event); // 键盘事件回调函数
-    void switchTool(int toolIndex); // 切换工具的方法
+  
 };
 #endif
