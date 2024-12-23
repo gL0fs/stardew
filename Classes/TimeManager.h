@@ -30,7 +30,15 @@ public:
 
         // 初始化时间显示UI
         initTimeUI();
+        // 创建暗色图层（只创建一次）
+        _darkLayer = LayerColor::create(Color4B(0, 0, 0, 0));
+        Size visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        _darkLayer->setPosition(origin);
+        _darkLayer->setContentSize(visibleSize);
+        this->addChild(_darkLayer, 95); // 降低层级
 
+        initTimeUI();
         // 每秒更新时间
         this->scheduleUpdate();
 
@@ -60,29 +68,26 @@ public:
                 EventCustom event("new_day");
                 _eventDispatcher->dispatchEvent(&event);
             }
-            _darkLayer = LayerColor::create(Color4B(0, 0, 0, 0));
-            Size visibleSize = Director::getInstance()->getVisibleSize();
-            _darkLayer->setContentSize(visibleSize);
-            this->addChild(_darkLayer, 99);  // UI 层级在最上层
-
+ 
             updateTimeUI();
             updateWeekdayUI();
             adjustScreenBrightness();
         }
     }
-        void adjustScreenBrightness() {
-            if (_currentGameHour >= 16) {
-                float darkeningFactor = (_currentGameHour - 16) / 8.0f;  // 16:00 到 24:00 逐渐变暗
-                darkeningFactor = std::min(darkeningFactor + (_currentGameMinutes / 60.0f / 8.0f), 1.0f);
-                _darkLayer->setOpacity(200 * darkeningFactor);  // 最大暗度调整为 200
-            }
-            else if (_currentGameHour >= 0 && _currentGameHour < 6) {
-                _darkLayer->setOpacity(200);  // 夜晚保持暗色
-            }
-            else {
-                _darkLayer->setOpacity(0);  // 白天保持明亮
-            }
+        
+    void adjustScreenBrightness() {
+        if (_currentGameHour >= 16 && _currentGameHour < 24) {
+            float darkeningFactor = (_currentGameHour - 16) / 8.0f;
+            darkeningFactor = std::min(darkeningFactor + (_currentGameMinutes / 60.0f / 8.0f), 0.7f); // 最大暗度70%
+            _darkLayer->setOpacity(255 * darkeningFactor);
         }
+        else if (_currentGameHour >= 0 && _currentGameHour < 6) {
+            _darkLayer->setOpacity(255 * 0.7f);
+        }
+        else {
+            _darkLayer->setOpacity(0);
+        }
+    }
 
     // 更新星期几的显示
     void updateWeekdayUI() {
@@ -124,9 +129,12 @@ private:
     LayerColor* _darkLayer;  // 用来控制变暗效果的层
     // 初始化时间UI
     void initTimeUI() {
+       
         // 显示时间的标签
         _timeLabel = Label::createWithTTF("06:00", "Fonts/pixel_font.ttf", 24);
         _timeLabel->setTextColor(Color4B::BLACK);
+        _timeLabel->enableShadow(Color4B::GRAY, Size(1, -1));  // 添加阴影效果
+        _timeLabel->enableOutline(Color4B::WHITE, 1);          // 添加描边效果
         Size visibleSize = Director::getInstance()->getVisibleSize();
         _timeLabel->setPosition(visibleSize.width - 70, visibleSize.height - 0);
         this->addChild(_timeLabel);
@@ -134,15 +142,23 @@ private:
         // 显示星期几的标签
         _weekdayLabel = Label::createWithTTF("Mon 1", "Fonts/pixel_font.ttf", 24);
         _weekdayLabel->setTextColor(Color4B::BLACK);
+        _weekdayLabel->enableShadow(Color4B::GRAY, Size(1, -1));  // 添加阴影效果
+        _weekdayLabel->enableOutline(Color4B::WHITE, 1);          // 添加描边效果
         _weekdayLabel->setPosition(visibleSize.width - 70, visibleSize.height - 30);
         this->addChild(_weekdayLabel);
 
+        updateWeekdayUI();  // 初始化星期几显示
         updateWeekdayUI();  // 初始化星期几显示
 
     }
 
     // 更新时间显示
     void updateTimeUI() {
+
+        // 清除旧的字符串内容
+        _timeLabel->setString("");
+
+        // 设置新的时间字符串
         char timeText[10];
         snprintf(timeText, sizeof(timeText), "%02d:%02d",
             _currentGameHour, static_cast<int>(_currentGameMinutes));

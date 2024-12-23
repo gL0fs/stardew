@@ -39,6 +39,19 @@ Scene* Town::createScene(const std::string& spawnPointName)
     auto layer = Town::create(spawnPointName);
     if (layer != nullptr)
     {
+        TimeManager* timeManager = TimeManager::getInstance();
+        // 确保TimeManager只被初始化一次
+        static bool timeManagerInitialized = false;
+        if (!timeManagerInitialized) {
+            timeManager->init();
+            timeManagerInitialized = true;
+        }
+
+        // 确保TimeManager只有一个父节点
+        if (timeManager->getParent()) {
+            timeManager->removeFromParent();
+        }
+        scene->addChild(timeManager);
         scene->addChild(layer);
     }
     auto toolbarLayer = Toolbar::getInstance();

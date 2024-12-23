@@ -30,4 +30,5 @@ private:
     void initWeatherUI();
     void createRainParticle();
 };
+#endif
 

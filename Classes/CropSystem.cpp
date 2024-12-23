@@ -20,6 +20,17 @@ bool Crop::init(const Vec2& pos, CropType type) {
     _isWatered = false;
     _state = GrowthState::SEED;
 
+ // 根据作物类型设置生长天数
+    switch (type) {
+    case CropType::CARROT:
+        _growthDays = 3;
+        break;
+    case CropType::SMALL_TREE:
+    case CropType::RED_FLOWER:
+        _growthDays = 4;
+        break;
+    }
+
     std::string spriteName;
     switch (type) {
     case CropType::CARROT:
@@ -31,9 +42,7 @@ bool Crop::init(const Vec2& pos, CropType type) {
     case CropType::RED_FLOWER:
         spriteName = "redflower1.png";
         break;
-    case CropType::TREE_FLOWER:
-        spriteName = "treeflower1.png";
-        break;
+  
     }
 
     if (!Sprite::initWithFile(spriteName)) {
@@ -43,7 +52,6 @@ bool Crop::init(const Vec2& pos, CropType type) {
     setPosition(pos);
     return true;
 }
-
 void Crop::grow() {
     if (!_isWatered) return;  // 如果今天没浇水，不生长
 
@@ -55,7 +63,7 @@ void Crop::grow() {
         }
         break;
     case GrowthState::GROWING:
-        if (_daysWatered >= 2) {
+        if (_daysWatered >= _growthDays - 1) {
             _state = GrowthState::MATURE;
             updateSprite();
         }
@@ -65,6 +73,7 @@ void Crop::grow() {
         break;
     }
 }
+
 bool CropSystem::waterCrop(const Vec2& position) {
     auto crop = findCropAt(position);
     if (crop && !crop->isWatered()) {
@@ -76,9 +85,10 @@ bool CropSystem::waterCrop(const Vec2& position) {
 }
 std::string CropSystem::harvestCrop(const Vec2& position) {
     auto crop = findCropAt(position);
-    if (crop && crop->isMature() && crop->getDaysWatered() >= 3) {
+    if (crop && crop->isMature() && crop->getDaysWatered() >= crop->getGrowthDays()) {
         std::string harvestItem = _harvestItems[crop->_cropType];
         removeCrop(position);
+        //背包
         return harvestItem;
     }
     return "";
@@ -113,9 +123,7 @@ void Crop::updateSprite() {
     case CropType::RED_FLOWER:
         filename = "redflower" + number + ".png";
         break;
-    case CropType::TREE_FLOWER:
-        filename = "treeflower" + number + ".png";
-        break;
+  
     }
 
     setTexture(filename);
@@ -208,7 +216,15 @@ void CropSystem::checkGrowth(float dt) {
 
 void CropSystem::onNewDay(EventCustom* event) {
     CCLOG("新的一天开始了，检查所有作物状态");
-    for (auto crop : _crops) {
-        crop->resetDailyWater();  // 重置每日浇水状态
-    }
+   
+        auto weatherSystem = WeatherSystem::getInstance();
+        bool isRaining = weatherSystem->getCurrentWeather() == WeatherSystem::Weather::RAINY;
+
+        for (auto crop : _crops) {
+            crop->resetDailyWater();  // 重置每日浇水状态
+            if (isRaining) {
+                crop->water();  // 如果下雨，自动浇水
+            }
+            crop->grow();  // 检查是否可以生长
+        }
 }

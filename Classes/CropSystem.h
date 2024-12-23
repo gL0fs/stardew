@@ -4,13 +4,15 @@
 
 #include "cocos2d.h"
 #include "TimeManager.h"
+#include"WeatherSystem.h"
+#include "Backpack.h"
 
 class Crop : public cocos2d::Sprite {
 private:
     enum class GrowthState {
-        SEED,    // carrot1
-        GROWING, // carrot2
-        MATURE   // carrot3
+        SEED,    
+        GROWING, 
+        MATURE   
     };
     GrowthState _state = GrowthState::SEED;  // 初始状态是种子
     void updateSprite();  // 更新作物精灵的方法
@@ -26,10 +28,12 @@ public:
         CARROT,
         SMALL_TREE,
         RED_FLOWER,
-        TREE_FLOWER
+     
     };
    
-
+    int getGrowthDays() const {
+        return _growthDays;
+    }
     // 创建作物的方法，接受位置和作物类型作为参数
     static Crop* create(const cocos2d::Vec2& pos, CropType type);
 
@@ -85,7 +89,7 @@ private:
         {Crop::CropType::CARROT, "carrot"},
         {Crop::CropType::SMALL_TREE, "wood"},
         {Crop::CropType::RED_FLOWER, "redflower"},
-        {Crop::CropType::TREE_FLOWER, "treeflower"}
+        
     };
     cocos2d::Vec2 getGridPosition(const cocos2d::Vec2& position) const;
     // 检查作物生长状态的方法

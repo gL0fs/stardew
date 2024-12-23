@@ -4,6 +4,7 @@
 
 WeatherSystem* WeatherSystem::_instance = nullptr;
 
+
 WeatherSystem* WeatherSystem::getInstance() {
     if (!_instance) {
         _instance = new WeatherSystem();

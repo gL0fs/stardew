@@ -26,14 +26,19 @@ Scene* MyFarm::createScene(const std::string& spawnPointName) {
             timeManager->removeFromParent();
         }
         scene->addChild(timeManager);
-        // 初始化并添加 MaskManager（遮罩层管理器）
-        //MaskManager* maskManager = MaskManager::getInstance();
-        //if (maskManager) {
-        //    maskManager->init();  // 调用 MaskManager 的初始化方法
-        //    scene->addChild(maskManager, 5);  // 将 MaskManager 添加到场景中，Z 序较低
+        // 初始化 WeatherSystem
+        //WeatherSystem* weatherSystem = WeatherSystem::getInstance();
+        //static bool weatherSystemInitialized = false;
+        //if (!weatherSystemInitialized) {
+        //    weatherSystem->init();
+        //    weatherSystemInitialized = true;
         //}
 
-       
+        //// 确保 WeatherSystem 只有一个父节点
+        //if (weatherSystem->getParent()) {
+        //    weatherSystem->removeFromParent();
+        //}
+        //scene->addChild(weatherSystem);
         // 创建工具栏
         auto toolbarLayer = Toolbar::getInstance();
         if (toolbarLayer) {
@@ -141,9 +146,7 @@ void MyFarm::onKeyPressed1(EventKeyboard::KeyCode keyCode, Event* event) {
         case EventKeyboard::KeyCode::KEY_C:
             _cropSystem->selectCropType(Crop::CropType::RED_FLOWER);
             break;
-        case EventKeyboard::KeyCode::KEY_V:
-            _cropSystem->selectCropType(Crop::CropType::TREE_FLOWER);
-            break;
+        
         }
     }
 }

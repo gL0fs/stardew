@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="5">
- <properties>
-  <property name="MapName" value="festival"/>
- </properties>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="2">
  <tileset firstgid="1" source="spring_outdoorsTileSheet.tsx"/>
  <tileset firstgid="1976" source="Festivals.tsx"/>
  <layer id="3" name="path" width="40" height="30">
@@ -77,11 +74,6 @@
 </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="1" name="SpawnPoint" x="528" y="432"/>
-  <object id="4" name="1" x="480" y="464" width="80" height="16">
-   <properties>
-    <property name="MapName" value="town"/>
-   </properties>
-  </object>
+  <object id="1" name="SpawnPoint" x="519.349" y="451.368"/>
  </objectgroup>
 </map>

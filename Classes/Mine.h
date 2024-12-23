@@ -4,6 +4,7 @@
 
 #include "BaseMapLayer.h"
 #include "cocos2d.h"
+#include "TimeManager.h"
 USING_NS_CC;
 class Mine : public BaseMapLayer
 {
