@@ -1,23 +1,24 @@
-<<<<<<< HEAD
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\scenemanager.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\main.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\test.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\cropsystem.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\gametimeui.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\appdelegate.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\backpack.obj
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\house.obj
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\myfarm.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\player.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\ui.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\basemaplayer.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\mine.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\gametimeui.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\main.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\appdelegate.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\tree.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\shop.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\test.obj
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\mainmenuscene.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\toolbar.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\player.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\timemanager.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\mine.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\shop.obj
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\forest.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\scenemanager.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\toolbar.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\ui.obj
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\festival.obj
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\backpack.obj
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\basemaplayer.obj
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\vc143.pdb
+c:\users\cheng\desktop\stardew\proj.win32\debug.win32\vc143.idb
 c:\users\cheng\desktop\stardew\proj.win32\stardew.cab
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\stardew.exe
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\stardew.pdb
@@ -26,7 +27,6 @@ c:\users\cheng\desktop\stardew\proj.win32\debug.win32\stardew.exp
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\stardew.ilk
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\libcocos2d.exp
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\libspine.idb
-c:\users\cheng\desktop\stardew\proj.win32\debug.win32\vc143.idb
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\libcocos2d.pdb
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\librecast.pdb
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\libspine.pdb
@@ -40,5 +40,3 @@ c:\users\cheng\desktop\stardew\proj.win32\debug.win32\stardew.tlog\link.command.
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\stardew.tlog\link.read.1.tlog
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\stardew.tlog\link.secondary.1.tlog
 c:\users\cheng\desktop\stardew\proj.win32\debug.win32\stardew.tlog\link.write.1.tlog
-=======
->>>>>>> 8f431e4871f09b05129449099a5f47cd0ee68378

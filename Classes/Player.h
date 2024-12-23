@@ -46,11 +46,15 @@ public:
     int diaoyu;
     int wakuang;
     int zhongdi;
+    void Player::loadAnimationFrames();
+    cocos2d::Animation* getAnimation(int index) {
+        return _playerAnimation[index];
+    }
 private:
     Player();
     static int money;
 
-    
+    cocos2d::Animation* _playerAnimation[4]; // 0: об, 1: ср, 2: ио, 3: вС
     static Player* _instance;
 
     

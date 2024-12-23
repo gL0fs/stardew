@@ -15,7 +15,8 @@ bool BaseMapLayer::init() {
         return false;
     }
 
-
+  
+   
     // 设置键盘监听
     auto keyboardListener = EventListenerKeyboard::create();
     keyboardListener->onKeyPressed = CC_CALLBACK_2(BaseMapLayer::onKeyPressed, this);
@@ -73,7 +74,8 @@ void BaseMapLayer::initializePlayer() {
     if (!_playerInstance->initPlayer("Player.png")) {
         return;
     }
-
+    // 加载玩家动画帧
+    _playerInstance->loadAnimationFrames();
     // 获取瓦片地图的瓦片尺寸
     auto tileSize = _map->getTileSize();
 
@@ -201,15 +203,50 @@ void BaseMapLayer::handlePlayerMovement(const cocos2d::Vec2& direction) {
     if (!_playerInstance) return;
 
     // 计算下一个位置
-    CCLOG("PLAYER%f %f", _playerInstance->getPosition().x, _playerInstance->getPosition().y);
     cocos2d::Vec2 nextPosition = _playerInstance->getPosition() + direction;
 
     // 检查是否发生碰撞
     if (!isCollisionAtNextPosition(nextPosition)) {
+        // 设置玩家位置
         _playerInstance->setPosition(nextPosition);
         this->setViewPointCenter(nextPosition);
+
+        // 根据方向播放动画
+        if (direction.y > 0) {
+            // 上方向
+            if (_currentDirection != Direction::UP) {
+                _playerInstance->stopAllActions();
+                _playerInstance->runAction(RepeatForever::create(Animate::create(_playerInstance->getAnimation(2))));
+                _currentDirection = Direction::UP;
+            }
+        }
+        else if (direction.y < 0) {
+            // 下方向
+            if (_currentDirection != Direction::DOWN) {
+                _playerInstance->stopAllActions();
+                _playerInstance->runAction(RepeatForever::create(Animate::create(_playerInstance->getAnimation(0))));
+                _currentDirection = Direction::DOWN;
+            }
+        }
+        else if (direction.x > 0) {
+            // 右方向
+            if (_currentDirection != Direction::RIGHT) {
+                _playerInstance->stopAllActions();
+                _playerInstance->runAction(RepeatForever::create(Animate::create(_playerInstance->getAnimation(1))));
+                _currentDirection = Direction::RIGHT;
+            }
+        }
+        else if (direction.x < 0) {
+            // 左方向
+            if (_currentDirection != Direction::LEFT) {
+                _playerInstance->stopAllActions();
+                _playerInstance->runAction(RepeatForever::create(Animate::create(_playerInstance->getAnimation(3))));
+                _currentDirection = Direction::LEFT;
+            }
+        }
     }
-	checkChangeMap(nextPosition);
+
+    checkChangeMap(nextPosition);
 }
 
 void BaseMapLayer::update(float delta) {
@@ -217,8 +254,12 @@ void BaseMapLayer::update(float delta) {
     if (_playerInstance && !_moveDirection.equals(Vec2::ZERO)) {
         handlePlayerMovement(_moveDirection);  // 持续移动
     }
+    else {
+        // 如果没有按键按下，停止所有动作
+        _playerInstance->stopAllActions();
+        _currentDirection = Direction::NONE; // 重置方向
+    }
 }
-
 
 void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
     if (!_playerInstance) return;

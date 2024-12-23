@@ -136,3 +136,64 @@ void Player::changeHealth() {
     _health--;
     _UI->updateUI(); // 更新 UI
 }
+void Player::loadAnimationFrames() {
+    // 加载动画帧
+    Vector<SpriteFrame*> downFrames, rightFrames, upFrames, leftFrames;
+
+    for (int i = 1; i <= 16; i++) {
+        std::string frameName = std::to_string(i) + ".png"; // 帧文件名
+
+        // 加载纹理
+        auto texture = Director::getInstance()->getTextureCache()->addImage(frameName);
+        if (!texture) {
+            CCLOG("Failed to load texture: %s", frameName.c_str());
+            continue;
+        }
+
+        // 创建 SpriteFrame
+        auto frame = SpriteFrame::createWithTexture(texture, Rect(0, 0, texture->getContentSize().width, texture->getContentSize().height));
+        if (!frame) {
+            CCLOG("Failed to create frame: %s", frameName.c_str());
+            continue;
+        }
+
+        // 获取原始的 rect
+        auto rect = frame->getRect();
+
+        // 放大 rect 2.5 倍
+        auto newRect = Rect(rect.origin.x, rect.origin.y, rect.size.width * 2.5f, rect.size.height * 2.5f);
+
+        // 创建新的 SpriteFrame
+        auto newFrame = SpriteFrame::createWithTexture(texture, newRect, frame->isRotated(), frame->getOffset(), frame->getOriginalSize());
+
+        // 根据帧序号分配到不同的方向
+        if (i >= 1 && i <= 4) {
+            downFrames.pushBack(newFrame); // 下方向
+        }
+        else if (i >= 5 && i <= 8) {
+            rightFrames.pushBack(newFrame); // 右方向
+        }
+        else if (i >= 9 && i <= 12) {
+            upFrames.pushBack(newFrame); // 上方向
+        }
+        else if (i >= 13 && i <= 16) {
+            leftFrames.pushBack(newFrame); // 左方向
+        }
+    }
+
+    // 创建动画
+    if (downFrames.empty() || rightFrames.empty() || upFrames.empty() || leftFrames.empty()) {
+        CCLOG("Error: Some animation frames are missing!");
+        return;
+    }
+
+    _playerAnimation[0] = Animation::createWithSpriteFrames(downFrames, 0.1f); // 下
+    _playerAnimation[1] = Animation::createWithSpriteFrames(rightFrames, 0.1f); // 右
+    _playerAnimation[2] = Animation::createWithSpriteFrames(upFrames, 0.1f); // 上
+    _playerAnimation[3] = Animation::createWithSpriteFrames(leftFrames, 0.1f); // 左
+
+    // 缓存动画
+    for (int i = 0; i < 4; i++) {
+        _playerAnimation[i]->retain();
+    }
+}
