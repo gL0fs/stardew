@@ -3,11 +3,11 @@
 #include "ui/CocosGUI.h"
 USING_NS_CC;
 #include <map>
-
+#include "AudioManager.h"
 
 
 void Mine::initializeNaijiuMap() {
-    minemap = TMXTiledMap::create("mine1.tmx");
+    minemap = cocos2d::TMXTiledMap::create("mine1.tmx");
   
     cocos2d::TMXLayer* mineralsLayer = minemap->getLayer("mineral");
    
@@ -96,7 +96,7 @@ bool Mine::initMap(const std::string& spawnPointName)
         return false;
     }
     // 加载地图
-    minemap = TMXTiledMap::create("mine1.tmx");
+    minemap = cocos2d::TMXTiledMap::create("mine1.tmx");
    
 
     // 获取矿物图层
@@ -158,7 +158,7 @@ cocos2d::Vec2 Mine::getTileCoordForPosition(cocos2d::Vec2 position) {
 }
 
 void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
-    const auto _minemap = TMXTiledMap::create("mine1.tmx");
+    const auto _minemap = cocos2d::TMXTiledMap::create("mine1.tmx");
     const auto _mineralsLayer = _minemap->getLayer("mineral");
     static auto mineralsLayer = _map->getLayer("mineral");
     static int gongji = 1;
@@ -195,6 +195,8 @@ void Mine::removeMineralAtTileCoord(cocos2d::Vec2 tileCoord) {
                         // 减少耐久度
                         CCLOG("%d", it->second);
                         it->second -= gongji;
+                        // 播放音效
+                        AudioManager::getInstance()->playEffect("kuang.mp3", 1.0f);
                         _playerInstance->changeHealth();
                         if (it->second <= 0)
                             it->second = 0;

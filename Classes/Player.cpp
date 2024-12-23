@@ -6,7 +6,7 @@ Player* Player::_instance = nullptr;
 int Player::money = 500;
 Player::Player()
     : _health(100),
-    _stamina(100),
+    _cook(0),
     zhongdi(0), diaoyu(0), wakuang(0),
     _inventory(nullptr){
     _inventory = new Inventory(36); 
@@ -57,12 +57,15 @@ int Player::getHealth() const {
     return _health;
 }
 
-void Player::setStamina(int stamina) {
-    _stamina = stamina;
+void Player::setCook(int stamina) {
+
+    _cook = stamina;
+    static auto _UI = UI::getInstance();
+    _UI->updateUI(); // 更新 UI
 }
 
-int Player::getStamina() const {
-    return _stamina;
+int Player::getCook() const {
+    return _cook;
 }
 
 void Player::addInventory(const std::string& name, int quantity) {
@@ -132,8 +135,9 @@ void Player::setHealth(int health) {
     _UI->updateUI(); // 更新 UI
 }
 void Player::changeHealth() {
-    static auto _UI = UI::getInstance();
+   
     _health--;
+    static auto _UI = UI::getInstance();
     _UI->updateUI(); // 更新 UI
 }
 void Player::loadAnimationFrames() {

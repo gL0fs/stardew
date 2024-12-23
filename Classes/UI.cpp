@@ -9,7 +9,7 @@ UI* UI::_instance = nullptr;
 
      // 初始化 UI 元素
      _healthLabel = cocos2d::Label::createWithSystemFont("Health: 100", "Arial", 24);
-     _staminaLabel = cocos2d::Label::createWithSystemFont("Stamina: 100", "Arial", 24);
+     _staminaLabel = cocos2d::Label::createWithSystemFont("Cook: 0", "Arial", 24);
      _zhongdiLabel = cocos2d::Label::createWithSystemFont("Zhongdi: 0", "Arial", 24);
      _diaoyuLabel = cocos2d::Label::createWithSystemFont("Diaoyu: 0", "Arial", 24);
      _wakuangLabel = cocos2d::Label::createWithSystemFont("Wakuang: 0", "Arial", 24);
@@ -50,7 +50,7 @@ void UI::updateUI() {
     // 获取 Player 的当前状态
     Player* player = Player::getInstance();
     _healthLabel->setString("Health: " + std::to_string(player->getHealth()));
-    _staminaLabel->setString("Stamina: " + std::to_string(player->getStamina()));
+    _staminaLabel->setString("Cook: " + std::to_string(player->getCook()));
     _zhongdiLabel->setString("Zhongdi: " + std::to_string(player->zhongdi));
     _diaoyuLabel->setString("Diaoyu: " + std::to_string(player->diaoyu));
     _wakuangLabel->setString("Wakuang: " + std::to_string(player->wakuang));

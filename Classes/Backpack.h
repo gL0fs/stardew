@@ -39,7 +39,7 @@ public:
 
     // Display the inventory contents (show all items)
     void displayInventory() const;
-   
+    void Inventory::eat();
     
     void updateSelectedItem(cocos2d::EventMouse* e);
     Item getSelectedItem() const;
@@ -48,6 +48,7 @@ public:
 
     // Get the number of items in the inventory
     size_t getItemCount() const;
+    void Inventory::cook();//≈Î‚ø
 };
 
 #endif // __BACKPACK_H__

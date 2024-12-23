@@ -2,6 +2,7 @@
 #include "Toolbar.h"
 #include "ui/CocosGUI.h"
 #include "MyFarm.h"
+#include "AudioManager.h"
 USING_NS_CC;
 
 Forest::Forest()
@@ -64,7 +65,7 @@ bool Forest::initMap(const std::string& spawnPointName)
     }
 
 
-    _map = TMXTiledMap::create("Forest/Forest.tmx");
+    _map = cocos2d::TMXTiledMap::create("Forest/Forest.tmx");
     Size mapSize = _map->getContentSize();
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -219,6 +220,7 @@ void Forest::Fishing(cocos2d::Vec2 position) {
         if (tileSprite) {
             tileSprite->setOpacity(255);  
         }
+        AudioManager::getInstance()->playEffect("fish.mp3", 1.0f);
 		//等待一段时间后钓到鱼
         this->scheduleOnce([=](float dt) {
             tileSprite->setOpacity(0);
@@ -229,7 +231,7 @@ void Forest::Fishing(cocos2d::Vec2 position) {
 	}
 }
 
-void Forest::deleteWholeObject(cocos2d::Vec2 position, TMXLayer* layer) {
+void Forest::deleteWholeObject(cocos2d::Vec2 position, cocos2d::TMXLayer* layer) {
 	auto gid = layer->getTileGIDAt(position);
 	if (gid != 0) {
 		layer->removeTileAt(position);
@@ -254,7 +256,8 @@ void Forest::collect(cocos2d::Vec2 position) {
 	auto gid1 = _map->getLayer("collecting1")->getTileGIDAt(position);
 	auto gid2 = _map->getLayer("collecting2")->getTileGIDAt(position);
 	auto gid3 = _map->getLayer("collecting3")->getTileGIDAt(position);
-
+    AudioManager::getInstance()->playEffect("shouji.mp3", 1.0f);
+    CCLOG("SHOUJI");
 	if (gid1 != 0) {
 		deleteWholeObject(position, _map->getLayer("collecting1"));
 		_playerInstance->addInventory("berry", 1);
@@ -287,6 +290,7 @@ void Forest::cutTree(cocos2d::Vec2 position) {
 		count = 1;
     }
     else {
+        AudioManager::getInstance()->playEffect("wood.mp3", 1.0f);
 		count++;
 		//显示砍树动画
         auto layer = _map->getLayer("cutting");

@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-
+#include "AudioManager.h"
 #include "MainMenuScene.h"
 
 #include "SceneManager.h"
@@ -69,6 +69,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #endif
         director->setOpenGLView(glview);
     }
+    // 播放背景音乐
+    AudioManager::getInstance()->playBackgroundMusic("BackGround.mp3", true);
 
     // turn on display FPS
     director->setDisplayStats(false);

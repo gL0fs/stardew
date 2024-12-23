@@ -3,7 +3,8 @@
 #define __FESTIVAL_H__
 
 #include "BaseMapLayer.h"
-
+#include "cocos2d.h"
+USING_NS_CC;
 class Festival : public BaseMapLayer
 {
 public:
@@ -21,7 +22,7 @@ protected:
     std::map<std::pair<int, int>, int> tileNaijiuMap; // 存储瓷砖坐标和耐久度的映射
 private:
     cocos2d::EventListenerMouse* _mouseListener;
-    TMXTiledMap* festivalMap; // 将 minemap 重命名为更合适的名称
+    cocos2d::TMXTiledMap* festivalMap; // 将 minemap 重命名为更合适的名称
    
 };
 

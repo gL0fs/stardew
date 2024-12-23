@@ -3,7 +3,8 @@
 #define __MINE_H__
 
 #include "BaseMapLayer.h"
-
+#include "cocos2d.h"
+USING_NS_CC;
 class Mine : public BaseMapLayer
 {
 public:
@@ -21,8 +22,8 @@ protected:
     std::map<std::pair<int, int>, int> tileNaijiuMap; // ´æ´¢´É×©×ø±êºÍÄÍ¾Ã¶ÈµÄÓ³Éä
 private:
     cocos2d::EventListenerMouse* _mouseListener;
-    TMXTiledMap* minemap;
-    TMXLayer* mineralsLayer;
+    cocos2d::TMXTiledMap* minemap;
+    cocos2d::TMXLayer* mineralsLayer;
 };
 
 #endif // __MINE_H__   

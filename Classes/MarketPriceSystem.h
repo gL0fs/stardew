@@ -27,7 +27,7 @@ public:
     // 促销函数：随机调整商品价格
     void applyPromotion() {
         for (auto& item : prices) {
-            int discount = rand() % 20 ; // 价格在0 到 +20 之间波动
+            int discount = rand() % 20; // 价格在0 到 +20 之间波动
             item.second += discount;
             if (item.second < 1) item.second = 1; // 确保价格不为负数
         }
@@ -41,13 +41,26 @@ public:
             if (quantitySold > 0) {
                 auto it = prices.find(itemName);
                 if (it != prices.end()) {
-                    it->second -= quantitySold / 2; // 每卖出 2个，价格降低 1
+                    // 根据物品类型调整价格
+                    if (itemName == "food1") {
+                        it->second -= quantitySold / 4; // 每卖出 4 个，价格降低 1
+                    }
+                    else if (itemName == "food2") {
+                        it->second -= quantitySold / 2; // 每卖出 2 个，价格降低 1
+                    }
+                    else if (itemName == "food3") {
+                        it->second -= quantitySold; // 每卖出 1 个，价格降低 1
+                    }
+                    else {
+                        it->second -= quantitySold / 2; // 其他物品每卖出 2 个，价格降低 1
+                    }
                     if (it->second < 1) it->second = 1; // 确保价格不为负数
                 }
             }
         }
-       //sales.clear(); // 清空销量记录
+        
     }
+
     void resetPricesWithVariation() {
         // 重置为初始价格
         initializePrices();
@@ -85,11 +98,15 @@ public:
         prices["kuang2"] = 10;
         prices["kuang3"] = 10;
         prices["carrot3"] = 30;
-
         prices["egg"] = 30;
         prices["cow"] = 40;
         prices["redflower3"] = 60;   // 新商品 redflower3，价格为 60
         prices["smalltree3"] = 120;  // 新商品 smalltree3，价格为 120
+
+        // 新增 food1, food2, food3 的价格
+        prices["food1"] = 20;
+        prices["food2"] = 60;
+        prices["food3"] = 150;
     }
 
 private:

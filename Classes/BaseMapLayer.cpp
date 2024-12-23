@@ -292,7 +292,12 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
     case cocos2d::EventKeyboard::KeyCode::KEY_U:
         Player::getInstance()->showUI();
         break;
-
+    case cocos2d::EventKeyboard::KeyCode::KEY_C:
+        Player::getInstance()->getInventory()->cook();
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_P:
+        Player::getInstance()->getInventory()->eat();
+        break;
 
     }
     //归一化移动方向

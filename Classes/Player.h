@@ -21,8 +21,8 @@ public:
     void changeHealth();
     int getHealth() const;
 
-    void setStamina(int stamina);
-    int getStamina() const;
+    void setCook(int stamina);
+    int getCook() const;
 
     Inventory* Player::getInventory();
     void addInventory(const std::string& name, int quantity);
@@ -46,6 +46,7 @@ public:
     int diaoyu;
     int wakuang;
     int zhongdi;
+    
     void Player::loadAnimationFrames();
     cocos2d::Animation* getAnimation(int index) {
         return _playerAnimation[index];
@@ -58,9 +59,9 @@ private:
     static Player* _instance;
 
     
-
+    int _cook;
     int _health;
-    int _stamina;
+    
     Inventory* _inventory;
     Shop* _shopLayer; // …ÃµÍ≤„
     

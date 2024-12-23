@@ -1,5 +1,5 @@
 #include "Backpack.h"
-
+#include "Player.h"
 USING_NS_CC;
 
 // Constructor to initialize Item with name and quantity
@@ -209,5 +209,85 @@ void Inventory::updateSelectedItem(cocos2d::EventMouse* e) {
 Item Inventory::getSelectedItem() const {
     return items[currentIndex];  // 返回当前选中的物品
 }
+void Inventory::cook() {
+    Item selectedItem = getSelectedItem(); // 获取当前选中的物品
 
+    // 获取 Player 实例
+    auto player = Player::getInstance();
 
+    // 检查当前选中的物品是否为 fish1、fish2 或 fish3
+    if (selectedItem.name == "fish1" || selectedItem.name == "fish2" || selectedItem.name == "fish3") {
+        // 根据 cook 值判断是否可以烹饪
+        if ((selectedItem.name == "fish2" && player->getCook() >= 30) ||
+            (selectedItem.name == "fish3" && player->getCook() >= 70) ||
+            (selectedItem.name == "fish1")) {
+
+            // 从背包中移除相应的鱼类物品
+            removeItem(selectedItem.name, 1);
+
+            // 根据鱼的类型添加对应的食物
+            std::string foodName;
+            if (selectedItem.name == "fish1") {
+                foodName = "food1";
+            }
+            else if (selectedItem.name == "fish2") {
+                foodName = "food2";
+            }
+            else if (selectedItem.name == "fish3") {
+                foodName = "food3";
+            }
+
+            // 添加食物到背包
+            addItemToInventory(foodName, 1);
+
+            // 增加 cook 值，并确保不超过 100
+            player->setCook(player->getCook() + 1<100? player->getCook() + 1 : 100);
+            player->setHealth(player->getHealth() - 5);
+
+            // 输出日志
+            CCLOG("Cooked %s into %s", selectedItem.name.c_str(), foodName.c_str());
+        }
+        else {
+            // 如果 cook 值不足，输出提示
+            CCLOG("Cannot cook %s. Cook skill is not high enough.", selectedItem.name.c_str());
+        }
+    }
+    else {
+        // 如果不是鱼类物品，输出提示
+        CCLOG("Cannot cook %s. Only fish1, fish2, or fish3 can be cooked.", selectedItem.name.c_str());
+    }
+}
+void Inventory::eat() {
+    Item selectedItem = getSelectedItem(); // 获取当前选中的物品
+
+    // 获取 Player 实例
+    auto player = Player::getInstance();
+
+    // 检查当前选中的物品是否为 food1、food2 或 food3
+    if (selectedItem.name == "food1" || selectedItem.name == "food2" || selectedItem.name == "food3") {
+        // 根据食物类型增加体力
+        int healthIncrease = 0;
+        if (selectedItem.name == "food1") {
+            healthIncrease = 10;
+        }
+        else if (selectedItem.name == "food2") {
+            healthIncrease = 25;
+        }
+        else if (selectedItem.name == "food3") {
+            healthIncrease = 50;
+        }
+
+        // 增加玩家的体力
+        player->setHealth(player->getHealth() + healthIncrease<100? player->getHealth() + healthIncrease : 100);
+
+        // 从背包中移除一个食物
+        removeItem(selectedItem.name, 1);
+
+        // 输出日志
+        CCLOG("Ate %s. Health increased by %d.", selectedItem.name.c_str(), healthIncrease);
+    }
+    else {
+        // 如果不是食物类物品，输出提示
+        CCLOG("Cannot eat %s. Only food1, food2, or food3 can be eaten.", selectedItem.name.c_str());
+    }
+}

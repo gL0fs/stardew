@@ -289,6 +289,21 @@ void Shop::logSelectedItemCoord() {
             }
         }
     }
+    // 处理出售 food1, food2, food3 的情况
+
+    if (_selectedItemCoord.y == 3 && _selectedItemCoord.x == 4) {
+        // 依次检查 food1, food2, food3
+        std::vector<std::string> foodItems = { "food1", "food2", "food3" };
+        for (const auto& food : foodItems) {
+            if (player->getInventory()->removeItem(food, 1)) { // 尝试移除一个物品
+                int price = market.getPrice(food); // 获取价格
+                player->setMoney(player->getmoney() + price); // 更新玩家的钱
+                market.recordSale(food, 1); // 记录销量
+                CCLOG("Sold %s for %d money.", food.c_str(), price); // 输出日志
+                break; // 找到一个物品后退出循环
+            }
+        }
+    }
     market.updatePricesBasedOnSales();//更新价格
 }
 void Shop::setVisible(bool visible) {

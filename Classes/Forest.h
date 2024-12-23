@@ -13,7 +13,7 @@
 #include "ui/CocosGUI.h"
 #include "Test.h"
 #include"House.h"
-
+USING_NS_CC;
 class Forest : public BaseMapLayer
 {
 public:
@@ -32,7 +32,7 @@ protected:
 private:
     bool initMap(const std::string& spawnPointName)override;
     cocos2d::EventListenerMouse* _mouseListener;
-	void deleteWholeObject(cocos2d::Vec2 position, TMXLayer* layer);
+	void deleteWholeObject(cocos2d::Vec2 position, cocos2d::TMXLayer* layer);
 };
 
 #endif // __FOREST_H__
