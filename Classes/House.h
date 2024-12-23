@@ -14,7 +14,12 @@ struct Animal {
     bool harvestedToday;
     Vec2 position;
 };
-
+struct BedObject {
+    float x;
+    float y;
+    float width;
+    float height;
+};
 class House : public BaseMapLayer {
 public:
     static Scene* createScene(const std::string& spawnPointName);
@@ -31,6 +36,7 @@ public:
 
     // 新的一天重置
     void onNewDay(EventCustom* event);
+    
 
 private:
     std::vector<Animal> animals;
@@ -39,6 +45,13 @@ private:
     void setupTouchListener();
     Animal* findTouchedAnimal(const Vec2& touchPos);
     void setupNewDayListener();
+//睡觉；
+    bool checkBedInteraction(const Vec2& position);
+    void goToSleep();
+
+    BedObject* _bedObject;  // 修改为 BedObject 类型
+
+
 };
 
 #endif // __HOUSE_H__

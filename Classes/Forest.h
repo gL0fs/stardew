@@ -5,7 +5,7 @@
 #include "BaseMapLayer.h"
 #include "Player.h"
 #include "Mine.h"
-
+#include "TimeManager.h"
 #include "MyFarm.h"
 
 #include "MainMenuScene.h"

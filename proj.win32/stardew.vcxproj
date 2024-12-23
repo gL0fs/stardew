@@ -150,7 +150,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Classes\AnimalSystem.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\AudioManager.cpp" />
     <ClCompile Include="..\Classes\Backpack.cpp" />
@@ -170,10 +169,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\TimeManager.cpp" />
     <ClCompile Include="..\Classes\Toolbar.cpp" />
     <ClCompile Include="..\Classes\UI.cpp" />
+    <ClCompile Include="..\Classes\WeatherSystem.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Classes\AnimalSystem.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\AudioManager.h" />
     <ClInclude Include="..\Classes\Backpack.h" />
@@ -193,8 +192,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Test.h" />
     <ClInclude Include="..\classes\TimeManager.h" />
     <ClInclude Include="..\Classes\Toolbar.h" />
-    <ClInclude Include="..\Classes\Town.h" />
     <ClInclude Include="..\Classes\UI.h" />
+    <ClInclude Include="..\Classes\WeatherSystem.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

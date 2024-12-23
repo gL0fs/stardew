@@ -21,6 +21,19 @@ Scene* Forest::createScene(const std::string& spawnPointName)
     if (layer != nullptr)
     {
         scene->addChild(layer);
+        TimeManager* timeManager = TimeManager::getInstance();
+        // 确保TimeManager只被初始化一次
+        static bool timeManagerInitialized = false;
+        if (!timeManagerInitialized) {
+            timeManager->init();
+            timeManagerInitialized = true;
+        }
+
+        // 确保TimeManager只有一个父节点
+        if (timeManager->getParent()) {
+            timeManager->removeFromParent();
+        }
+        scene->addChild(timeManager);
     }
     auto toolbarLayer = Toolbar::getInstance();
     toolbarLayer->setPositionOnLeft(); // 设置工具栏层位置

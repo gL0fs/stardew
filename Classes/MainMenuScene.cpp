@@ -51,7 +51,7 @@ bool MainMenuScene::init() {
         [](Ref* sender) {
             // 切换到农场场景
 
-            auto scene =MyFarm::createScene("SpawnPoint");
+            auto scene =House::createScene("SpawnPoint");
 
             Director::getInstance()->replaceScene(TransitionFade::create(0.5, scene, Color3B(0, 0, 0)));
         }

@@ -13,6 +13,19 @@ Scene* House::createScene(const std::string& spawnPointName)  // 将 MyFarm 改为 
     if (layer != nullptr)
     {
         scene->addChild(layer);
+        TimeManager* timeManager = TimeManager::getInstance();
+        // 确保TimeManager只被初始化一次
+        static bool timeManagerInitialized = false;
+        if (!timeManagerInitialized) {
+            timeManager->init();
+            timeManagerInitialized = true;
+        }
+
+        // 确保TimeManager只有一个父节点
+        if (timeManager->getParent()) {
+            timeManager->removeFromParent();
+        }
+        scene->addChild(timeManager);
     }
     // 返回场景对象
     return scene;
@@ -37,6 +50,22 @@ bool House::initMap(const std::string& spawnPointName)
     // 调用基类的方法来加载地图
     loadMap("house1.tmx");  // 更改为 house.tmx
     initializePlayer(spawnPointName);
+    auto objectGroup = _map->getObjectGroup("Object");
+    if (objectGroup) {
+        auto bedObjects = objectGroup->getObjects();
+        for (const auto& obj : bedObjects) {
+            auto bedObj = obj.asValueMap();
+            if (bedObj["name"].asString() == "Bed") {
+                _bedObject = new BedObject();  // 使用 BedObject 类型
+                _bedObject->x = bedObj["x"].asFloat();
+                _bedObject->y = bedObj["y"].asFloat();
+                _bedObject->width = bedObj["width"].asFloat();
+                _bedObject->height = bedObj["height"].asFloat();
+                break;
+            }
+        }
+    }
+    
     return true;
 }
 
@@ -49,6 +78,7 @@ bool House::init() {
 
     // 初始化动物系统
     initializeAnimals();
+
 
     // 设置触摸监听
     setupTouchListener();
@@ -87,11 +117,52 @@ void House::setupTouchListener() {
     listener->onTouchBegan = CC_CALLBACK_2(House::onTouchBegan, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
+bool House::checkBedInteraction(const Vec2& position) {
+    if (!_bedObject) return false;
+
+    Rect bedRect(_bedObject->x, _bedObject->y, _bedObject->width, _bedObject->height);
+    return bedRect.containsPoint(position);
+}
+
+void House::goToSleep() {
+    // 获取时间管理器
+    auto timeManager = TimeManager::getInstance();
+
+    // 显示睡觉提示
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto sleepLabel = Label::createWithTTF("睡觉中...", "Fonts/pixel_font.ttf", 40);
+    sleepLabel->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+    this->addChild(sleepLabel, 100);
+
+    // 淡出动画
+    auto fadeOut = FadeOut::create(1.0f);
+    auto fadeIn = FadeIn::create(1.0f);
+    auto removeLabel = RemoveSelf::create();
+    auto sleep = CallFunc::create([timeManager]() {
+        timeManager->playerGoToBed();
+        });
+
+    sleepLabel->runAction(Sequence::create(
+        fadeOut,
+        sleep,
+        fadeIn,
+        DelayTime::create(1.0f),
+        removeLabel,
+        nullptr
+    ));
+}
 
 bool House::onTouchBegan(Touch* touch, Event* event) {
     Vec2 touchLocation = touch->getLocation();
+    Vec2 locationInNode = this->convertToNodeSpace(touchLocation);
 
-    // 查找被触摸的动物
+    // 检查是否点击了床
+    if (checkBedInteraction(locationInNode)) {
+        goToSleep();
+        return true;
+    }
+
+    // 原有的动物交互逻辑
     Animal* touchedAnimal = findTouchedAnimal(touchLocation);
     if (touchedAnimal) {
         harvestAnimal(touchedAnimal);

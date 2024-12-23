@@ -1,7 +1,7 @@
 #pragma once
 #ifndef __FESTIVAL_H__
 #define __FESTIVAL_H__
-
+#include "TimeManager.h"
 #include "BaseMapLayer.h"
 #include "cocos2d.h"
 USING_NS_CC;
