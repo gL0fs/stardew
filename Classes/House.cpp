@@ -55,7 +55,7 @@ bool House::initMap()  // 将 MyFarm 改为 House
     }
 
     // 调用基类的方法来加载地图
-    loadMap("house.tmx");  // 更改为 house.tmx
+    loadMap("house1.tmx");  // 更改为 house.tmx
 
     initializePlayer();
 

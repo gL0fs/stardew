@@ -14,9 +14,10 @@ Crop* Crop::create(const Vec2& pos, CropType type) {
 }
 
 bool Crop::init(const Vec2& pos, CropType type) {
+
     _cropType = type;
     _growthDays = 0;
-
+    _isWatered = false;  // 初始化时未浇水
     std::string spriteName;
     switch (type) {
     case CropType::CARROT:
@@ -44,6 +45,7 @@ bool Crop::init(const Vec2& pos, CropType type) {
 
 
 void Crop::grow() {
+    if (!_isWatered) return;  // 只有浇水后才能生长
     switch (_state) {
     case GrowthState::SEED:
         _state = GrowthState::GROWING;
@@ -58,7 +60,33 @@ void Crop::grow() {
     updateSprite();
 }
 
+bool CropSystem::waterCrop(const Vec2& position) {
+    auto crop = findCropAt(position);
+    if (crop && !crop->isWatered()) {
+        crop->water();
+        return true;
+    }
+    return false;
+}
+std::string CropSystem::harvestCrop(const Vec2& position) {
+    auto crop = findCropAt(position);
+    if (crop && crop->isMature()) {
+        std::string harvestItem = _harvestItems[crop->_cropType];
+        removeCrop(position);
+        return harvestItem;
+    }
+    return "";
+}
 
+Crop* CropSystem::findCropAt(const Vec2& position) {
+    Vec2 gridPos = getGridPosition(position);
+    for (auto crop : _crops) {
+        if (crop->getPosition() == gridPos) {
+            return crop;
+        }
+    }
+    return nullptr;
+} 
 void Crop::updateSprite() {
     std::string filename;
     std::string number;
