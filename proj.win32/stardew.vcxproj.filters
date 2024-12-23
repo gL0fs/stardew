@@ -24,6 +24,7 @@
     <ClCompile Include="..\Classes\xuanting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\Classes\AudioManager.cpp" />
+    <ClCompile Include="..\Classes\Town.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AnimalSystem.h" />
@@ -49,5 +50,6 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="..\Classes\AudioManager.h" />
     <ClInclude Include="..\Classes\cook.h" />
+    <ClInclude Include="..\Classes\Town.h" />
   </ItemGroup>
 </Project>
