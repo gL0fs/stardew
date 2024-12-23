@@ -1,4 +1,5 @@
 #include "BaseMapLayer.h"
+#include "SceneManager.h"
 #include "Toolbar.h"
 USING_NS_CC;
 #define COCOS2D_DEBUG 1
@@ -8,7 +9,7 @@ BaseMapLayer::BaseMapLayer() : _map(nullptr), _playerInstance(nullptr) {
 BaseMapLayer* BaseMapLayer::create(const std::string& tmxFile)
 {
     return nullptr;
-} 
+}
 
 bool BaseMapLayer::init() {
     if (!Layer::init()) {
@@ -24,7 +25,7 @@ bool BaseMapLayer::init() {
     auto mouseListener = cocos2d::EventListenerMouse::create();
     mouseListener->onMouseScroll = CC_CALLBACK_1(BaseMapLayer::onMouseScroll, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
-    
+
     // 设置定时器，更新玩家位置
     this->scheduleUpdate();
 
@@ -53,7 +54,7 @@ void BaseMapLayer::loadMap(const std::string& tmxFile)
     _map->setScale(2.5f);
     _map->setAnchorPoint(Vec2(0, 0));
     // 直接将地图的左下角放置在层的左下角
-    _map->setPosition(0,0);
+    _map->setPosition(0, 0);
 
     // 添加地图到层
     this->addChild(_map, -1);
@@ -65,9 +66,9 @@ void BaseMapLayer::loadMap(const std::string& tmxFile)
 }
 
 
-void BaseMapLayer::initializePlayer() {
-    
-   // 获取玩家单例
+void BaseMapLayer::initializePlayer(const std::string& spawnPointName) {
+
+    // 获取玩家单例
     _playerInstance = Player::getInstance();
     // 初始化玩家精灵
     if (!_playerInstance->initPlayer("Player.png")) {
@@ -90,22 +91,19 @@ void BaseMapLayer::initializePlayer() {
     _playerInstance->setScale(scaleWidth, scaleHeight);
 
     // 设置玩家位置
-	if (_path == 0)
-        setPlayerPosition("Objects", "SpawnPoint");
-    else {
-		//根据路径设置玩家位置
-		setPlayerPosition("Objects", "SpawnPoint"+std::to_string(_path));
-    }
+
+    setPlayerPosition("Objects", spawnPointName);
+
 
     // 添加玩家精灵到地图层
     //如果没有添加
-	if (_playerInstance->getParent() == nullptr)
+    if (_playerInstance->getParent() == nullptr)
         this->addChild(_playerInstance);
     else {
         _playerInstance->getParent()->removeChild(_playerInstance, false);
-		this->addChild(_playerInstance);
+        this->addChild(_playerInstance);
     }
-    
+
     _playerInstance->addInventory("tool1", 1);//用于测试背包功能
     for (int i = 0; i < 14; i++) { _playerInstance->addInventory("tool2", 1); }
     _playerInstance->addInventory("fish1", 13);
@@ -121,12 +119,12 @@ void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const s
     if (!objectGroup) return;
 
     auto spawnPoint = objectGroup->getObject(spawnPointName);
-	// 如果没有找到指定名称的出生点，则使用默认名称
+    // 如果没有找到指定名称的出生点，则使用默认名称
     if (spawnPoint.empty()) {
-        auto spawnPoint = objectGroup->getObject("SpawnPoint");
+        spawnPoint = objectGroup->getObject("SpawnPoint");
     }
 
-	if (spawnPoint.empty()) return;
+    if (spawnPoint.empty()) return;
 
     // 获取地图的尺寸和缩放比例
     float mapScale = _map->getScale();
@@ -139,14 +137,14 @@ void BaseMapLayer::setPlayerPosition(const std::string& objectGroupName, const s
     float y = spawnPoint["y"].asFloat() * mapScale;
     CCLOG("MAPSIZE%f %f", mapSize.width, mapSize.height);
     CCLOG("SPAWN %f %f", spawnPoint["x"].asFloat(), spawnPoint["y"].asFloat());
-    
+
     CCLOG("SPAWN %f %f", x, y);
-    
+
 
     // 设置玩家位置
     _playerInstance->setPosition(cocos2d::Vec2(x, y));
     setViewPointCenter(_playerInstance->getPosition());
-   
+
 }
 
 bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) {
@@ -161,19 +159,19 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
     auto tileSize = this->_map->getTileSize();
     auto mapSize = this->_map->getMapSize();
     auto mapScale = this->_map->getScale(); // 获取地图的缩放比例
-    
+
     // 将下一个位置转换为瓦片坐标，考虑地图缩放
-    int x = static_cast<int>(nextPosition.x / 17.83) ;
+    int x = static_cast<int>(nextPosition.x / 17.83);
     int y = static_cast<int>(mapSize.height * 17.83 - nextPosition.y) / (17.83);
     auto tileCoord = cocos2d::Vec2(x, y);
     CCLOG("nextPosition:%f %f", nextPosition.x, nextPosition.y);
     //CCLOG("tileSize:%f %f", tileSize.width, tileSize.height);
 
-    CCLOG("%d %d",x,y);
+    CCLOG("%d %d", x, y);
     CCLOG("TOOL%d", toolbar->getCurrentToolIndex());
     // 获取该瓦片坐标的GID
     int GID = obstacles->getTileGIDAt(tileCoord);
-    
+
     // 如果GID为0，表示该位置没有瓦片，即不是障碍物
     if (GID == 0) {
         return false;
@@ -181,7 +179,7 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
     else {
         return true;
     }
-    
+
     // 获取瓦片的属性
     cocos2d::Value properties = _map->getPropertiesForGID(GID);
     CCLOG("GET_PRO");
@@ -192,7 +190,7 @@ bool BaseMapLayer::isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition) 
         CCLOG("collision%d %d", x, y);
         return collidable;
     }
-    
+
     // 默认不发生碰撞
     return false;
 }
@@ -209,7 +207,7 @@ void BaseMapLayer::handlePlayerMovement(const cocos2d::Vec2& direction) {
         _playerInstance->setPosition(nextPosition);
         this->setViewPointCenter(nextPosition);
     }
-	checkChangeMap(nextPosition);
+    checkChangeMap(nextPosition);
 }
 
 void BaseMapLayer::update(float delta) {
@@ -253,11 +251,11 @@ void BaseMapLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d
     case cocos2d::EventKeyboard::KeyCode::KEY_U:
         Player::getInstance()->showUI();
         break;
-        
-    
+
+
     }
-	//归一化移动方向
-	_moveDirection.normalize();
+    //归一化移动方向
+    _moveDirection.normalize();
 }
 
 void BaseMapLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
@@ -281,8 +279,8 @@ void BaseMapLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
         _moveDirection.x = 0;  // 停止向右移动
         break;
     }
-	//归一化移动方向
-	_moveDirection.normalize();
+    //归一化移动方向
+    _moveDirection.normalize();
 }
 void BaseMapLayer::setViewPointCenter(Point position) {
     auto winSize = Director::getInstance()->getWinSize();
@@ -303,11 +301,11 @@ void BaseMapLayer::setViewPointCenter(Point position) {
 
     // 计算视图点，考虑缩放
     auto centerOfView = Point(winSize.width / 2, winSize.height / 2);
-    auto viewPoint = centerOfView - actualPosition ;
+    auto viewPoint = centerOfView - actualPosition;
     this->setPosition(viewPoint);
 }
 void BaseMapLayer::initMouseEvent() {
-   
+
     _mouseListener = cocos2d::EventListenerMouse::create();
 
     _mouseListener->onMouseDown = [this](cocos2d::Event* event) {
@@ -315,7 +313,7 @@ void BaseMapLayer::initMouseEvent() {
 
         cocos2d::Vec2 mouseLocation = mouseEvent->getLocationInView();
 
-       
+
         cocos2d::Vec2 worldLocation = this->convertToNodeSpace(mouseLocation);
 
         if (canPlantTreeAtPosition(worldLocation)) {
@@ -323,28 +321,28 @@ void BaseMapLayer::initMouseEvent() {
         }
         };
 
-  
+
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 }
 void BaseMapLayer::plantTree(cocos2d::Vec2 position) {
-    
+
     auto treeSprite = cocos2d::Sprite::create("tree1_spring.png");
-    
+
     auto tileSize = _map->getTileSize();
     float scaleX = tileSize.width / treeSprite->getContentSize().width;
     float scaleY = tileSize.height / treeSprite->getContentSize().height;
     treeSprite->setScale(scaleX, scaleY);
- 
+
     treeSprite->setPosition(position);
-   
-    _map->addChild(treeSprite, 1);  
-   
+
+    _map->addChild(treeSprite, 1);
+
     _treesVector.pushBack(treeSprite);
-  
+
     // CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("plant.wav");
 }
 bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
-    
+
     auto objectGroup = _map->getObjectGroup("PlantArea");
     if (!objectGroup) {
         CCLOG("No PlantArea object group found!");
@@ -356,7 +354,7 @@ bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
 
 
     for (auto& plantAreaValue : objectGroup->getObjects()) {
-        auto plantArea = plantAreaValue.asValueMap();  
+        auto plantArea = plantAreaValue.asValueMap();
 
         float x = plantArea["x"].asFloat();
         float y = plantArea["y"].asFloat();
@@ -365,19 +363,19 @@ bool BaseMapLayer::canPlantTreeAtPosition(cocos2d::Vec2 position) {
 
         cocos2d::Rect plantRect(x, y, width, height);
 
-       
+
         if (plantRect.containsPoint(mapPosition)) {
-         
+
             for (auto tree : _treesVector) {
                 if (tree && tree->getBoundingBox().intersectsRect(plantRect)) {
-                    return false;  
+                    return false;
                 }
             }
-            return true;  
+            return true;
         }
     }
 
-    return false;  
+    return false;
 }
 
 void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
@@ -410,7 +408,7 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
         cocos2d::Size mapSize = _map->getMapSize();
         cocos2d::Size tileSize = _map->getTileSize();
 
-        
+
         // 获取object的位置和大小
         float objectX = object["x"].asFloat() * mapScale;
         float objectY = object["y"].asFloat() * mapScale;
@@ -418,21 +416,22 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
         float height = object["height"].asFloat() * mapScale;
         int obx = static_cast<int>(objectX / 17.83);
         int oby = static_cast<int>(mapSize.height * 17.83 - objectY) / (17.83);
-		int obwidth = static_cast<int>(width / 17.83);
-		int obheight = static_cast<int>(height / 17.83)+1;
+        int obwidth = static_cast<int>(width / 17.83);
+        int obheight = static_cast<int>(height / 17.83) + 1;
         // 创建矩形
         CCLOG("obx %d oby %d", obx, oby);
         CCLOG("width %d height %d", obwidth, obheight);
-        cocos2d::Rect objectRect(obx- obwidth, oby-obheight, obwidth, obheight);
+        cocos2d::Rect objectRect(obx, oby - obheight, obwidth, obheight);
 
         // 检查位置是否在矩形内
         if (objectRect.containsPoint(position)) {
-			CCLOG("hit_object %d", i);
-			// 获取目标地图名称
-			std::string mapName = object["MapName"].asString();
-			// 切换地图
-			switchMap(mapName,i);
-			break;
+            CCLOG("hit_object %d", i);
+            // 获取目标地图名称
+            std::string mapName = object["MapName"].asString();
+            std::string mapName_now = _map->getProperty("MapName").asString();
+            // 切换地图
+            SceneManager::getInstance().switchMap(mapName, mapName_now, this->getScene());
+            break;
         }
         i++;
     }

@@ -7,14 +7,13 @@
 class Festival : public BaseMapLayer
 {
 public:
-    static cocos2d::Scene* createScene();
-    static Festival* create();
-    virtual bool init() override;
-    void initMouseEvent(); // 去掉了 Festival::，因为这是在类定义内部
+    static cocos2d::Scene* createScene(const std::string& spawnPointName);
+    static Festival* create(const std::string& spawnPointName);
+    bool init() override;
+    void initMouseEvent() override; // 去掉了 Festival::，因为这是在类定义内部
     cocos2d::Vec2 getTileCoordForPosition(cocos2d::Vec2 position); // 同上
-    void Festival::switchMap(const std::string& mapName, int path)override;
    
-    bool initMap();
+    bool initMap(const std::string& spawnPointName) override;
    
 protected:
     Festival(); // 构造函数
