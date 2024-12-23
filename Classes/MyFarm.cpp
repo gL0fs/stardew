@@ -1,6 +1,7 @@
 // MyFarm.cpp
 #include "MyFarm.h"
 #include "CropSystem.h"
+#include "MaskManager.h"
 USING_NS_CC;
 Scene* MyFarm::createScene(const std::string& spawnPointName) {
     auto scene = Scene::create();
@@ -11,15 +12,28 @@ Scene* MyFarm::createScene(const std::string& spawnPointName) {
     if (layer != nullptr) {
         scene->addChild(layer);
 
-        // 创建UI
-        auto timeUI = GameTimeUI::create();
-        if (timeUI) {
-            auto visibleSize = Director::getInstance()->getVisibleSize();
-            // 由于已经设置了背景精灵的锚点为右上角，这里直接设置到右上角位置
-            timeUI->setPosition(Vec2(visibleSize.width, visibleSize.height));
-            scene->addChild(timeUI, 10);
+
+        TimeManager* timeManager = TimeManager::getInstance();
+        // 确保TimeManager只被初始化一次
+        static bool timeManagerInitialized = false;
+        if (!timeManagerInitialized) {
+            timeManager->init();
+            timeManagerInitialized = true;
         }
 
+        // 确保TimeManager只有一个父节点
+        if (timeManager->getParent()) {
+            timeManager->removeFromParent();
+        }
+        scene->addChild(timeManager);
+        // 初始化并添加 MaskManager（遮罩层管理器）
+        //MaskManager* maskManager = MaskManager::getInstance();
+        //if (maskManager) {
+        //    maskManager->init();  // 调用 MaskManager 的初始化方法
+        //    scene->addChild(maskManager, 5);  // 将 MaskManager 添加到场景中，Z 序较低
+        //}
+
+       
         // 创建工具栏
         auto toolbarLayer = Toolbar::getInstance();
         if (toolbarLayer) {
@@ -55,8 +69,15 @@ bool MyFarm::init() {
     if (!BaseMapLayer::init()) {
         return false;
     }
+
+   
+
+    // 注册更新回调
+    scheduleUpdate();
+
     return true;
 }
+
 
 void MyFarm::initCropSystem() {
     _cropSystem = CropSystem::create();
@@ -80,8 +101,9 @@ bool MyFarm::initMap(const std::string& spawnPointName) {
   
 
     // 初始化作物系统
+    initializePlayer("SpawnPoint");
     initCropSystem();
-    initAnimalSystem();
+    //initAnimalSystem();
     // 设置鼠标监听器
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseDown = CC_CALLBACK_1(MyFarm::onMouseDown1, this);
@@ -126,9 +148,9 @@ void MyFarm::onKeyPressed1(EventKeyboard::KeyCode keyCode, Event* event) {
     }
 }
 
+// 在 MyFarm.cpp 中修改 onMouseDown1 函数
 void MyFarm::onMouseDown1(EventMouse* event) {
     if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT) {
-        // 获取场景和工具栏
         auto scene = Director::getInstance()->getRunningScene();
         auto toolbar = dynamic_cast<Toolbar*>(scene->getChildByName("toolbar"));
 
@@ -136,7 +158,6 @@ void MyFarm::onMouseDown1(EventMouse* event) {
             Vec2 clickPos = Vec2(event->getCursorX(), event->getCursorY());
             Vec2 locationInNode = this->convertToNodeSpace(clickPos);
             int currentTool = toolbar->getCurrentToolIndex();
-
 
             if (_cropSystem) {
                 switch (currentTool) {
@@ -152,11 +173,14 @@ void MyFarm::onMouseDown1(EventMouse* event) {
                     }
                 }
                 break;
-                case 4: // 浇水工具
+                case 5: // 浇水工具
                     _cropSystem->waterCrop(locationInNode);
                     break;
                 }
             }
+
+            // 检查是否点击了动物
+           
         }
     }
 }

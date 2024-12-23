@@ -1,6 +1,7 @@
 #include "CropSystem.h"
 
 USING_NS_CC;
+
 CropSystem* CropSystem::_instance = nullptr;
 // Crop 实现
 Crop* Crop::create(const Vec2& pos, CropType type) {
@@ -12,12 +13,13 @@ Crop* Crop::create(const Vec2& pos, CropType type) {
     CC_SAFE_DELETE(crop);
     return nullptr;
 }
-
 bool Crop::init(const Vec2& pos, CropType type) {
-
     _cropType = type;
-    _growthDays = 0;
-    _isWatered = false;  // 初始化时未浇水
+    _daysWatered = 0;
+    _todayWatered = false;
+    _isWatered = false;
+    _state = GrowthState::SEED;
+
     std::string spriteName;
     switch (type) {
     case CropType::CARROT:
@@ -39,38 +41,42 @@ bool Crop::init(const Vec2& pos, CropType type) {
     }
 
     setPosition(pos);
-    _state = GrowthState::SEED;
     return true;
 }
 
-
 void Crop::grow() {
-    if (!_isWatered) return;  // 只有浇水后才能生长
+    if (!_isWatered) return;  // 如果今天没浇水，不生长
+
     switch (_state) {
     case GrowthState::SEED:
-        _state = GrowthState::GROWING;
+        if (_daysWatered >= 1) {
+            _state = GrowthState::GROWING;
+            updateSprite();
+        }
         break;
     case GrowthState::GROWING:
-        _state = GrowthState::MATURE;
+        if (_daysWatered >= 2) {
+            _state = GrowthState::MATURE;
+            updateSprite();
+        }
         break;
     case GrowthState::MATURE:
-        // 已经完全成熟
+        // 保持成熟状态直到收获
         break;
     }
-    updateSprite();
 }
-
 bool CropSystem::waterCrop(const Vec2& position) {
     auto crop = findCropAt(position);
     if (crop && !crop->isWatered()) {
         crop->water();
+        crop->grow();  // 立即检查是否可以生长
         return true;
     }
     return false;
 }
 std::string CropSystem::harvestCrop(const Vec2& position) {
     auto crop = findCropAt(position);
-    if (crop && crop->isMature()) {
+    if (crop && crop->isMature() && crop->getDaysWatered() >= 3) {
         std::string harvestItem = _harvestItems[crop->_cropType];
         removeCrop(position);
         return harvestItem;
@@ -141,22 +147,6 @@ bool CropSystem::init() {
     return true;
 }
 
-//bool CropSystem::plantCrop(const Vec2& position) {
-//    Vec2 gridPos = getGridPosition(position);
-//
-//    if (!canPlantAt(gridPos)) {
-//        return false;
-//    }
-//
-//    auto crop = Crop::create(gridPos);
-//    if (crop) {
-//        this->addChild(crop);
-//        _crops.push_back(crop);
-//        return true;
-//    }
-//    return false;
-//}
-
 bool CropSystem::plantCrop(const Vec2& position) {
     Vec2 gridPos = getGridPosition(position);
 
@@ -217,6 +207,8 @@ void CropSystem::checkGrowth(float dt) {
 }
 
 void CropSystem::onNewDay(EventCustom* event) {
-    // 处理新的一天开始时的逻辑
     CCLOG("新的一天开始了，检查所有作物状态");
+    for (auto crop : _crops) {
+        crop->resetDailyWater();  // 重置每日浇水状态
+    }
 }

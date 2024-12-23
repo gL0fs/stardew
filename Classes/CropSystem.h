@@ -6,32 +6,47 @@
 #include "TimeManager.h"
 
 class Crop : public cocos2d::Sprite {
+private:
+    enum class GrowthState {
+        SEED,    // carrot1
+        GROWING, // carrot2
+        MATURE   // carrot3
+    };
+    GrowthState _state = GrowthState::SEED;  // 初始状态是种子
+    void updateSprite();  // 更新作物精灵的方法
+    int _daysWatered = 0;  // 记录累计浇水天数
+    bool _todayWatered = false;  // 记录今天是否浇水过
+    float _plantedMinute = 0;  // 记录种植时的游戏分钟
+    int _plantedHour = 0;      // 记录种植时的游戏小时
+    int _plantedDay = 0;       // 记录种植时的游戏天数
+
+    int _growthDays;
 public:
-    // 作物类型枚举
     enum class CropType {
         CARROT,
         SMALL_TREE,
         RED_FLOWER,
         TREE_FLOWER
     };
+   
 
     // 创建作物的方法，接受位置和作物类型作为参数
     static Crop* create(const cocos2d::Vec2& pos, CropType type);
 
     // 初始化方法，接受位置和作物类型作为参数
     bool Crop::init(const Vec2& pos, CropType type);
-
-    // 生长状态枚举
-    enum class GrowthState {
-        SEED,    // carrot1
-        GROWING, // carrot2
-        MATURE   // carrot3
-    };
-
     // 作物生长的方法
     void grow();
     bool _isWatered;
-    void water() { _isWatered = true; }
+    void resetDailyWater() { _todayWatered = false; _isWatered = false; }
+    int getDaysWatered() const { return _daysWatered; }
+    void water() {
+        if (!_todayWatered) {
+            _todayWatered = true;
+            _isWatered = true;
+            _daysWatered++;
+        }
+    }
     bool isWatered() const { return _isWatered; }
     bool isMature() const { return _state == GrowthState::MATURE; }
 
@@ -42,15 +57,6 @@ public:
     // 获取当前作物的类型
     CropType getType() const { return _cropType; }
     CropType _cropType;  // 作物类型
-private:
-    GrowthState _state = GrowthState::SEED;  // 初始状态是种子
-    void updateSprite();  // 更新作物精灵的方法
-   
-    float _plantedMinute = 0;  // 记录种植时的游戏分钟
-    int _plantedHour = 0;      // 记录种植时的游戏小时
-    int _plantedDay = 0;       // 记录种植时的游戏天数
-
-    int _growthDays;
 };
 
 class CropSystem : public cocos2d::Node {
