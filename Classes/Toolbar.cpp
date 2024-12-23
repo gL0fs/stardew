@@ -1,124 +1,116 @@
-#ifndef __TIME_MANAGER_H__
-#define __TIME_MANAGER_H__
 
+#include "Toolbar.h"
 #include "cocos2d.h"
-#include <vector>
-
 USING_NS_CC;
+Toolbar* Toolbar::_instance = nullptr; // 初始化单例实例指针
 
-class TimeManager : public Node {
-public:
-    static TimeManager* getInstance() {
-        if (!_instance) {
-            _instance = new TimeManager();
-        }
-        return _instance;
+Toolbar* Toolbar::getInstance()
+{
+    if (_instance == nullptr)
+    {
+        _instance = Toolbar::create();
+        _instance->retain(); // 保持引用，防止被自动释放
+    }
+    return _instance;
+}
+
+Toolbar::Toolbar()
+{
+    currentToolIndex = -1; // 初始化当前工具索引为-1
+}
+
+Toolbar::~Toolbar()
+{
+    _instance = nullptr; // 清理单例实例指针
+}
+
+
+bool Toolbar::init()
+{
+    if (!Layer::init())
+    {
+        return false;
     }
 
-    static void destroyInstance() {
-        if (_instance) {
-            _instance->release();
-            _instance = nullptr;
-        }
+    // 初始化工具图标
+    for (int i = 1; i <= 5; ++i)
+    {
+        std::string toolName = "tool" + std::to_string(i) + ".png";
+        cocos2d::Sprite* tool = cocos2d::Sprite::create(toolName);
+        tool->setAnchorPoint(Vec2(0, 0)); // 设置锚点为左下角
+        tool->setPosition(0, 30); // 根据需要调整位置
+        tool->setVisible(false); // 初始时隐藏所有工具
+        tool->setScale(2.5); // 将精灵放大 2.5 倍
+        this->addChild(tool);
+        _tools.pushBack(tool);
     }
 
-    bool init() {
-        if (!Node::init()) {
-            return false;
-        }
+   
 
-        _minutesPerDay = 2.0f;
-        _currentGameMinutes = 0;
-        _currentGameHour = 6;
-        _currentGameDay = 1;
-        _currentWeekday = 0;
+    // 添加键盘事件监听
+    auto keyboardListener = cocos2d::EventListenerKeyboard::create();
+    keyboardListener->onKeyPressed = CC_CALLBACK_2(Toolbar::onKeyPressed, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
-        initTimeUI();
-        this->scheduleUpdate();
-        return true;
+    return true;
+}
+
+void Toolbar::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
+{
+    switch (keyCode)
+    {
+        case cocos2d::EventKeyboard::KeyCode::KEY_1:
+            switchTool(1);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_2:
+            switchTool(2);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_3:
+            switchTool(3);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_4:
+            switchTool(4);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_5:
+            switchTool(5);
+            break;
+        default:
+            break;
+    }
+}
+
+void Toolbar::switchTool(int toolIndex)
+{
+    // 隐藏所有工具
+    for (auto tool : _tools)
+    {
+        tool->setVisible(false);
     }
 
-    void update(float dt) {
-        float gameMinutesPerRealSecond = 24.0f * 60.0f / (_minutesPerDay * 60.0f);
-        _currentGameMinutes += dt * gameMinutesPerRealSecond;
-
-        while (_currentGameMinutes >= 60) {
-            _currentGameMinutes -= 60;
-            _currentGameHour++;
-
-            if (_currentGameHour >= 23) {  // 在23点切换到第二天
-                _currentGameHour = 6;
-                _currentGameMinutes = 0;
-                _currentGameDay++;
-                _currentWeekday = (_currentWeekday + 1) % 7;
-
-                EventCustom event("new_day");
-                _eventDispatcher->dispatchEvent(&event);
-            }
-
-            updateTimeUI();
-            updateWeekdayUI();
-        }
+    // 显示选中的工具
+    if (toolIndex >= 1 && toolIndex <= 5)
+    {
+        _tools.at(toolIndex - 1)->setVisible(true);
     }
+    currentToolIndex = toolIndex; // 更新当前工具索引
+    CCLOG("switchtool%d", toolIndex);
+}
+int Toolbar::getCurrentToolIndex()
+{
+    int temp = currentToolIndex;
+    return temp; // 返回当前工具的索引
+}
+void Toolbar::setPositionOnLeft()
+{
+    // 获取窗口大小
+       // 获取窗口大小
+    auto director = cocos2d::Director::getInstance();
+    cocos2d::Size visibleSize = director->getVisibleSize();
 
-    void updateWeekdayUI() {
-        static const std::vector<std::string> weekdays = { "周一", "周二", "周三", "周四", "周五", "周六", "周日" };
-        if (_weekdayLabel) {
-            _weekdayLabel->setString(weekdays[_currentWeekday] + " " + std::to_string(_currentGameDay));
-        }
-    }
+    // 设置工具栏的锚点为左边中点
+    this->setAnchorPoint(cocos2d::Vec2(0, 0.5));
 
-    void playerGoToBed() {
-        _currentGameHour = 6;
-        _currentGameMinutes = 0;
-        _currentGameDay++;
-        _currentWeekday = (_currentWeekday + 1) % 7;
+    // 设置工具栏层的位置，使左边中点位于场景左边中点
+    this->setPosition(cocos2d::Vec2(0, visibleSize.height / 2));
+}
 
-        EventCustom event("new_day");
-        _eventDispatcher->dispatchEvent(&event);
-
-        updateWeekdayUI();
-        updateTimeUI();
-    }
-
-    int getCurrentWeekday() const { return _currentWeekday; }
-    int getCurrentDay() const { return _currentGameDay; }
-    int getCurrentHour() const { return _currentGameHour; }
-    int getCurrentMinutes() const { return static_cast<int>(_currentGameMinutes); }
-
-private:
-    static TimeManager* _instance;
-    float _minutesPerDay;
-    float _currentGameMinutes;
-    int _currentGameHour;
-    int _currentGameDay;
-    int _currentWeekday;
-    Label* _timeLabel;
-    Label* _weekdayLabel;
-
-    void initTimeUI() {
-        _timeLabel = Label::createWithTTF("06:00", "Fonts/pixel_font.ttf", 24);
-        _timeLabel->setTextColor(Color4B::BLACK);
-        Size visibleSize = Director::getInstance()->getVisibleSize();
-        _timeLabel->setPosition(visibleSize.width - 70, visibleSize.height - 0);
-        this->addChild(_timeLabel);
-
-        _weekdayLabel = Label::createWithTTF("周一 1", "Fonts/pixel_font.ttf", 24);
-        _weekdayLabel->setTextColor(Color4B::BLACK);
-        _weekdayLabel->setPosition(visibleSize.width - 70, visibleSize.height - 30);
-        this->addChild(_weekdayLabel);
-
-        updateWeekdayUI();
-    }
-
-    void updateTimeUI() {
-        if (_timeLabel) {
-            char timeText[10];
-            snprintf(timeText, sizeof(timeText), "%02d:%02d",
-                _currentGameHour, static_cast<int>(_currentGameMinutes));
-            _timeLabel->setString(timeText);
-        }
-    }
-};
-
-#endif
