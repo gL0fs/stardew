@@ -11,6 +11,8 @@
 #include "Forest.h"
 #include "Test.h"
 #include "Festival.h"
+#include "Town.h"
+
 
 
 // 场景管理器类，用于管理场景 ID

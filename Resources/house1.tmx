@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="7">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="8">
  <properties>
+  <property name="MapName" value="house"/>
   <property name="colliable" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" name="egg" tilewidth="16" tileheight="16" tilecount="1" columns="1">
@@ -378,5 +379,10 @@
  </layer>
  <objectgroup id="2" name="Objects">
   <object id="1" name="SpawnPoint" x="132" y="134" width="30" height="18"/>
+  <object id="7" name="1" x="624" y="704" width="48" height="16">
+   <properties>
+    <property name="MapName" value="farm"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

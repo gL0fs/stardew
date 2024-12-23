@@ -101,7 +101,7 @@ bool MyFarm::initMap(const std::string& spawnPointName) {
   
 
     // 初始化作物系统
-    initializePlayer("SpawnPoint");
+    initializePlayer(spawnPointName);
     initCropSystem();
     //initAnimalSystem();
     // 设置鼠标监听器
