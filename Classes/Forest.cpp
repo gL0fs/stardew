@@ -11,11 +11,11 @@ Forest::Forest()
 Forest::~Forest()
 {
 }
-Scene* Forest::createScene(int path)
+Scene* Forest::createScene(const std::string& spawnPointName)
 {
     auto scene = Scene::create();
     
-    auto layer = Forest::create(path);
+    auto layer = Forest::create(spawnPointName);
 	
     if (layer != nullptr)
     {
@@ -34,11 +34,10 @@ Scene* Forest::createScene(int path)
     CCLOG("add toolbar");
     return scene;
 }
-Forest* Forest::create(int path)
+Forest* Forest::create(const std::string& spawnPointName)
 {
     Forest* forest = new (std::nothrow) Forest();
-	forest->_path = path;
-    if (forest && forest->initMap())
+    if (forest && forest->initMap(spawnPointName))
     {
         forest->autorelease();
         return forest;
@@ -57,7 +56,7 @@ bool Forest::init()
     return true;
 }
 
-bool Forest::initMap()
+bool Forest::initMap(const std::string& spawnPointName)
 {
     if (!init())
     {
@@ -102,7 +101,7 @@ bool Forest::initMap()
     // 添加地图到层
     this->addChild(_map, -1);
 
-    initializePlayer();//加入玩家层
+    initializePlayer(spawnPointName);//加入玩家层
 
    
 
@@ -118,50 +117,6 @@ bool Forest::initMap()
 
 }
 
-void Forest::switchMap(const std::string& mapName,int path)
-{
-    if (mapName == "test")
-    {
-        /*if (SceneManager::getInstance().isMapInHistory("test"))
-        {
-            SceneManager::getInstance().returnToPreviousScene();
-            return;
-        }
-        else {
-        */
-            auto scene = Test::createScene(path);
-            SceneManager::getInstance().goToScene(scene, "forest");
-        //}
-    }
-	/*else if (mapName == "farm")
-	{
-		if (SceneManager::getInstance().isMapInHistory("farm"))
-		{
-			SceneManager::getInstance().returnToPreviousScene();
-			return;
-		}
-		else {
-			auto scene = MyFarm::createScene();
-			SceneManager::getInstance().goToScene(scene, "forest");
-		}
-	}*/
-    /*else if (mapName == "house")
-    {
-        if (SceneManager::getInstance().isMapInHistory("house"))
-        {
-            SceneManager::getInstance().returnToPreviousScene();
-            return;
-        }
-        else {
-            auto scene = House::createScene();
-            SceneManager::getInstance().goToScene(scene, "forest");
-        }
-    }*/
-    else
-    {
-        CCLOG("Unknown map: %s", mapName.c_str());
-    }
-}
 
 void Forest::initMouseEvent() {
     // 移除现有的鼠标监听器

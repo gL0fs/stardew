@@ -12,11 +12,11 @@ Festival::Festival()
 Festival::~Festival()
 {
 }
-Scene* Festival::createScene()
+Scene* Festival::createScene(const std::string& spawnPointName)
 {
     auto scene = Scene::create();
 
-    auto layer = Festival::create();
+    auto layer = Festival::create(spawnPointName);
 
     if (layer != nullptr)
     {
@@ -25,10 +25,10 @@ Scene* Festival::createScene()
     
     return scene;
 }
-Festival* Festival::create()
+Festival* Festival::create(const std::string& spawnPointName)
 {
     Festival* festival = new (std::nothrow) Festival();
-    if (festival && festival->initMap())
+    if (festival && festival->initMap(spawnPointName))
     {
         festival->autorelease();
         return festival;
@@ -47,7 +47,7 @@ bool Festival::init()
     return true;
 }
 
-bool Festival::initMap()
+bool Festival::initMap(const std::string& spawnPointName)
 {
     if (!init())
     {
@@ -62,7 +62,7 @@ bool Festival::initMap()
     //mineralsLayer = minemap->getLayer("mineral");
 
     loadMap("Festival.tmx");//加入地图层 
-    initializePlayer();//加入玩家层
+    initializePlayer(spawnPointName);//加入玩家层
     this->initMouseEvent();
    
 
@@ -132,7 +132,4 @@ cocos2d::Vec2 Festival::getTileCoordForPosition(cocos2d::Vec2 position) {
     CCLOG("DIANJI%d %d", x, y);
 
     return cocos2d::Vec2(x, y);
-}
-void Festival::switchMap(const std::string& mapName,int path) {
-    return;
 }
