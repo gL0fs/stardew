@@ -467,7 +467,7 @@ void BaseMapLayer::checkChangeMap(const cocos2d::Vec2& nextPosition) {
         // 创建矩形
         CCLOG("obx %d oby %d", obx, oby);
         CCLOG("width %d height %d", obwidth, obheight);
-        cocos2d::Rect objectRect(obx, oby - obheight, obwidth, obheight);
+        cocos2d::Rect objectRect(obx+1, oby - obheight-1, obwidth, obheight);
 
         // 检查位置是否在矩形内
         if (objectRect.containsPoint(position)) {

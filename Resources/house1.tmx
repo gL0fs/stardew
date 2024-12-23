@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="8">
+=======
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="8">
+>>>>>>> 1458fa3d91527a3c04d30975cc6d8fdf62aecd72
  <properties>
+  <property name="MapName" value="house"/>
   <property name="colliable" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" name="egg" tilewidth="16" tileheight="16" tilecount="1" columns="1">
@@ -377,9 +382,18 @@
 </data>
  </layer>
  <objectgroup id="2" name="Objects">
+<<<<<<< HEAD
   <object id="1" name="SpawnPoint" x="192.15" y="491.465" width="30" height="18"/>
  </objectgroup>
  <objectgroup id="14" name="Object">
   <object id="7" name="Bed" x="53.276" y="125.456" width="67.0247" height="20.623"/>
+=======
+  <object id="1" name="SpawnPoint" x="132" y="134" width="30" height="18"/>
+  <object id="7" name="1" x="624" y="704" width="48" height="16">
+   <properties>
+    <property name="MapName" value="farm"/>
+   </properties>
+  </object>
+>>>>>>> 1458fa3d91527a3c04d30975cc6d8fdf62aecd72
  </objectgroup>
 </map>

@@ -21,7 +21,12 @@
     <ClCompile Include="..\Classes\UI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\Classes\AudioManager.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="..\Classes\WeatherSystem.cpp" />
+=======
+    <ClCompile Include="..\Classes\MaskManager.cpp" />
+    <ClCompile Include="..\Classes\Town.cpp" />
+>>>>>>> 1458fa3d91527a3c04d30975cc6d8fdf62aecd72
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
@@ -45,6 +50,12 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="..\Classes\AudioManager.h" />
     <ClInclude Include="..\Classes\cook.h" />
+<<<<<<< HEAD
     <ClInclude Include="..\Classes\WeatherSystem.h" />
+=======
+    <ClInclude Include="..\Classes\Town.h" />
+    <ClInclude Include="..\Classes\MaskLayer.h" />
+    <ClInclude Include="..\Classes\MaskManager.h" />
+>>>>>>> 1458fa3d91527a3c04d30975cc6d8fdf62aecd72
   </ItemGroup>
 </Project>

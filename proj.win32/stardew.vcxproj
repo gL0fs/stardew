@@ -160,6 +160,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\House.cpp" />
     <ClCompile Include="..\Classes\MainMenuScene.cpp" />
     <ClCompile Include="..\Classes\MarketPriceSystem.cpp" />
+    <ClCompile Include="..\Classes\MaskManager.cpp" />
     <ClCompile Include="..\Classes\Mine.cpp" />
     <ClCompile Include="..\Classes\MyFarm.cpp" />
     <ClCompile Include="..\Classes\Player.cpp" />
@@ -168,6 +169,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Test.cpp" />
     <ClCompile Include="..\Classes\TimeManager.cpp" />
     <ClCompile Include="..\Classes\Toolbar.cpp" />
+    <ClCompile Include="..\Classes\Town.cpp" />
     <ClCompile Include="..\Classes\UI.cpp" />
     <ClCompile Include="..\Classes\WeatherSystem.cpp" />
     <ClCompile Include="main.cpp" />
@@ -184,6 +186,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\House.h" />
     <ClInclude Include="..\Classes\MainMenuScene.h" />
     <ClInclude Include="..\Classes\MarketPriceSystem.h" />
+    <ClInclude Include="..\Classes\MaskLayer.h" />
+    <ClInclude Include="..\Classes\MaskManager.h" />
     <ClInclude Include="..\Classes\Mine.h" />
     <ClInclude Include="..\Classes\MyFarm.h" />
     <ClInclude Include="..\Classes\Player.h" />

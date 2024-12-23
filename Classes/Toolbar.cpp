@@ -1,4 +1,4 @@
-
+// Toolbar.cpp
 #include "Toolbar.h"
 #include "cocos2d.h"
 USING_NS_CC;
@@ -45,7 +45,7 @@ bool Toolbar::init()
         _tools.pushBack(tool);
     }
 
-   
+
 
     // 添加键盘事件监听
     auto keyboardListener = cocos2d::EventListenerKeyboard::create();
@@ -59,23 +59,23 @@ void Toolbar::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Eve
 {
     switch (keyCode)
     {
-        case cocos2d::EventKeyboard::KeyCode::KEY_1:
-            switchTool(1);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_2:
-            switchTool(2);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_3:
-            switchTool(3);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_4:
-            switchTool(4);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_5:
-            switchTool(5);
-            break;
-        default:
-            break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_1:
+        switchTool(1);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_2:
+        switchTool(2);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_3:
+        switchTool(3);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_4:
+        switchTool(4);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_5:
+        switchTool(5);
+        break;
+    default:
+        break;
     }
 }
 
@@ -113,4 +113,3 @@ void Toolbar::setPositionOnLeft()
     // 设置工具栏层的位置，使左边中点位于场景左边中点
     this->setPosition(cocos2d::Vec2(0, visibleSize.height / 2));
 }
-

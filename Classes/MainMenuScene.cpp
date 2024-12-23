@@ -1,8 +1,8 @@
-
 #include "Festival.h"
 #include "MainMenuScene.h"
 #include "Test.h"
 #include "Mine.h"
+#include "MyFarm.h"
 USING_NS_CC;
 
 Scene* MainMenuScene::createScene() {
