@@ -5,42 +5,42 @@ USING_NS_CC;
 Scene* MyFarm::createScene(const std::string& spawnPointName) {
     auto scene = Scene::create();
 
- 
+
     // 创建地图层
     auto layer = MyFarm::create(spawnPointName);
     if (layer != nullptr) {
         scene->addChild(layer);
 
-    // 创建UI
-    auto timeUI = GameTimeUI::create();
-    if (timeUI) {
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        // 由于已经设置了背景精灵的锚点为右上角，这里直接设置到右上角位置
-        timeUI->setPosition(Vec2(visibleSize.width, visibleSize.height));
-        scene->addChild(timeUI, 10);
-    }
-
-    // 创建工具栏
-    auto toolbarLayer = Toolbar::getInstance();
-    if (toolbarLayer) {
-        // 确保工具栏只有一个父节点
-        if (toolbarLayer->getParent()) {
-            toolbarLayer->removeFromParent();
+        // 创建UI
+        auto timeUI = GameTimeUI::create();
+        if (timeUI) {
+            auto visibleSize = Director::getInstance()->getVisibleSize();
+            // 由于已经设置了背景精灵的锚点为右上角，这里直接设置到右上角位置
+            timeUI->setPosition(Vec2(visibleSize.width, visibleSize.height));
+            scene->addChild(timeUI, 10);
         }
 
-        toolbarLayer->setPositionOnLeft();
-        scene->addChild(toolbarLayer, 10);  // 提高Z序确保可见
+        // 创建工具栏
+        auto toolbarLayer = Toolbar::getInstance();
+        if (toolbarLayer) {
+            // 确保工具栏只有一个父节点
+            if (toolbarLayer->getParent()) {
+                toolbarLayer->removeFromParent();
+            }
 
-        // 重要：设置初始工具
-        toolbarLayer->switchTool(1);  // 默认选择第一个工具
+            toolbarLayer->setPositionOnLeft();
+            scene->addChild(toolbarLayer, 10);  // 提高Z序确保可见
 
-        // 设置名称以便后续查找
-        toolbarLayer->setName("toolbar");
+            // 重要：设置初始工具
+            toolbarLayer->switchTool(1);  // 默认选择第一个工具
+
+            // 设置名称以便后续查找
+            toolbarLayer->setName("toolbar");
+        }
+
+        return scene;
     }
-
-    return scene;
 }
-
 MyFarm* MyFarm::create(const std::string& spawnPointName) {
     MyFarm* myFarm = new (std::nothrow) MyFarm();
     if (myFarm && myFarm->initMap(spawnPointName)) {

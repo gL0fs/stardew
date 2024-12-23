@@ -28,7 +28,7 @@ public:
     void setPlayerPosition(const std::string& objectGroupName, const std::string& spawnPointName);
 
     // 修改碰撞检测和移动相关函数以使用Player单例
-    void BaseMapLayer::createPlayerAnimation();
+    
     bool isCollisionAtNextPosition(const cocos2d::Vec2& nextPosition);
     void handlePlayerMovement(const cocos2d::Vec2& direction);  // 处理玩家的移动
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);  // 按键按下
@@ -55,7 +55,7 @@ protected:
     void initializePlayer(const std::string& spawnPointName);
 
 
-    virtual void initializePlayer();
+   
     Direction _currentDirection = Direction::NONE;
  
 private:
