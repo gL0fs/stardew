@@ -1,7 +1,6 @@
 // MyFarm.cpp
 #include "MyFarm.h"
 #include "CropSystem.h"
-#include "MaskManager.h"
 USING_NS_CC;
 Scene* MyFarm::createScene(const std::string& spawnPointName) {
     auto scene = Scene::create();
@@ -13,32 +12,25 @@ Scene* MyFarm::createScene(const std::string& spawnPointName) {
         scene->addChild(layer);
 
 
+        // 添加时间管理器
         TimeManager* timeManager = TimeManager::getInstance();
-        // 确保TimeManager只被初始化一次
-        static bool timeManagerInitialized = false;
-        if (!timeManagerInitialized) {
-            timeManager->init();
-            timeManagerInitialized = true;
+        if (!timeManager->getParent()) {
+            timeManager->init();  // 只在没有父节点时初始化
+            scene->addChild(timeManager, 100);  // 提高层级确保UI可见
         }
 
-        // 确保TimeManager只有一个父节点
-        if (timeManager->getParent()) {
-            timeManager->removeFromParent();
+        // 添加天气系统
+        WeatherSystem* weatherSystem = WeatherSystem::getInstance();
+        if (!weatherSystem->getParent()) {
+            weatherSystem->init();  // 只在没有父节点时初始化
+            scene->addChild(weatherSystem, 99);  // 放在时间管理器下面
         }
-        scene->addChild(timeManager);
-        // 初始化 WeatherSystem
-        //WeatherSystem* weatherSystem = WeatherSystem::getInstance();
-        //static bool weatherSystemInitialized = false;
-        //if (!weatherSystemInitialized) {
-        //    weatherSystem->init();
-        //    weatherSystemInitialized = true;
-        //}
 
-        //// 确保 WeatherSystem 只有一个父节点
-        //if (weatherSystem->getParent()) {
-        //    weatherSystem->removeFromParent();
-        //}
-        //scene->addChild(weatherSystem);
+        // 确保 WeatherSystem 只有一个父节点
+        if (weatherSystem->getParent()) {
+            weatherSystem->removeFromParent();
+        }
+        scene->addChild(weatherSystem);
         // 创建工具栏
         auto toolbarLayer = Toolbar::getInstance();
         if (toolbarLayer) {

@@ -4,6 +4,7 @@
 
 #include "cocos2d.h"
 #include <vector>
+#include"WeatherSystem.h"
 
 USING_NS_CC;
 
@@ -67,6 +68,8 @@ public:
                 // 发送新的一天开始的事件
                 EventCustom event("new_day");
                 _eventDispatcher->dispatchEvent(&event);
+                // 通知天气系统生成新的一天的天气
+                WeatherSystem::getInstance()->generateNewDayWeather();
             }
  
             updateTimeUI();
